@@ -3,7 +3,7 @@ import React from "react"
 interface LandingPageProps {}
 
 const LandingPage: React.FC<LandingPageProps> = () => {
-  return <></>
+  return <>Landing</>
 }
 
 export default LandingPage

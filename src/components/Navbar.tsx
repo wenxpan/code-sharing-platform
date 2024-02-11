@@ -1,52 +1,52 @@
-"use client";
+"use client"
 
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react"
 import {
   Navbar,
   NavbarBrand,
   NavbarContent,
-  NavbarItem,
-} from "@nextui-org/navbar";
-import { Link } from "@nextui-org/link";
+  NavbarItem
+} from "@nextui-org/navbar"
+import { Link } from "@nextui-org/link"
 import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
-  DropdownTrigger,
-} from "@nextui-org/dropdown";
-import { Button } from "@nextui-org/button";
-import { User } from "@nextui-org/user";
-import { usePathname, useRouter } from "next/navigation";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+  DropdownTrigger
+} from "@nextui-org/dropdown"
+import { Button } from "@nextui-org/button"
+import { User } from "@nextui-org/user"
+import { usePathname, useRouter } from "next/navigation"
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
 
 const performSignOut = async (router: AppRouterInstance) => {
   try {
     await fetch("/api/auth/federated-sign-out").then(() => {
-      signOut({ redirect: false });
-      router.replace("/");
-    });
+      signOut({ redirect: false })
+      router.replace("/")
+    })
   } catch (error) {
-    console.error("Error during sign out:", error);
+    console.error("Error during sign out:", error)
   }
-};
+}
 
 const AvatarDropDown = () => {
-  const router = useRouter();
+  const router = useRouter()
   const userInfo = {
     name: "Zoey Hughes",
     avatarURL: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
     email: "zoey@example.com",
-    description: "user",
-  };
+    description: "user"
+  }
   const coderItems = [
     { key: "dashboard", label: "Dashboard", href: "/dashboard/coder" },
     { key: "profile", label: "My Profile", href: "/profile/coder" },
     { key: "projects", label: "My Projects", href: "/projects" },
     { key: "jobs", label: "Applied Jobs", href: "/jobs" },
-    { key: "sign-out", label: "Sign Out" },
-  ];
+    { key: "sign-out", label: "Sign Out" }
+  ]
 
-  const items = coderItems;
+  const items = coderItems
   return (
     <Dropdown placement="bottom-end">
       <DropdownTrigger>
@@ -54,7 +54,7 @@ const AvatarDropDown = () => {
           as="button"
           avatarProps={{
             isBordered: true,
-            src: userInfo.avatarURL,
+            src: userInfo.avatarURL
           }}
           className="transition-transform"
           description={userInfo.description}
@@ -74,33 +74,23 @@ const AvatarDropDown = () => {
         )}
       </DropdownMenu>
     </Dropdown>
-  );
-};
-
-const GetStartedButton = () => (
-  <NavbarItem>
-    <Button
-      color="primary"
-      variant="flat"
-      onClick={() => signIn("descope", { callbackUrl: "/dashboard" })}
-    >
-      Get Started
-    </Button>
-  </NavbarItem>
-);
+  )
+}
 
 export default function NavBar() {
-  const pathname = usePathname();
-  const { data: session, status } = useSession();
+  const pathname = usePathname()
+  const { data: session, status } = useSession()
   const navItems = [
     { name: "Home", URL: "/" },
     { name: "Projects", URL: "/projects" },
-    { name: "Users", URL: "/users" },
-  ];
+    { name: "Users", URL: "/users" }
+  ]
   return (
     <Navbar isBordered>
       <NavbarBrand>
-        <p className="font-bold text-inherit">CODABORATE</p>
+        <Link className="font-bold text-inherit cursor-pointer" href="/">
+          CODABORATE
+        </Link>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         {navItems.map((item) => (
@@ -132,7 +122,7 @@ export default function NavBar() {
                 color="primary"
                 variant="flat"
               >
-                Sign Up As Business
+                Business Portal
               </Button>
             </NavbarItem>
             <NavbarItem>
@@ -143,12 +133,12 @@ export default function NavBar() {
                 color="primary"
                 variant="flat"
               >
-                Sign Up As Coder
+                Coder Portal
               </Button>
             </NavbarItem>
           </>
         )}
       </NavbarContent>
     </Navbar>
-  );
+  )
 }
