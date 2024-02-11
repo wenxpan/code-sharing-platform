@@ -1,6 +1,7 @@
-import NextAuthSessionProvider from "./provider"
+import Providers from "./providers"
 import "./globals.css"
 import { Roboto } from "next/font/google"
+import NavBar from "@/components/Navbar"
 
 const roboto = Roboto({ subsets: ["latin"], weight: ["400", "500", "700"] })
 
@@ -10,11 +11,13 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html>
+    <html lang="en" className="light">
       <body className={roboto.className}>
-        <NextAuthSessionProvider>
-          <div>{children}</div>
-        </NextAuthSessionProvider>
+        <Providers>
+          <NavBar />
+          <main>{children}</main>
+          <footer></footer>
+        </Providers>
       </body>
     </html>
   )
