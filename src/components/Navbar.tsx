@@ -16,6 +16,7 @@ import {
 } from "@nextui-org/dropdown"
 import { Button } from "@nextui-org/button"
 import { User } from "@nextui-org/user"
+import { usePathname } from "next/navigation"
 
 const AvatarDropDown = () => {
   const userInfo = {
@@ -75,7 +76,8 @@ const GetStartedButton = () => (
 )
 
 export default function NavBar() {
-  // TODO: add isActive to NavbarItem, aria-current="page" to Link
+  const pathname = usePathname()
+  console.log(pathname)
   const navItems = [
     { name: "Home", URL: "/" },
     { name: "Projects", URL: "/projects" },
@@ -88,8 +90,12 @@ export default function NavBar() {
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         {navItems.map((item) => (
-          <NavbarItem>
-            <Link color="foreground" href={item.URL}>
+          <NavbarItem isActive={pathname === item.URL} key={item.name}>
+            <Link
+              color="foreground"
+              href={item.URL}
+              aria-current={pathname === item.URL ? "page" : false}
+            >
               {item.name}
             </Link>
           </NavbarItem>

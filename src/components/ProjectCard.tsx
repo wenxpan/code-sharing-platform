@@ -41,6 +41,7 @@ const ProjectCard: React.FC<ProjectCardProps> = () => {
           src="https://picsum.photos/300/200"
           width={300}
           height={200}
+          priority
           // fallbackSrc="https://via.placeholder.com/300x200"
         />
         <SkillTagList skills={skills} />
