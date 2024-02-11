@@ -1,3 +1,9 @@
-export default function Home() {
-  return <div>Landing page</div>
+import React from "react"
+
+interface LandingPageProps {}
+
+const LandingPage: React.FC<LandingPageProps> = () => {
+  return <></>
 }
+
+export default LandingPage

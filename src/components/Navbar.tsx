@@ -1,39 +1,52 @@
-"use client"
+"use client";
 
-import { signIn } from "next-auth/react"
+import { signIn, signOut, useSession } from "next-auth/react";
 import {
   Navbar,
   NavbarBrand,
   NavbarContent,
-  NavbarItem
-} from "@nextui-org/navbar"
-import { Link } from "@nextui-org/link"
+  NavbarItem,
+} from "@nextui-org/navbar";
+import { Link } from "@nextui-org/link";
 import {
   Dropdown,
-  DropdownTrigger,
+  DropdownItem,
   DropdownMenu,
-  DropdownItem
-} from "@nextui-org/dropdown"
-import { Button } from "@nextui-org/button"
-import { User } from "@nextui-org/user"
-import { usePathname } from "next/navigation"
+  DropdownTrigger,
+} from "@nextui-org/dropdown";
+import { Button } from "@nextui-org/button";
+import { User } from "@nextui-org/user";
+import { usePathname, useRouter } from "next/navigation";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+
+const performSignOut = async (router: AppRouterInstance) => {
+  try {
+    await fetch("/api/auth/federated-sign-out").then(() => {
+      signOut({ redirect: false });
+      router.replace("/");
+    });
+  } catch (error) {
+    console.error("Error during sign out:", error);
+  }
+};
 
 const AvatarDropDown = () => {
+  const router = useRouter();
   const userInfo = {
     name: "Zoey Hughes",
     avatarURL: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
     email: "zoey@example.com",
-    description: "user"
-  }
+    description: "user",
+  };
   const coderItems = [
     { key: "dashboard", label: "Dashboard", href: "/dashboard/coder" },
     { key: "profile", label: "My Profile", href: "/profile/coder" },
     { key: "projects", label: "My Projects", href: "/projects" },
     { key: "jobs", label: "Applied Jobs", href: "/jobs" },
-    { key: "sign-out", label: "Sign Out" }
-  ]
+    { key: "sign-out", label: "Sign Out" },
+  ];
 
-  const items = coderItems
+  const items = coderItems;
   return (
     <Dropdown placement="bottom-end">
       <DropdownTrigger>
@@ -41,7 +54,7 @@ const AvatarDropDown = () => {
           as="button"
           avatarProps={{
             isBordered: true,
-            src: userInfo.avatarURL
+            src: userInfo.avatarURL,
           }}
           className="transition-transform"
           description={userInfo.description}
@@ -54,14 +67,15 @@ const AvatarDropDown = () => {
             key={item.key}
             color={item.key === "sign-out" ? "danger" : "default"}
             className={item.key === "sign-out" ? "text-danger" : ""}
+            onClick={() => item.key === "sign-out" && performSignOut(router)}
           >
             {item.label}
           </DropdownItem>
         )}
       </DropdownMenu>
     </Dropdown>
-  )
-}
+  );
+};
 
 const GetStartedButton = () => (
   <NavbarItem>
@@ -73,15 +87,16 @@ const GetStartedButton = () => (
       Get Started
     </Button>
   </NavbarItem>
-)
+);
 
 export default function NavBar() {
-  const pathname = usePathname()
+  const pathname = usePathname();
+  const { data: session, status } = useSession();
   const navItems = [
     { name: "Home", URL: "/" },
     { name: "Projects", URL: "/projects" },
-    { name: "Users", URL: "/users" }
-  ]
+    { name: "Users", URL: "/users" },
+  ];
   return (
     <Navbar isBordered>
       <NavbarBrand>
@@ -101,8 +116,39 @@ export default function NavBar() {
         ))}
       </NavbarContent>
       <NavbarContent justify="end">
-        <AvatarDropDown />
+        {status === "authenticated" && (
+          <NavbarItem>
+            <AvatarDropDown />
+          </NavbarItem>
+        )}
+
+        {status === "unauthenticated" && (
+          <>
+            <NavbarItem>
+              <Button
+                onClick={() =>
+                  signIn("descope", { callbackUrl: "/dashboard/business" })
+                }
+                color="primary"
+                variant="flat"
+              >
+                Sign Up As Business
+              </Button>
+            </NavbarItem>
+            <NavbarItem>
+              <Button
+                onClick={() =>
+                  signIn("descope", { callbackUrl: "/dashboard/coder" })
+                }
+                color="primary"
+                variant="flat"
+              >
+                Sign Up As Coder
+              </Button>
+            </NavbarItem>
+          </>
+        )}
       </NavbarContent>
     </Navbar>
-  )
+  );
 }
