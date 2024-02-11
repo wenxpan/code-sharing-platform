@@ -4,20 +4,9 @@ import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card"
 import { Button, ButtonGroup } from "@nextui-org/react"
 import { User } from "@nextui-org/user"
 import NextImage from "next/image"
+import SkillTagList from "./SkillTagList"
 
 interface ProjectCardProps {}
-
-const SkillTagList: React.FC<{ skills: string[] }> = ({ skills }) => {
-  return (
-    <ul className="flex gap-1">
-      {skills.map((skill) => (
-        <li key={skill} className="bg-gray-200 rounded-full px-3 py-1">
-          {skill}
-        </li>
-      ))}
-    </ul>
-  )
-}
 
 const ProjectCard: React.FC<ProjectCardProps> = () => {
   const skills = ["html", "css", "react", "..."]

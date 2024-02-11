@@ -77,7 +77,6 @@ const GetStartedButton = () => (
 
 export default function NavBar() {
   const pathname = usePathname()
-  console.log(pathname)
   const navItems = [
     { name: "Home", URL: "/" },
     { name: "Projects", URL: "/projects" },
