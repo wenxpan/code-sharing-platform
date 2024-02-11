@@ -1,4 +1,4 @@
-import NextAuthSessionProvider from "./provider"
+import Providers from "./providers"
 import "./globals.css"
 import { Roboto } from "next/font/google"
 
@@ -10,11 +10,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html>
+    <html lang="en">
       <body className={roboto.className}>
-        <NextAuthSessionProvider>
+        <Providers>
           <div>{children}</div>
-        </NextAuthSessionProvider>
+        </Providers>
       </body>
     </html>
   )
