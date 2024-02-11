@@ -2,26 +2,51 @@ import React from "react"
 import { Image } from "@nextui-org/image"
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card"
 import { Button, ButtonGroup } from "@nextui-org/react"
+import { User } from "@nextui-org/user"
+import NextImage from "next/image"
 
 interface ProjectCardProps {}
 
+const SkillTagList: React.FC<{ skills: string[] }> = ({ skills }) => {
+  return (
+    <ul className="flex gap-1">
+      {skills.map((skill) => (
+        <li key={skill} className="bg-gray-200 rounded-full px-3 py-1">
+          {skill}
+        </li>
+      ))}
+    </ul>
+  )
+}
+
 const ProjectCard: React.FC<ProjectCardProps> = () => {
+  const skills = ["html", "css", "react", "..."]
   return (
     <Card className="py-4">
       <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-        <p className="text-tiny uppercase font-bold">Wenxuan Pan</p>
-        <small className="text-default-500">5 Projects reviewed</small>
-        <h4 className="font-bold text-large">Tailwind color contrast</h4>
-      </CardHeader>
-      <CardBody className="overflow-visible py-2">
-        <Image
-          alt="Card background"
-          className="object-cover rounded-xl"
-          src="https://raw.githubusercontent.com/wenxpan/tailwind-color-contrast/main/docs/screenshot.jpeg"
-          width={270}
+        <User
+          name="Jane Doe"
+          description="Product Designer"
+          avatarProps={{
+            src: "https://i.pravatar.cc/150?u=a04258114e29026702d"
+          }}
         />
-        {/* <div className="flex gap-2 justify-between"> */}
-        <ButtonGroup className="mt-4 *:grow">
+        <h4 className="font-bold text-large mt-2">Tailwind color contrast</h4>
+      </CardHeader>
+      <CardBody className="overflow-visible py-2 flex flex-col gap-2">
+        <Image
+          as={NextImage}
+          alt="Website screenshot"
+          className="object-cover rounded-xl"
+          src="https://picsum.photos/300/200"
+          width={300}
+          height={200}
+          // fallbackSrc="https://via.placeholder.com/300x200"
+        />
+        <SkillTagList skills={skills} />
+      </CardBody>
+      <CardFooter>
+        <ButtonGroup className="mt-4 *:grow w-full">
           <Button color="secondary">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -57,8 +82,7 @@ const ProjectCard: React.FC<ProjectCardProps> = () => {
             </svg>
           </Button>
         </ButtonGroup>
-        {/* </div> */}
-      </CardBody>
+      </CardFooter>
     </Card>
   )
 }
