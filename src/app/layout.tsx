@@ -2,6 +2,7 @@ import Providers from "./providers"
 import "./globals.css"
 import { Roboto } from "next/font/google"
 import NavBar from "@/components/Navbar"
+import Footer from "@/components/Footer"
 
 const roboto = Roboto({ subsets: ["latin"], weight: ["400", "500", "700"] })
 
@@ -16,7 +17,7 @@ export default function RootLayout({
         <Providers>
           <NavBar />
           <main className="max-w-[1024px] mx-auto">{children}</main>
-          <footer></footer>
+          <Footer />
         </Providers>
       </body>
     </html>
