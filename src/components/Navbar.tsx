@@ -80,6 +80,7 @@ const AvatarDropDown = () => {
 export default function NavBar() {
   const pathname = usePathname()
   const { data: session, status } = useSession()
+  console.log({ session, status })
   const navItems = [
     { name: "Home", URL: "/" },
     { name: "Projects", URL: "/projects" },

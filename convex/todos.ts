@@ -1,6 +1,8 @@
 import { mutation, query } from "./_generated/server"
 import { v } from "convex/values"
 
+// TODO: delete
+
 // see also internalMutation - private
 export const createTodo = mutation({
   args: { text: v.string() },
