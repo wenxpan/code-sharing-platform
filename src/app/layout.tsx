@@ -15,9 +15,13 @@ export default function RootLayout({
     <html lang="en" className="light">
       <body className={roboto.className}>
         <Providers>
-          <NavBar />
-          <main className="max-w-[1024px] mx-auto">{children}</main>
-          <Footer />
+          <div className="flex flex-col min-h-screen">
+            <NavBar />
+            <main className="max-w-[1024px] self-center grow py-4">
+              {children}
+            </main>
+            <Footer />
+          </div>
         </Providers>
       </body>
     </html>

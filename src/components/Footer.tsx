@@ -1,11 +1,10 @@
-import { GithubIcon } from "lucide-react"
 import React from "react"
 
 interface FooterProps {}
 
 const Footer: React.FC<FooterProps> = () => {
   return (
-    <div className="md:flex md:items-center md:justify-between max-w-[1024px] mx-auto mt-8 p-4 border-t">
+    <div className="w-full md:flex md:items-center md:justify-between max-w-[1024px] mx-auto mt-8 p-4 border-t">
       <ul className="flex mb-4 md:order-1 md:ml-4 md:mb-0">
         <li className="ml-4">
           <a

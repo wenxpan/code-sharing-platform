@@ -1,10 +1,3 @@
-const columns = [
-  { name: "Name", uid: "name" },
-  { name: "Feedback posted", uid: "feedbackPosted" },
-  { name: "Feedback received", uid: "feedbackReceived" },
-  { name: "Skills", uid: "skills" }
-]
-
 const coders = [
   {
     id: 1,
@@ -53,4 +46,4 @@ const coders = [
   }
 ]
 
-export { columns, coders }
+export { coders }
