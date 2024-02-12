@@ -15,7 +15,7 @@ const FeedbackPage: React.FC<FeedbackPageProps> = ({ params }) => {
 
   return (
     <>
-      <div className="flex gap-4 flex-col items-center sm:items-start p-5 sm:flex-row md:max-w-4xl mx-auto md:gap-10">
+      <div className="flex gap-4 flex-col items-center sm:items-start p-5 sm:flex-row mx-auto md:gap-10">
         <div>
           <ProjectCard />
         </div>

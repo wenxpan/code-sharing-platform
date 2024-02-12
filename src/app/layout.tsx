@@ -15,7 +15,7 @@ export default function RootLayout({
       <body className={roboto.className}>
         <Providers>
           <NavBar />
-          <main>{children}</main>
+          <main className="max-w-[1024px] mx-auto">{children}</main>
           <footer></footer>
         </Providers>
       </body>

@@ -15,7 +15,7 @@ const UserPage: React.FC<UserPageProps> = ({ params }) => {
   const id = params.id
 
   return (
-    <div className="flex flex-col max-w-5xl mx-auto sm:px-10 py-5">
+    <div className="flex flex-col mx-auto sm:px-10 py-5">
       <div className="flex gap-2 items-center">
         <Avatar src="https://i.pravatar.cc/150?u=a04258114e29026702d" />
         <h1 className="font-bold text-xl">Jane Doe</h1>
