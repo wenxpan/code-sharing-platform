@@ -15,7 +15,7 @@ const ProjectCard: React.FC<ProjectCardProps> = () => {
       <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
         <User
           name="Jane Doe"
-          description="Product Designer"
+          description="github name"
           avatarProps={{
             src: "https://i.pravatar.cc/150?u=a04258114e29026702d"
           }}
