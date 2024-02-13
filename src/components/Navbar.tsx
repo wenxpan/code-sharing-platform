@@ -18,6 +18,7 @@ import { Button } from "@nextui-org/button"
 import { User } from "@nextui-org/user"
 import { usePathname, useRouter } from "next/navigation"
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
+import useStoreCoderEffect from "@/lib/useStoreCoderEffect"
 
 const performSignOut = async (router: AppRouterInstance) => {
   try {
@@ -78,6 +79,8 @@ const AvatarDropDown = () => {
 }
 
 export default function NavBar() {
+  const userId = useStoreCoderEffect()
+  console.log({ userId })
   const pathname = usePathname()
   const { data: session, status } = useSession()
   console.log({ session, status })
