@@ -19,6 +19,9 @@ import { User } from "@nextui-org/user"
 import { usePathname, useRouter } from "next/navigation"
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
 import useStoreCoderEffect from "@/lib/useStoreCoderEffect"
+import { useQuery } from "convex/react"
+import { api } from "@convex/_generated/api"
+import { Doc } from "@convex/_generated/dataModel"
 
 const performSignOut = async (router: AppRouterInstance) => {
   try {
@@ -31,14 +34,16 @@ const performSignOut = async (router: AppRouterInstance) => {
   }
 }
 
-const AvatarDropDown = () => {
-  const router = useRouter()
-  const userInfo = {
-    name: "Zoey Hughes",
-    avatarURL: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
-    email: "zoey@example.com",
-    description: "user"
+const AvatarDropDown = ({
+  userData
+}: {
+  userData: Doc<"users"> | null | undefined
+}) => {
+  // TODO: skeleton
+  if (!userData) {
+    return null
   }
+  const router = useRouter()
   const coderItems = [
     { key: "dashboard", label: "Dashboard", href: "/dashboard/coder" },
     { key: "profile", label: "My Profile", href: "/profile/coder" },
@@ -55,11 +60,11 @@ const AvatarDropDown = () => {
           as="button"
           avatarProps={{
             isBordered: true,
-            src: userInfo.avatarURL
+            src: userData?.image || ""
           }}
           className="transition-transform"
-          description={userInfo.description}
-          name={userInfo.name}
+          description={userData!.role}
+          name={userData!.name}
         />
       </DropdownTrigger>
       <DropdownMenu aria-label="User Actions" variant="flat" items={items}>
@@ -79,16 +84,18 @@ const AvatarDropDown = () => {
 }
 
 export default function NavBar() {
-  const userId = useStoreCoderEffect()
-  console.log({ userId })
-  const pathname = usePathname()
   const { data: session, status } = useSession()
+  // create or get user id in convex and fetch user data
+  const userId = useStoreCoderEffect()
+  const userData = useQuery(api.users.getCoder, { userId: userId || undefined })
+  const pathname = usePathname()
   console.log({ session, status })
   const navItems = [
     { name: "Home", URL: "/" },
     { name: "Projects", URL: "/projects" },
     { name: "Users", URL: "/users" }
   ]
+
   return (
     <Navbar isBordered>
       <NavbarBrand>
@@ -112,7 +119,7 @@ export default function NavBar() {
       <NavbarContent justify="end">
         {status === "authenticated" && (
           <NavbarItem>
-            <AvatarDropDown />
+            <AvatarDropDown userData={userData} />
           </NavbarItem>
         )}
 

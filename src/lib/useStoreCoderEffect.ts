@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
-import { useMutation } from "convex/react"
+import { useMutation, useQuery } from "convex/react"
 import { api } from "../../convex/_generated/api"
 import { useSession } from "next-auth/react"
-import { Id } from "../../convex/_generated/dataModel"
+import { Doc, Id } from "../../convex/_generated/dataModel"
 
 export default function useStoreCoderEffect() {
   // store user as coder role and return user id
@@ -10,6 +10,7 @@ export default function useStoreCoderEffect() {
   const { data: session, status } = useSession()
   const [userId, setUserId] = useState<Id<"users"> | null>(null)
   const storeCoder = useMutation(api.users.storeCoder)
+
   useEffect(() => {
     // If the user is not logged in don't do anything
     if (status !== "authenticated") {
@@ -22,6 +23,7 @@ export default function useStoreCoderEffect() {
       setUserId(id)
     }
     createCoder()
+
     // cleanup
     return () => setUserId(null)
   }, [status, storeCoder, session?.user?.email])

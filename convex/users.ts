@@ -36,8 +36,12 @@ export const storeCoder = mutation({
 })
 
 export const getCoder = query({
-  args: { userId: v.id("users") },
+  args: { userId: v.optional(v.id("users")) },
   handler: async (ctx, args) => {
+    if (!args.userId) {
+      return null
+    }
+
     const coder = await ctx.db
       .query("users")
       .filter((q) => q.eq(q.field("_id"), args.userId))
