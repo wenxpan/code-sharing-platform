@@ -10,6 +10,8 @@
     "convex": "npx convex dev"
   },
   "dependencies": {
+    "@descope/nextjs-sdk": "^0.0.3-alpha.1",
+    "@descope/node-sdk": "^1.6.3",
     "@heroicons/react": "^2.1.1",
     "@nextui-org/react": "^2.2.9",
     "@octokit/core": "^5.1.0",

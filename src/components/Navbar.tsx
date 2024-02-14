@@ -1,6 +1,5 @@
 "use client"
 
-import { signIn, signOut, useSession } from "next-auth/react"
 import {
   Navbar,
   NavbarBrand,
@@ -16,34 +15,20 @@ import {
 } from "@nextui-org/dropdown"
 import { Button } from "@nextui-org/button"
 import { User } from "@nextui-org/user"
-import { usePathname, useRouter } from "next/navigation"
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
-import useStoreCoderEffect from "@/lib/useStoreCoderEffect"
-import { useQuery } from "convex/react"
+import { usePathname } from "next/navigation"
+import { useMutation } from "convex/react"
 import { api } from "@convex/_generated/api"
-import { Doc } from "@convex/_generated/dataModel"
-
-const performSignOut = async (router: AppRouterInstance) => {
-  try {
-    await fetch("/api/auth/federated-sign-out").then(() => {
-      signOut({ redirect: false })
-      router.replace("/")
-    })
-  } catch (error) {
-    console.error("Error during sign out:", error)
-  }
-}
+import { useUser } from "@descope/react-sdk"
 
 const AvatarDropDown = ({
   userData,
 }: {
-  userData: Doc<"users"> | null | undefined
+  userData: { name: string; role: string; image: string }
 }) => {
   // TODO: skeleton
   if (!userData) {
     return null
   }
-  const router = useRouter()
   const coderItems = [
     { key: "dashboard", label: "Dashboard", href: "/dashboard/coder" },
     { key: "profile", label: "My Profile", href: "/profile/coder" },
@@ -73,7 +58,7 @@ const AvatarDropDown = ({
             key={item.key}
             color={item.key === "sign-out" ? "danger" : "default"}
             className={item.key === "sign-out" ? "text-danger" : ""}
-            onClick={() => item.key === "sign-out" && performSignOut(router)}
+            onClick={() => item.key === "sign-out"}
           >
             {item.label}
           </DropdownItem>
@@ -84,12 +69,9 @@ const AvatarDropDown = ({
 }
 
 export default function NavBar() {
-  const { data: session, status } = useSession()
-  // create or get user id in convex and fetch user data
-  const userId = useStoreCoderEffect()
-  const userData = useQuery(api.users.getCoder, { userId: userId || undefined })
+  const { user } = useUser()
+  useMutation(api.users.storeCoder)
   const pathname = usePathname()
-  console.log({ session, status })
   const navItems = [
     { name: "Home", URL: "/" },
     { name: "Projects", URL: "/projects" },
@@ -117,34 +99,28 @@ export default function NavBar() {
         ))}
       </NavbarContent>
       <NavbarContent justify="end">
-        {status === "authenticated" && (
+        {user && (
           <NavbarItem>
-            <AvatarDropDown userData={userData} />
+            <AvatarDropDown
+              userData={{
+                name: user?.name || "",
+                role: user?.roleNames?.[0] || "",
+                image: user?.picture || "",
+              }}
+            />
           </NavbarItem>
         )}
 
-        {status === "unauthenticated" && (
+        {!user && (
           <>
             <NavbarItem>
-              <Button
-                onClick={() =>
-                  signIn("descope", { callbackUrl: "/dashboard/business" })
-                }
-                color="primary"
-                variant="flat"
-              >
-                Business Portal
+              <Button color="primary" variant="flat">
+                <Link href="/login">Business Portal</Link>
               </Button>
             </NavbarItem>
             <NavbarItem>
-              <Button
-                onClick={() =>
-                  signIn("descope", { callbackUrl: "/dashboard/coder" })
-                }
-                color="primary"
-                variant="flat"
-              >
-                Coder Portal
+              <Button color="primary" variant="flat">
+                <Link href="/login">Coder Portal</Link>
               </Button>
             </NavbarItem>
           </>
