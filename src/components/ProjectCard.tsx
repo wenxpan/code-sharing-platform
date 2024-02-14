@@ -11,13 +11,13 @@ interface ProjectCardProps {}
 const ProjectCard: React.FC<ProjectCardProps> = () => {
   const skills = ["html", "css", "react", "..."]
   return (
-    <Card className="py-4">
+    <Card className="py-4" shadow="sm">
       <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
         <User
           name="Jane Doe"
-          description="Product Designer"
+          description="github name"
           avatarProps={{
-            src: "https://i.pravatar.cc/150?u=a04258114e29026702d"
+            src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
           }}
         />
         <h4 className="font-bold text-large mt-2">Tailwind color contrast</h4>
@@ -78,3 +78,17 @@ const ProjectCard: React.FC<ProjectCardProps> = () => {
 }
 
 export default ProjectCard
+
+const ProjectCardList: React.FC<ProjectCardProps> = () => {
+  return (
+    <div className="py-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 place-items-center">
+      <ProjectCard />
+      <ProjectCard />
+      <ProjectCard />
+      <ProjectCard />
+      <ProjectCard />
+    </div>
+  )
+}
+
+export { ProjectCardList, ProjectCard }

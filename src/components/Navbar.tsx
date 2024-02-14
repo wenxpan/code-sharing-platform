@@ -1,52 +1,50 @@
-"use client";
+"use client"
 
-import { signIn, signOut, useSession } from "next-auth/react";
 import {
   Navbar,
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-} from "@nextui-org/navbar";
-import { Link } from "@nextui-org/link";
+} from "@nextui-org/navbar"
+import { Link } from "@nextui-org/link"
 import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from "@nextui-org/dropdown";
-import { Button } from "@nextui-org/button";
-import { User } from "@nextui-org/user";
-import { usePathname, useRouter } from "next/navigation";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+} from "@nextui-org/dropdown"
+import { Button } from "@nextui-org/button"
+import { User } from "@nextui-org/user"
+import { usePathname } from "next/navigation"
+import { useMutation } from "convex/react"
+import { api } from "@convex/_generated/api"
+import { useDescope, useUser } from "@descope/react-sdk"
+import { useCallback } from "react"
 
-const performSignOut = async (router: AppRouterInstance) => {
-  try {
-    await fetch("/api/auth/federated-sign-out").then(() => {
-      signOut({ redirect: false });
-      router.replace("/");
-    });
-  } catch (error) {
-    console.error("Error during sign out:", error);
+const AvatarDropDown = ({
+  userData,
+}: {
+  userData: { name: string; role: string; image: string }
+}) => {
+  const sdk = useDescope()
+
+  const handleLogout = useCallback(() => {
+    sdk.logout()
+  }, [sdk])
+
+  // TODO: skeleton
+  if (!userData) {
+    return null
   }
-};
-
-const AvatarDropDown = () => {
-  const router = useRouter();
-  const userInfo = {
-    name: "Zoey Hughes",
-    avatarURL: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
-    email: "zoey@example.com",
-    description: "user",
-  };
   const coderItems = [
     { key: "dashboard", label: "Dashboard", href: "/dashboard/coder" },
     { key: "profile", label: "My Profile", href: "/profile/coder" },
     { key: "projects", label: "My Projects", href: "/projects" },
     { key: "jobs", label: "Applied Jobs", href: "/jobs" },
     { key: "sign-out", label: "Sign Out" },
-  ];
+  ]
 
-  const items = coderItems;
+  const items = coderItems
   return (
     <Dropdown placement="bottom-end">
       <DropdownTrigger>
@@ -54,11 +52,11 @@ const AvatarDropDown = () => {
           as="button"
           avatarProps={{
             isBordered: true,
-            src: userInfo.avatarURL,
+            src: userData?.image || "",
           }}
           className="transition-transform"
-          description={userInfo.description}
-          name={userInfo.name}
+          description={userData!.role}
+          name={userData!.name}
         />
       </DropdownTrigger>
       <DropdownMenu aria-label="User Actions" variant="flat" items={items}>
@@ -67,40 +65,32 @@ const AvatarDropDown = () => {
             key={item.key}
             color={item.key === "sign-out" ? "danger" : "default"}
             className={item.key === "sign-out" ? "text-danger" : ""}
-            onClick={() => item.key === "sign-out" && performSignOut(router)}
+            onClick={() => item.key === "sign-out" && handleLogout()}
           >
             {item.label}
           </DropdownItem>
         )}
       </DropdownMenu>
     </Dropdown>
-  );
-};
-
-const GetStartedButton = () => (
-  <NavbarItem>
-    <Button
-      color="primary"
-      variant="flat"
-      onClick={() => signIn("descope", { callbackUrl: "/dashboard" })}
-    >
-      Get Started
-    </Button>
-  </NavbarItem>
-);
+  )
+}
 
 export default function NavBar() {
-  const pathname = usePathname();
-  const { data: session, status } = useSession();
+  const { user } = useUser()
+  useMutation(api.users.storeCoder)
+  const pathname = usePathname()
   const navItems = [
     { name: "Home", URL: "/" },
     { name: "Projects", URL: "/projects" },
     { name: "Users", URL: "/users" },
-  ];
+  ]
+
   return (
     <Navbar isBordered>
       <NavbarBrand>
-        <p className="font-bold text-inherit">CODABORATE</p>
+        <Link className="font-bold text-inherit cursor-pointer" href="/">
+          CODABORATE
+        </Link>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         {navItems.map((item) => (
@@ -116,39 +106,33 @@ export default function NavBar() {
         ))}
       </NavbarContent>
       <NavbarContent justify="end">
-        {status === "authenticated" && (
+        {user && (
           <NavbarItem>
-            <AvatarDropDown />
+            <AvatarDropDown
+              userData={{
+                name: user?.name || "",
+                role: user?.roleNames?.[0] || "",
+                image: user?.picture || "",
+              }}
+            />
           </NavbarItem>
         )}
 
-        {status === "unauthenticated" && (
+        {!user && (
           <>
             <NavbarItem>
-              <Button
-                onClick={() =>
-                  signIn("descope", { callbackUrl: "/dashboard/business" })
-                }
-                color="primary"
-                variant="flat"
-              >
-                Sign Up As Business
+              <Button color="primary" variant="flat">
+                <Link href="/login/business">Business Portal</Link>
               </Button>
             </NavbarItem>
             <NavbarItem>
-              <Button
-                onClick={() =>
-                  signIn("descope", { callbackUrl: "/dashboard/coder" })
-                }
-                color="primary"
-                variant="flat"
-              >
-                Sign Up As Coder
+              <Button color="primary" variant="flat">
+                <Link href="/login/coder">Coder Portal</Link>
               </Button>
             </NavbarItem>
           </>
         )}
       </NavbarContent>
     </Navbar>
-  );
+  )
 }
