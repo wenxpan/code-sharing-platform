@@ -18,13 +18,20 @@ import { User } from "@nextui-org/user"
 import { usePathname } from "next/navigation"
 import { useMutation } from "convex/react"
 import { api } from "@convex/_generated/api"
-import { useUser } from "@descope/react-sdk"
+import { useDescope, useUser } from "@descope/react-sdk"
+import { useCallback } from "react"
 
 const AvatarDropDown = ({
   userData,
 }: {
   userData: { name: string; role: string; image: string }
 }) => {
+  const sdk = useDescope()
+
+  const handleLogout = useCallback(() => {
+    sdk.logout()
+  }, [sdk])
+
   // TODO: skeleton
   if (!userData) {
     return null
@@ -58,7 +65,7 @@ const AvatarDropDown = ({
             key={item.key}
             color={item.key === "sign-out" ? "danger" : "default"}
             className={item.key === "sign-out" ? "text-danger" : ""}
-            onClick={() => item.key === "sign-out"}
+            onClick={() => item.key === "sign-out" && handleLogout()}
           >
             {item.label}
           </DropdownItem>
@@ -115,12 +122,12 @@ export default function NavBar() {
           <>
             <NavbarItem>
               <Button color="primary" variant="flat">
-                <Link href="/login">Business Portal</Link>
+                <Link href="/login/business">Business Portal</Link>
               </Button>
             </NavbarItem>
             <NavbarItem>
               <Button color="primary" variant="flat">
-                <Link href="/login">Coder Portal</Link>
+                <Link href="/login/coder">Coder Portal</Link>
               </Button>
             </NavbarItem>
           </>
