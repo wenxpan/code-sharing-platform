@@ -13,13 +13,30 @@ interface ProjectPageProps {
 const ProjectPage: React.FC<ProjectPageProps> = ({ params }) => {
   const id = params.id
   const project = {
-    name: "Tailwind Color Contrast Checker",
-    openIssues: 4,
-    techStack: ["html", "css", "tailwind css", "javascript"]
+    displayName: "Tailwind Color Contrast Checker",
+    techStack: ["html", "css", "tailwind css", "javascript"],
+    // can fetch from github api
+    full_name: "wenxpan/task-hatch-frontend",
+    homepage: "https://taskhatch.wenxpan.com",
+    open_issues: 0,
+    allow_forking: true
   }
+  const collaborators = [
+    {
+      login: "MinghongGao",
+      avatar_url: "https://avatars.githubusercontent.com/u/20641815?v=4",
+      role_name: "write"
+    },
+    {
+      login: "wenxpan",
+      avatar_url: "https://avatars.githubusercontent.com/u/28617120?v=4",
+      role_name: "admin"
+    }
+  ]
+
   return (
     <article className="max-w-lg mx-auto py-8 flex flex-col gap-4 items-start">
-      <h1 className="font-bold text-2xl">{project.name}</h1>
+      <h1 className="font-bold text-2xl">{project.displayName}</h1>
       <User
         name="Jane Doe"
         description="github name"
@@ -29,9 +46,9 @@ const ProjectPage: React.FC<ProjectPageProps> = ({ params }) => {
       />
       <section className="grid grid-cols-2">
         <h2>Repository</h2>
-        <p>github.com</p>
+        <p>{project.full_name}</p>
         <h2>Website</h2>
-        <p>www.example.com</p>
+        <p>{project.homepage}</p>
       </section>
       <Button>Leave feedback</Button>
       <ScreenshotsCarousel />
