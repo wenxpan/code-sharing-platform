@@ -8,26 +8,37 @@ export const authOptions: NextAuthOptions = {
       id: "descope",
       name: "Descope",
       type: "oauth",
-      wellKnown: `https://api.descope.com/${process.env.DESCOPE_CLIENT_ID}/.well-known/openid-configuration`,
-      authorization: { params: { scope: "openid email profile" } },
+      wellKnown: `https://api.descope.com/${process.env.DESCOPE_PROJECT_ID}/.well-known/openid-configuration`,
+      authorization: {
+        params: { scope: "openid email profile descope.custom_claims" },
+      },
       idToken: true,
       clientId: process.env.DESCOPE_CLIENT_ID,
       clientSecret: process.env.DESCOPE_CLIENT_SECRET,
       checks: ["pkce", "state"],
-      profile(profile) {
+      profile(profile, tokens) {
         return {
           id: profile.sub,
           name: profile.name,
           email: profile.email,
           image: profile.picture,
+          idToken: tokens.id_token,
+          ...tokens,
         }
       },
     },
   ],
   callbacks: {
-    async session({ session, token }) {
-      const user = { ...session.user, id: token.sub }
-      return { ...session, user }
+    async jwt({ token, account }) {
+      if (account?.id_token) {
+        token.idToken = account.id_token
+      }
+      return token
+    },
+    async session({ session, token, user }) {
+      // @ts-ignore
+      session.idToken = token.idToken
+      return session
     },
   },
 }
