@@ -6,7 +6,7 @@ const coders = [
     feedbackPosted: 2,
     feedbackReceived: 1,
     avatar: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
-    github: "tony.reichert"
+    github: "tony.reichert",
   },
   {
     id: 2,
@@ -15,7 +15,7 @@ const coders = [
     feedbackPosted: 5,
     feedbackReceived: 4,
     avatar: "https://i.pravatar.cc/150?u=b042581f4e290267e2f",
-    github: "julia.mendez"
+    github: "julia.mendez",
   },
   {
     id: 3,
@@ -24,7 +24,7 @@ const coders = [
     feedbackPosted: 3,
     feedbackReceived: 3,
     avatar: "https://i.pravatar.cc/150?u=c042581d4e290267e3d",
-    github: "marco.fischer"
+    github: "marco.fischer",
   },
   {
     id: 4,
@@ -33,7 +33,7 @@ const coders = [
     feedbackPosted: 1,
     feedbackReceived: 5,
     avatar: "https://i.pravatar.cc/150?u=d042581f4e290267e4d",
-    github: "lena.patel"
+    github: "lena.patel",
   },
   {
     id: 5,
@@ -42,8 +42,8 @@ const coders = [
     feedbackPosted: 4,
     feedbackReceived: 2,
     avatar: "https://i.pravatar.cc/150?u=e042581f4e290267e5e",
-    github: "sergio.ramos"
-  }
+    github: "sergio.ramos",
+  },
 ]
 
 export { coders }

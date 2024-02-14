@@ -14,7 +14,7 @@ interface FeedbackPageProps {
 const FeedbackPage: React.FC<FeedbackPageProps> = ({ params }) => {
   const id = params.id
   const feedbackInfo = {
-    name: ""
+    name: "",
   }
 
   return (

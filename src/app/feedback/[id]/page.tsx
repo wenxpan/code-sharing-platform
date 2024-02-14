@@ -10,7 +10,7 @@ interface FeedbackPageProps {
 const FeedbackPage: React.FC<FeedbackPageProps> = ({ params }) => {
   const id = params.id
   const feedbackInfo = {
-    name: ""
+    name: "",
   }
 
   return (
@@ -26,7 +26,7 @@ const FeedbackPage: React.FC<FeedbackPageProps> = ({ params }) => {
               name="Jane Doe"
               description="github name"
               avatarProps={{
-                src: "https://i.pravatar.cc/150?u=a04258114e29026702d"
+                src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
               }}
             />
           </div>

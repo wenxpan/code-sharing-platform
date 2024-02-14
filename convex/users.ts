@@ -11,7 +11,7 @@ export const storeCoder = mutation({
       // @ts-ignore
       .withIndex("by_email", (q) =>
         // @ts-ignore
-        q.eq("email", email)
+        q.eq("email", email),
       )
       .unique()
     if (user !== null) {
@@ -20,7 +20,7 @@ export const storeCoder = mutation({
         await ctx.db.patch(user._id, {
           name,
           email,
-          image
+          image,
         })
       }
       return user._id
@@ -30,9 +30,9 @@ export const storeCoder = mutation({
       name,
       email,
       image,
-      role: "coder"
+      role: "coder",
     })
-  }
+  },
 })
 
 export const getCoder = query({
@@ -47,5 +47,5 @@ export const getCoder = query({
       .filter((q) => q.eq(q.field("_id"), args.userId))
       .unique()
     return coder
-  }
+  },
 })

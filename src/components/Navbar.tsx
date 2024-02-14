@@ -5,14 +5,14 @@ import {
   Navbar,
   NavbarBrand,
   NavbarContent,
-  NavbarItem
+  NavbarItem,
 } from "@nextui-org/navbar"
 import { Link } from "@nextui-org/link"
 import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
-  DropdownTrigger
+  DropdownTrigger,
 } from "@nextui-org/dropdown"
 import { Button } from "@nextui-org/button"
 import { User } from "@nextui-org/user"
@@ -35,7 +35,7 @@ const performSignOut = async (router: AppRouterInstance) => {
 }
 
 const AvatarDropDown = ({
-  userData
+  userData,
 }: {
   userData: Doc<"users"> | null | undefined
 }) => {
@@ -49,7 +49,7 @@ const AvatarDropDown = ({
     { key: "profile", label: "My Profile", href: "/profile/coder" },
     { key: "projects", label: "My Projects", href: "/projects" },
     { key: "jobs", label: "Applied Jobs", href: "/jobs" },
-    { key: "sign-out", label: "Sign Out" }
+    { key: "sign-out", label: "Sign Out" },
   ]
 
   const items = coderItems
@@ -60,7 +60,7 @@ const AvatarDropDown = ({
           as="button"
           avatarProps={{
             isBordered: true,
-            src: userData?.image || ""
+            src: userData?.image || "",
           }}
           className="transition-transform"
           description={userData!.role}
@@ -93,7 +93,7 @@ export default function NavBar() {
   const navItems = [
     { name: "Home", URL: "/" },
     { name: "Projects", URL: "/projects" },
-    { name: "Users", URL: "/users" }
+    { name: "Users", URL: "/users" },
   ]
 
   return (

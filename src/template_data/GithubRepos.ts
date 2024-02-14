@@ -22,7 +22,7 @@ const repo = {
     events_url: "https://api.github.com/users/octocat/events{/privacy}",
     received_events_url: "https://api.github.com/users/octocat/received_events",
     type: "User",
-    site_admin: false
+    site_admin: false,
   },
   private: false,
   html_url: "https://github.com/octocat/Hello-World",
@@ -118,7 +118,7 @@ const repo = {
   permissions: {
     pull: true,
     push: false,
-    admin: false
+    admin: false,
   },
   allow_rebase_merge: true,
   template_repository: {
@@ -147,7 +147,7 @@ const repo = {
       received_events_url:
         "https://api.github.com/users/octocat/received_events",
       type: "User",
-      site_admin: false
+      site_admin: false,
     },
     private: false,
     html_url: "https://github.com/octocat/Hello-World-Template",
@@ -248,7 +248,7 @@ const repo = {
       url: "https://api.github.com/licenses/mit",
       spdx_id: "MIT",
       node_id: "MDc6TGljZW5zZW1pdA==",
-      html_url: "https://api.github.com/licenses/mit"
+      html_url: "https://api.github.com/licenses/mit",
     },
     topics: ["octocat", "atom", "electron", "api"],
     has_issues: true,
@@ -265,7 +265,7 @@ const repo = {
     permissions: {
       admin: false,
       push: false,
-      pull: true
+      pull: true,
     },
     allow_rebase_merge: true,
     temp_clone_token: "ABTLWHOULUVAXGTRYU7OC2876QJ2O",
@@ -274,7 +274,7 @@ const repo = {
     delete_branch_on_merge: true,
     allow_merge_commit: true,
     subscribers_count: 42,
-    network_count: 0
+    network_count: 0,
   },
   temp_clone_token: "ABTLWHOULUVAXGTRYU7OC2876QJ2O",
   allow_squash_merge: true,
@@ -288,7 +288,7 @@ const repo = {
     name: "MIT License",
     spdx_id: "MIT",
     url: "https://api.github.com/licenses/mit",
-    node_id: "MDc6TGljZW5zZW1pdA=="
+    node_id: "MDc6TGljZW5zZW1pdA==",
   },
   organization: {
     login: "octocat",
@@ -309,7 +309,7 @@ const repo = {
     events_url: "https://api.github.com/users/octocat/events{/privacy}",
     received_events_url: "https://api.github.com/users/octocat/received_events",
     type: "Organization",
-    site_admin: false
+    site_admin: false,
   },
   parent: {
     id: 1296269,
@@ -337,7 +337,7 @@ const repo = {
       received_events_url:
         "https://api.github.com/users/octocat/received_events",
       type: "User",
-      site_admin: false
+      site_admin: false,
     },
     private: false,
     html_url: "https://github.com/octocat/Hello-World",
@@ -436,7 +436,7 @@ const repo = {
     permissions: {
       admin: false,
       push: false,
-      pull: true
+      pull: true,
     },
     allow_rebase_merge: true,
     temp_clone_token: "ABTLWHOULUVAXGTRYU7OC2876QJ2O",
@@ -452,11 +452,11 @@ const repo = {
       url: "https://api.github.com/licenses/mit",
       spdx_id: "MIT",
       node_id: "MDc6TGljZW5zZW1pdA==",
-      html_url: "https://api.github.com/licenses/mit"
+      html_url: "https://api.github.com/licenses/mit",
     },
     forks: 1,
     open_issues: 1,
-    watchers: 1
+    watchers: 1,
   },
   source: {
     id: 1296269,
@@ -484,7 +484,7 @@ const repo = {
       received_events_url:
         "https://api.github.com/users/octocat/received_events",
       type: "User",
-      site_admin: false
+      site_admin: false,
     },
     private: false,
     html_url: "https://github.com/octocat/Hello-World",
@@ -582,7 +582,7 @@ const repo = {
     permissions: {
       admin: false,
       push: false,
-      pull: true
+      pull: true,
     },
     allow_rebase_merge: true,
     temp_clone_token: "ABTLWHOULUVAXGTRYU7OC2876QJ2O",
@@ -598,21 +598,21 @@ const repo = {
       url: "https://api.github.com/licenses/mit",
       spdx_id: "MIT",
       node_id: "MDc6TGljZW5zZW1pdA==",
-      html_url: "https://api.github.com/licenses/mit"
+      html_url: "https://api.github.com/licenses/mit",
     },
     forks: 1,
     open_issues: 1,
     watchers: 1,
     security_and_analysis: {
       advanced_security: {
-        status: "enabled"
+        status: "enabled",
       },
       secret_scanning: {
-        status: "enabled"
+        status: "enabled",
       },
       secret_scanning_push_protection: {
-        status: "disabled"
-      }
-    }
-  }
+        status: "disabled",
+      },
+    },
+  },
 }
