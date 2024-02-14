@@ -15,7 +15,7 @@ const JobPage: React.FC<JobPageProps> = ({ params }) => {
   const id = params.id
   const job = {
     name: "Frontend Developer",
-    techStack: ["html", "css", "tailwind css", "javascript"]
+    techStack: ["html", "css", "tailwind css", "javascript"],
   }
   return (
     <article className="mx-auto py-8 flex flex-col gap-4 items-start">
@@ -24,7 +24,7 @@ const JobPage: React.FC<JobPageProps> = ({ params }) => {
         name="Jane Doe"
         description="company name"
         avatarProps={{
-          src: "https://i.pravatar.cc/150?u=a04258114e29026702d"
+          src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
         }}
       />
       <section className="grid grid-cols-2">

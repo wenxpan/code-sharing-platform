@@ -1,14 +1,14 @@
-import {getServerSession} from "next-auth";
-import {NextRequest, NextResponse} from "next/server";
-import {authOptions} from "@/app/api/auth/[...nextauth]/route";
+import { getServerSession } from "next-auth"
+import { NextRequest, NextResponse } from "next/server"
+import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 
-export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic"
 
 export async function GET(req: NextRequest, res: NextResponse) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(authOptions)
     if (!session) {
-      return NextResponse.redirect(process.env.NEXTAUTH_URL!);
+      return NextResponse.redirect(process.env.NEXTAUTH_URL!)
     }
 
     const res = fetch("https://api.descope.com/oauth2/v1/logout", {
@@ -19,13 +19,13 @@ export async function GET(req: NextRequest, res: NextResponse) {
         // Needed for OAuth logout endpoint
         post_logout_redirect_uri: process.env.NEXTAUTH_URL!,
       }),
-    });
+    })
 
-    return NextResponse.json({success: true});
+    return NextResponse.json({ success: true })
   } catch (error) {
     return NextResponse.json({
       success: false,
       message: "Could not sign out of Descope",
-    });
+    })
   }
 }

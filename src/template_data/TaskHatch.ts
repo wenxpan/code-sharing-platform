@@ -123,6 +123,6 @@ const TaskHatch = {
     merge_commit_message: "PR_TITLE",
     merge_commit_title: "MERGE_MESSAGE",
     network_count: 0,
-    subscribers_count: 2
-  }
+    subscribers_count: 2,
+  },
 }

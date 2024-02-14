@@ -6,6 +6,6 @@ export default defineSchema({
     name: v.string(),
     email: v.string(),
     image: v.optional(v.string()),
-    role: v.string()
-  }).index("by_email", ["email"])
+    role: v.string(),
+  }).index("by_email", ["email"]),
 })

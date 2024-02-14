@@ -19,19 +19,19 @@ const ProjectPage: React.FC<ProjectPageProps> = ({ params }) => {
     full_name: "wenxpan/task-hatch-frontend",
     homepage: "https://taskhatch.wenxpan.com",
     open_issues: 0,
-    allow_forking: true
+    allow_forking: true,
   }
   const collaborators = [
     {
       login: "MinghongGao",
       avatar_url: "https://avatars.githubusercontent.com/u/20641815?v=4",
-      role_name: "write"
+      role_name: "write",
     },
     {
       login: "wenxpan",
       avatar_url: "https://avatars.githubusercontent.com/u/28617120?v=4",
-      role_name: "admin"
-    }
+      role_name: "admin",
+    },
   ]
 
   return (
@@ -41,7 +41,7 @@ const ProjectPage: React.FC<ProjectPageProps> = ({ params }) => {
         name="Jane Doe"
         description="github name"
         avatarProps={{
-          src: "https://i.pravatar.cc/150?u=a04258114e29026702d"
+          src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
         }}
       />
       <section className="grid grid-cols-2">

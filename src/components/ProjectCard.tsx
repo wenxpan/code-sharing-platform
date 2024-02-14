@@ -17,7 +17,7 @@ const ProjectCard: React.FC<ProjectCardProps> = () => {
           name="Jane Doe"
           description="github name"
           avatarProps={{
-            src: "https://i.pravatar.cc/150?u=a04258114e29026702d"
+            src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
           }}
         />
         <h4 className="font-bold text-large mt-2">Tailwind color contrast</h4>

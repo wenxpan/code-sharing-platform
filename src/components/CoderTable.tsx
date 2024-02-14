@@ -7,7 +7,7 @@ import {
   TableBody,
   TableColumn,
   TableRow,
-  TableCell
+  TableCell,
 } from "@nextui-org/table"
 import { coders } from "@/template_data/Coders"
 import { User } from "@nextui-org/user"
@@ -22,7 +22,7 @@ const CoderTable: React.FC<CoderTableProps> = () => {
     { name: "Name", uid: "name" },
     { name: "Feedback posted", uid: "feedbackPosted" },
     { name: "Feedback received", uid: "feedbackReceived" },
-    { name: "Skills", uid: "skills" }
+    { name: "Skills", uid: "skills" },
   ]
 
   // TODO: add pagination
