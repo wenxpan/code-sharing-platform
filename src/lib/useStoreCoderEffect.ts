@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react"
-import { useMutation, useQuery } from "convex/react"
+import { useMutation } from "convex/react"
 import { api } from "../../convex/_generated/api"
-import { useSession } from "next-auth/react"
-import { Doc, Id } from "../../convex/_generated/dataModel"
+import { Id } from "../../convex/_generated/dataModel"
+import { useUser } from "@descope/react-sdk"
 
 export default function useStoreCoderEffect() {
   // store user as coder role and return user id
   // TODO: expand this to store business
-  const { data: session, status } = useSession()
+  const { user, isUserLoading } = useUser()
   const [userId, setUserId] = useState<Id<"users"> | null>(null)
   const storeCoder = useMutation(api.users.storeCoder)
 
@@ -17,15 +17,15 @@ export default function useStoreCoderEffect() {
       return
     }
     // @ts-ignore
-    const { name, email, image } = session.user
+    const { name, email, picture } = session.user
     async function createCoder() {
-      const id = await storeCoder({ name, email, image })
+      const id = await storeCoder({ name, email, image: picture })
       setUserId(id)
     }
     createCoder()
 
     // cleanup
     return () => setUserId(null)
-  }, [status, storeCoder, session?.user?.email])
+  }, [status, storeCoder, user?.email])
   return userId
 }
