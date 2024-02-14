@@ -9,7 +9,7 @@ import {
   TableRow,
   TableCell
 } from "@nextui-org/table"
-import { columns, coders } from "@/template_data/Coders"
+import { coders } from "@/template_data/Coders"
 import { User } from "@nextui-org/user"
 import SkillTagList from "./SkillTagList"
 
@@ -18,6 +18,13 @@ type Coder = (typeof coders)[0]
 interface CoderTableProps {}
 
 const CoderTable: React.FC<CoderTableProps> = () => {
+  const columns = [
+    { name: "Name", uid: "name" },
+    { name: "Feedback posted", uid: "feedbackPosted" },
+    { name: "Feedback received", uid: "feedbackReceived" },
+    { name: "Skills", uid: "skills" }
+  ]
+
   // TODO: add pagination
   const renderCell = React.useCallback((coder: Coder, columnKey: React.Key) => {
     const cellValue = coder[columnKey as keyof Coder]

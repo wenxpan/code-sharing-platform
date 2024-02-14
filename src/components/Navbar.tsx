@@ -1,52 +1,58 @@
-"use client";
+"use client"
 
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react"
 import {
   Navbar,
   NavbarBrand,
   NavbarContent,
-  NavbarItem,
-} from "@nextui-org/navbar";
-import { Link } from "@nextui-org/link";
+  NavbarItem
+} from "@nextui-org/navbar"
+import { Link } from "@nextui-org/link"
 import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
-  DropdownTrigger,
-} from "@nextui-org/dropdown";
-import { Button } from "@nextui-org/button";
-import { User } from "@nextui-org/user";
-import { usePathname, useRouter } from "next/navigation";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+  DropdownTrigger
+} from "@nextui-org/dropdown"
+import { Button } from "@nextui-org/button"
+import { User } from "@nextui-org/user"
+import { usePathname, useRouter } from "next/navigation"
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
+import useStoreCoderEffect from "@/lib/useStoreCoderEffect"
+import { useQuery } from "convex/react"
+import { api } from "@convex/_generated/api"
+import { Doc } from "@convex/_generated/dataModel"
 
 const performSignOut = async (router: AppRouterInstance) => {
   try {
     await fetch("/api/auth/federated-sign-out").then(() => {
-      signOut({ redirect: false });
-      router.replace("/");
-    });
+      signOut({ redirect: false })
+      router.replace("/")
+    })
   } catch (error) {
-    console.error("Error during sign out:", error);
+    console.error("Error during sign out:", error)
   }
-};
+}
 
-const AvatarDropDown = () => {
-  const router = useRouter();
-  const userInfo = {
-    name: "Zoey Hughes",
-    avatarURL: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
-    email: "zoey@example.com",
-    description: "user",
-  };
+const AvatarDropDown = ({
+  userData
+}: {
+  userData: Doc<"users"> | null | undefined
+}) => {
+  // TODO: skeleton
+  if (!userData) {
+    return null
+  }
+  const router = useRouter()
   const coderItems = [
     { key: "dashboard", label: "Dashboard", href: "/dashboard/coder" },
     { key: "profile", label: "My Profile", href: "/profile/coder" },
     { key: "projects", label: "My Projects", href: "/projects" },
     { key: "jobs", label: "Applied Jobs", href: "/jobs" },
-    { key: "sign-out", label: "Sign Out" },
-  ];
+    { key: "sign-out", label: "Sign Out" }
+  ]
 
-  const items = coderItems;
+  const items = coderItems
   return (
     <Dropdown placement="bottom-end">
       <DropdownTrigger>
@@ -54,11 +60,11 @@ const AvatarDropDown = () => {
           as="button"
           avatarProps={{
             isBordered: true,
-            src: userInfo.avatarURL,
+            src: userData?.image || ""
           }}
           className="transition-transform"
-          description={userInfo.description}
-          name={userInfo.name}
+          description={userData!.role}
+          name={userData!.name}
         />
       </DropdownTrigger>
       <DropdownMenu aria-label="User Actions" variant="flat" items={items}>
@@ -74,33 +80,28 @@ const AvatarDropDown = () => {
         )}
       </DropdownMenu>
     </Dropdown>
-  );
-};
-
-const GetStartedButton = () => (
-  <NavbarItem>
-    <Button
-      color="primary"
-      variant="flat"
-      onClick={() => signIn("descope", { callbackUrl: "/dashboard" })}
-    >
-      Get Started
-    </Button>
-  </NavbarItem>
-);
+  )
+}
 
 export default function NavBar() {
-  const pathname = usePathname();
-  const { data: session, status } = useSession();
+  const { data: session, status } = useSession()
+  // create or get user id in convex and fetch user data
+  const userId = useStoreCoderEffect()
+  const userData = useQuery(api.users.getCoder, { userId: userId || undefined })
+  const pathname = usePathname()
+  console.log({ session, status })
   const navItems = [
     { name: "Home", URL: "/" },
     { name: "Projects", URL: "/projects" },
-    { name: "Users", URL: "/users" },
-  ];
+    { name: "Users", URL: "/users" }
+  ]
+
   return (
     <Navbar isBordered>
       <NavbarBrand>
-        <p className="font-bold text-inherit">CODABORATE</p>
+        <Link className="font-bold text-inherit cursor-pointer" href="/">
+          CODABORATE
+        </Link>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         {navItems.map((item) => (
@@ -118,7 +119,7 @@ export default function NavBar() {
       <NavbarContent justify="end">
         {status === "authenticated" && (
           <NavbarItem>
-            <AvatarDropDown />
+            <AvatarDropDown userData={userData} />
           </NavbarItem>
         )}
 
@@ -132,7 +133,7 @@ export default function NavBar() {
                 color="primary"
                 variant="flat"
               >
-                Sign Up As Business
+                Business Portal
               </Button>
             </NavbarItem>
             <NavbarItem>
@@ -143,12 +144,12 @@ export default function NavBar() {
                 color="primary"
                 variant="flat"
               >
-                Sign Up As Coder
+                Coder Portal
               </Button>
             </NavbarItem>
           </>
         )}
       </NavbarContent>
     </Navbar>
-  );
+  )
 }

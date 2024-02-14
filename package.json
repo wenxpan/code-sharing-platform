@@ -6,11 +6,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "convex": "npx convex dev"
   },
   "dependencies": {
+    "@heroicons/react": "^2.1.1",
     "@nextui-org/react": "^2.2.9",
+    "@octokit/core": "^5.1.0",
     "@radix-ui/react-slot": "^1.0.2",
+    "aos": "^2.3.4",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "convex": "^1.9.0",
@@ -21,6 +25,7 @@
     "next-auth": "^4.24.5",
     "react": "^18",
     "react-dom": "^18",
+    "react-hook-form": "^7.50.1",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7"
   },
