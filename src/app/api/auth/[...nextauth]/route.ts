@@ -1,5 +1,5 @@
-import NextAuth from "next-auth/next"
-import { NextAuthOptions } from "next-auth"
+import NextAuth from "next-auth/next";
+import { NextAuthOptions } from "next-auth";
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.SECRET,
@@ -19,12 +19,18 @@ export const authOptions: NextAuthOptions = {
           id: profile.sub,
           name: profile.name,
           email: profile.email,
-          image: profile.picture
-        }
-      }
-    }
-  ]
-}
+          image: profile.picture,
+        };
+      },
+    },
+  ],
+  callbacks: {
+    async session({ session, token }) {
+      const user = { ...session.user, id: token.sub };
+      return { ...session, user };
+    },
+  },
+};
 
-const handler = NextAuth(authOptions)
-export { handler as GET, handler as POST }
+const handler = NextAuth(authOptions);
+export { handler as GET, handler as POST };
