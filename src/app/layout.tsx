@@ -22,8 +22,10 @@ export default function RootLayout({
           <Providers>
             <div className="flex flex-col min-h-screen">
               <NavBar />
-              <main className="max-w-[1024px] self-center grow py-4">
-                {children}
+              <main className="flex grow items-start py-4 w-full">
+                <div className="max-w-[1024px] w-full px-4 flex flex-col items-center">
+                  {children}
+                </div>
               </main>
               <Footer />
             </div>
