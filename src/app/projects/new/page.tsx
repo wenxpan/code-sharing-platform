@@ -3,16 +3,25 @@ import React, { useState } from "react"
 import { Input } from "@nextui-org/input"
 import { Checkbox } from "@nextui-org/checkbox"
 import { Button } from "@nextui-org/button"
-import { getProjectById } from "@convex/projects"
-import { getGithubRepo } from "@/lib/useGithubAPI"
+import { Doc } from "@convex/_generated/dataModel"
 
 interface CreateProjectPageProps {}
 
 const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
   const [ownerName, setOwnerName] = useState("")
   const [repoName, setRepoName] = useState("")
-  console.log({ tokenInClient: process.env.GITHUB_TOKEN })
+  const [project, setProject] = useState<Doc<"projects"> | null>(null)
+
+  const handleRepoLookup = async () => {
+    const res = await fetch(
+      `/api/github/repo?owner=${ownerName}&repo=${repoName}`
+    )
+    const { data } = await res.json()
+    setProject({ ...data })
+  }
+
   // TODO: show collaborators
+
   return (
     <>
       <form className="grid grid-cols-2 w-full gap-4 max-w-xl place-items-center">
@@ -40,14 +49,8 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
         />
         <Button
           type="button"
-          onClick={async (e) => {
-            // console.log({ tokenInClient: process.env.GITHUB_TOKEN })
-            const data = await getGithubRepo({
-              owner: ownerName,
-              repo: repoName,
-              token: process.env.GITHUB_TOKEN as string,
-            })
-            console.log({ data })
+          onClick={() => {
+            handleRepoLookup()
           }}
         >
           Search for repo

@@ -31,7 +31,6 @@ export const getGithubRepo = async ({
   token: string
 }) => {
   const octokit = await useGithubAPI({ token })
-  console.log({ tokenInServer: token })
   const { data } = await octokit.request("GET /repos/{owner}/{repo}", {
     owner,
     repo,
@@ -40,7 +39,7 @@ export const getGithubRepo = async ({
     },
   })
   const { id, allow_forking, full_name, homepage, html_url, open_issues } = data
-  const collaboratorsData = await octokit.request(
+  const { data: collaboratorsData } = await octokit.request(
     "GET /repos/{owner}/{repo}/collaborators",
     {
       owner,
