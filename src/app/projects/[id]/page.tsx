@@ -15,9 +15,10 @@ const ProjectPage: React.FC<ProjectPageProps> = ({ params }) => {
   const project = {
     displayName: "Tailwind Color Contrast Checker",
     techStack: ["html", "css", "tailwind css", "javascript"],
-    // can fetch from github api
+    // below can fetch & sync from github api
     full_name: "wenxpan/task-hatch-frontend",
     homepage: "https://taskhatch.wenxpan.com",
+    html_url: "https://github.com/wenxpan/task-hatch-frontend",
     open_issues: 0,
     allow_forking: true,
   }
