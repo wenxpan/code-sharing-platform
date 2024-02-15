@@ -10,21 +10,20 @@ import {
 } from "@/components/ui/carousel"
 import Image from "next/image"
 
-export function ScreenshotsCarousel() {
+export function ScreenshotsCarousel({
+  screenshots,
+}: {
+  screenshots: { url: string; alt: string }[]
+}) {
   return (
     <Carousel className="w-full max-w-lg mx-auto">
       <CarouselContent>
-        {Array.from({ length: 5 }).map((_, index) => (
+        {screenshots.map((img, index) => (
           <CarouselItem key={index}>
             <div className="p-1">
               <Card>
                 <CardContent className="flex items-center justify-center p-6">
-                  <Image
-                    src={"https://placehold.co/600x400/png"}
-                    alt="project screenshot"
-                    width={600}
-                    height={400}
-                  />
+                  <Image src={img.url} alt={img.alt} width={600} height={400} />
                 </CardContent>
               </Card>
             </div>
