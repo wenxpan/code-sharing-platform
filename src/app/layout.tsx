@@ -14,6 +14,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="light">
+      <head>
+        <link rel="icon" href="/icon.svg" sizes="any" />
+      </head>
       <body className={roboto.className}>
         <AuthProvider projectId={process.env.DESCOPE_CLIENT_ID || ""}>
           <Providers>
