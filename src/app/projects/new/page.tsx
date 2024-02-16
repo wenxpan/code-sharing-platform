@@ -4,7 +4,7 @@ import { Input } from "@nextui-org/input"
 import { Checkbox } from "@nextui-org/checkbox"
 import { Button } from "@nextui-org/button"
 import { Doc } from "@convex/_generated/dataModel"
-import { useForm } from "react-hook-form"
+import { useForm, Controller, useFieldArray } from "react-hook-form"
 
 interface CreateProjectPageProps {}
 
@@ -14,6 +14,7 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
   const {
     register,
     handleSubmit,
+    control,
     getValues,
     reset,
     formState: { errors },
@@ -25,14 +26,19 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
       displayName: "",
       homepage: "",
       html_url: "",
-      id: 300,
-      open_issues: 20,
+      id: 0,
+      open_issues: 0,
       screenshots: [],
       techStack: [],
     },
   })
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "screenshots",
+  })
 
-  const handleRepoLookup = async () => {
+  const handleRepoLookup = async (e: React.FormEvent) => {
+    e.preventDefault()
     const res = await fetch(
       `/api/github/repo?owner=${ownerName}&repo=${repoName}`
     )
@@ -45,6 +51,8 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
   }
 
   // TODO: show collaborators
+  // TODO: display allow forking
+  // TODO: upload screenshots
   const onSubmit = async (data: Doc<"projects">) => {
     console.log(data)
   }
@@ -52,74 +60,116 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
   return (
     <>
       <form
+        onSubmit={(e) => handleRepoLookup(e)}
+        className="w-full max-w-xl mb-8 flex flex-col "
+      >
+        <div className="flex items-start w-full gap-2">
+          <Input
+            type="text"
+            label="Owner"
+            required
+            description="https://github.com/{owner}/{repo}"
+            isInvalid={false}
+            value={ownerName}
+            onChange={(e) => setOwnerName(e.target.value)}
+          />
+          <Input
+            type="text"
+            label="Repo"
+            required
+            isInvalid={false}
+            value={repoName}
+            onChange={(e) => setRepoName(e.target.value)}
+          />
+        </div>
+        <Button type="submit" color="primary">
+          Search for repo
+        </Button>
+      </form>
+      <form
         className="grid grid-cols-2 w-full gap-4 max-w-xl place-items-center"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <Input
-          type="text"
-          label="Owner"
-          placeholder="/repos/{owner}"
-          required
-          isInvalid={false}
-          value={ownerName}
-          onChange={(e) => setOwnerName(e.target.value)}
-          // errorMessage="Repo not found"
+        {/* populated info */}
+        <Controller
+          name="html_url"
+          control={control}
+          render={({ field }) => (
+            <Input
+              label="Github url"
+              placeholder="/owner/repo"
+              isDisabled
+              {...field}
+            />
+          )}
         />
-        <Input
-          type="text"
-          label="Repo"
-          placeholder="/{repo}"
-          required
-          isInvalid={false}
-          value={repoName}
-          onChange={(e) => setRepoName(e.target.value)}
-          // errorMessage="Repo not found"
+        <Controller
+          name="homepage"
+          control={control}
+          render={({ field }) => <Input label="Deployed page" {...field} />}
         />
-        <Button
-          type="button"
-          onClick={() => {
-            handleRepoLookup()
-          }}
-        >
-          Search for repo
-        </Button>
-        <Input
-          type="text"
-          label="Fetched Repo Full Name"
-          placeholder="/repos/{owner}/{repo}"
-          isDisabled
-          {...register("full_name")}
-          // errorMessage="Repo not found"
-        />
-        <Input
-          type="text"
-          label="Project display name"
-          {...register("displayName")}
-        />
-        <Input type="text" label="Deployed page" {...register("homepage")} />
-        <Input
-          type="url"
-          label="Github url"
-          placeholder="/owner/repo"
-          isDisabled
-          {...register("html_url")}
-        />
-        <Input
-          // type="number"
-          label="Github repo id"
-          // isDisabled
-          {...register("id", { valueAsNumber: true })}
+        <Controller
+          name="open_issues"
+          control={control}
+          render={({ field }) => (
+            <Input
+              isDisabled
+              label="Open Issues"
+              {...field}
+              value={field.value.toString()}
+            />
+          )}
         />
         <Input
           type="number"
-          label="Open Issues"
           isDisabled
-          {...register("open_issues")}
+          label="Total collaborators"
+          value={getValues("collaborators").length.toString()}
         />
-        <Checkbox isDisabled {...register("allow_forking")}>
-          Allow Forking
-        </Checkbox>
-        <Button type="submit">Submit</Button>
+        {/* additional info */}
+        <Controller
+          name="displayName"
+          control={control}
+          render={({ field }) => <Input label="display name" {...field} />}
+        />
+        <div className="col-span-2 w-full">
+          <p>Screenshots</p>
+          <ul>
+            {fields.map((item, index) => (
+              <li key={item.id} className="flex items-center gap-2">
+                {/* <input {...register(`screenshots.${index}.url`)} /> */}
+                {/* <Controller
+                  render={({ field }) => <input {...field} />}
+                  name={`screenshots.${index}.alt`}
+                  control={control}
+                /> */}
+                <Controller
+                  name={`screenshots.${index}.url`}
+                  control={control}
+                  render={({ field }) => (
+                    <Input label="screenshot link" {...field} />
+                  )}
+                />
+                <Controller
+                  name={`screenshots.${index}.alt`}
+                  control={control}
+                  render={({ field }) => (
+                    <Input label="screenshot alt text" {...field} />
+                  )}
+                />
+                <Button type="button" onClick={() => remove(index)}>
+                  Delete
+                </Button>
+              </li>
+            ))}
+          </ul>
+          <Button type="button" onClick={() => append({ url: "", alt: "" })}>
+            Add
+          </Button>
+        </div>
+        <Button type="submit" color="primary">
+          Submit
+        </Button>
       </form>
     </>
   )
