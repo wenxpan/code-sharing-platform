@@ -4,47 +4,75 @@ import { Input } from "@nextui-org/input"
 import { Checkbox } from "@nextui-org/checkbox"
 import { Button } from "@nextui-org/button"
 import { Doc } from "@convex/_generated/dataModel"
+import { useForm } from "react-hook-form"
 
 interface CreateProjectPageProps {}
 
 const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
   const [ownerName, setOwnerName] = useState("")
   const [repoName, setRepoName] = useState("")
-  const [project, setProject] = useState<Doc<"projects"> | null>(null)
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    reset,
+    formState: { errors },
+  } = useForm<Doc<"projects">>({
+    defaultValues: {
+      full_name: "",
+      allow_forking: false,
+      collaborators: [],
+      displayName: "",
+      homepage: "",
+      html_url: "",
+      id: 300,
+      open_issues: 20,
+      screenshots: [],
+      techStack: [],
+    },
+  })
 
   const handleRepoLookup = async () => {
     const res = await fetch(
       `/api/github/repo?owner=${ownerName}&repo=${repoName}`
     )
     const { data } = await res.json()
-    setProject({ ...data })
+    const currentValues = getValues()
+    reset(
+      { ...currentValues, ...data },
+      { keepDefaultValues: true, keepDirtyValues: true }
+    )
   }
 
   // TODO: show collaborators
+  const onSubmit = async (data: Doc<"projects">) => {
+    console.log(data)
+  }
 
   return (
     <>
-      <form className="grid grid-cols-2 w-full gap-4 max-w-xl place-items-center">
+      <form
+        className="grid grid-cols-2 w-full gap-4 max-w-xl place-items-center"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <Input
           type="text"
           label="Owner"
-          placeholder="/repos/{owner}/{repo}"
+          placeholder="/repos/{owner}"
           required
           isInvalid={false}
           value={ownerName}
           onChange={(e) => setOwnerName(e.target.value)}
-          // value={full_name}
           // errorMessage="Repo not found"
         />
         <Input
           type="text"
           label="Repo"
-          placeholder="/repos/{owner}/{repo}"
+          placeholder="/{repo}"
           required
           isInvalid={false}
           value={repoName}
           onChange={(e) => setRepoName(e.target.value)}
-          // value={full_name}
           // errorMessage="Repo not found"
         />
         <Button
@@ -55,33 +83,43 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
         >
           Search for repo
         </Button>
-        <Input type="text" label="Project display name" />
         <Input
           type="text"
-          label="Deployed page"
-          // value={homepage}
+          label="Fetched Repo Full Name"
+          placeholder="/repos/{owner}/{repo}"
+          isDisabled
+          {...register("full_name")}
+          // errorMessage="Repo not found"
         />
+        <Input
+          type="text"
+          label="Project display name"
+          {...register("displayName")}
+        />
+        <Input type="text" label="Deployed page" {...register("homepage")} />
         <Input
           type="url"
           label="Github url"
+          placeholder="/owner/repo"
           isDisabled
-          // value={home_url}
+          {...register("html_url")}
         />
         <Input
-          type="text"
+          // type="number"
           label="Github repo id"
-          isDisabled
-          // value={id}
+          // isDisabled
+          {...register("id", { valueAsNumber: true })}
         />
         <Input
           type="number"
           label="Open Issues"
           isDisabled
-          // value={open_issues}
+          {...register("open_issues")}
         />
-        <Checkbox defaultSelected isDisabled>
+        <Checkbox isDisabled {...register("allow_forking")}>
           Allow Forking
         </Checkbox>
+        <Button type="submit">Submit</Button>
       </form>
     </>
   )

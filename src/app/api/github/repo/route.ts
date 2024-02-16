@@ -7,8 +7,6 @@ export async function GET(req: NextRequest) {
   const repo = searchParams.get("repo")
   const id = searchParams.get("id")
 
-  console.log({ tokenInAPI: process.env.GITHUB_TOKEN })
-
   let data
   if (owner && repo) {
     data = await getGithubRepo({
