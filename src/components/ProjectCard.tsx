@@ -5,10 +5,15 @@ import { Button, ButtonGroup } from "@nextui-org/react"
 import { User } from "@nextui-org/user"
 import NextImage from "next/image"
 import SkillTagList from "./SkillTagList"
+import Link from "next/link"
 
-interface ProjectCardProps {}
 
-const ProjectCard: React.FC<ProjectCardProps> = () => {
+interface ProjectCardProps {
+  id: number
+}
+
+const ProjectCard: React.FC<ProjectCardProps> = (props) => {
+  const { id } = props
   const skills = ["html", "css", "react", "..."]
   return (
     <Card className="py-4" shadow="sm">
@@ -31,7 +36,7 @@ const ProjectCard: React.FC<ProjectCardProps> = () => {
           width={300}
           height={200}
           priority
-          // fallbackSrc="https://via.placeholder.com/300x200"
+        // fallbackSrc="https://via.placeholder.com/300x200"
         />
         <SkillTagList skills={skills} />
       </CardBody>
@@ -54,7 +59,8 @@ const ProjectCard: React.FC<ProjectCardProps> = () => {
             </svg>
             Preview
           </Button>
-          <Button color="primary">
+          {/* <a href={`/projects/${id}`}> */}
+          <Button color="primary" href={`/projects/${id}`} as={Link}>
             Details
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -71,6 +77,7 @@ const ProjectCard: React.FC<ProjectCardProps> = () => {
               />
             </svg>
           </Button>
+          {/* </a> */}
         </ButtonGroup>
       </CardFooter>
     </Card>
@@ -82,11 +89,11 @@ export default ProjectCard
 const ProjectCardList: React.FC<ProjectCardProps> = () => {
   return (
     <div className="py-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 place-items-center">
-      <ProjectCard />
-      <ProjectCard />
-      <ProjectCard />
-      <ProjectCard />
-      <ProjectCard />
+      <ProjectCard id={1} />
+      <ProjectCard id={2} />
+      <ProjectCard id={3} />
+      <ProjectCard id={4} />
+      <ProjectCard id={5} />
     </div>
   )
 }
