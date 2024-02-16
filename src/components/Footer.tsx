@@ -18,7 +18,10 @@ const Footer: React.FC<FooterProps> = () => {
         </li>
       </ul>
       <p className="text-gray-500 text-sm mr-4">
-        Made with &#9829; by Minghong Gao & Wenxuan Pan
+        Made with <span className="text-red-500">&#9829;</span> by{" "}
+        <a href="https://github.com/Jojowangfy">Fangyi Wang</a>,{" "}
+        <a href="https://github.com/MinghongGao">Minghong Gao</a> &{" "}
+        <a href="https://github.com/wenxpan">Wenxuan Pan</a>
       </p>
     </div>
   )

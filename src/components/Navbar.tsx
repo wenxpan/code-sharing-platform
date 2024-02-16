@@ -20,6 +20,7 @@ import { useMutation } from "convex/react"
 import { api } from "@convex/_generated/api"
 import { useDescope, useUser } from "@descope/react-sdk"
 import { useCallback } from "react"
+import { WebsiteLogo } from "./ui/logo"
 
 const AvatarDropDown = ({
   userData,
@@ -89,8 +90,8 @@ export default function NavBar() {
   return (
     <Navbar isBordered>
       <NavbarBrand>
-        <Link className="font-bold text-inherit cursor-pointer" href="/">
-          CODABORATE
+        <Link href="/">
+          <WebsiteLogo />
         </Link>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">

@@ -1,6 +1,6 @@
 const coders = [
   {
-    id: 1,
+    id: "1",
     name: "Tony Reichert",
     skills: ["react", "nextjs", "tailwind"],
     feedbackPosted: 2,
@@ -9,7 +9,7 @@ const coders = [
     github: "tony.reichert",
   },
   {
-    id: 2,
+    id: "2",
     name: "Julia Mendez",
     skills: ["vue", "nuxtjs", "bootstrap"],
     feedbackPosted: 5,
@@ -18,7 +18,7 @@ const coders = [
     github: "julia.mendez",
   },
   {
-    id: 3,
+    id: "3",
     name: "Marco Fischer",
     skills: ["angular", "rxjs", "material"],
     feedbackPosted: 3,
@@ -27,7 +27,7 @@ const coders = [
     github: "marco.fischer",
   },
   {
-    id: 4,
+    id: "4",
     name: "Lena Patel",
     skills: ["svelte", "sapper", "tailwind"],
     feedbackPosted: 1,
@@ -36,7 +36,7 @@ const coders = [
     github: "lena.patel",
   },
   {
-    id: 5,
+    id: "5",
     name: "Sergio Ramos",
     skills: ["gatsby", "graphql", "styled-components"],
     feedbackPosted: 4,
