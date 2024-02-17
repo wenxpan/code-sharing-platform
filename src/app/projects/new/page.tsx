@@ -5,6 +5,9 @@ import { Checkbox } from "@nextui-org/checkbox"
 import { Button } from "@nextui-org/button"
 import { Doc } from "@convex/_generated/dataModel"
 import { useForm, Controller, useFieldArray } from "react-hook-form"
+import { Icon } from "@iconify-icon/react"
+import { useMutation } from "convex/react"
+import { api } from "@convex/_generated/api"
 
 interface CreateProjectPageProps {}
 
@@ -32,9 +35,22 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
       techStack: [],
     },
   })
-  const { fields, append, remove } = useFieldArray({
+  const {
+    fields: screenshotFields,
+    append: appendScreenshot,
+    remove: removeScreenshot,
+  } = useFieldArray({
     control,
     name: "screenshots",
+  })
+
+  const {
+    fields: stackFields,
+    append: appendStack,
+    remove: removeStack,
+  } = useFieldArray({
+    control,
+    name: "techStack",
   })
 
   const handleRepoLookup = async (e: React.FormEvent) => {
@@ -43,19 +59,23 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
       `/api/github/repo?owner=${ownerName}&repo=${repoName}`
     )
     const { data } = await res.json()
-    console.log({ data })
     const currentValues = getValues()
     reset(
       { ...currentValues, ...data },
       { keepDefaultValues: true, keepDirtyValues: true }
     )
   }
+  const createProject = useMutation(api.projects.createProject)
 
+  // TODO: check if user creating project is the repo owner
   // TODO: show collaborators
   // TODO: display allow forking
   // TODO: upload screenshots
+  // TODO: tech stack - group by frontend/backend/db/ui
   const onSubmit = async (data: Doc<"projects">) => {
-    console.log(data)
+    console.log({ data })
+    const projectId = await createProject({ data })
+    console.log({ projectId })
   }
 
   return (
@@ -134,16 +154,43 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
           render={({ field }) => <Input label="display name" {...field} />}
         />
         <div className="col-span-2 w-full">
-          <p>Screenshots</p>
-          <ul>
-            {fields.map((item, index) => (
+          <p className="font-semibold">Tech Stack</p>
+          <ul className="grid gap-2 grid-cols-2 sm:grid-cols-3">
+            {stackFields.map((item, index) => (
               <li key={item.id} className="flex items-center gap-2">
-                {/* <input {...register(`screenshots.${index}.url`)} /> */}
-                {/* <Controller
-                  render={({ field }) => <input {...field} />}
-                  name={`screenshots.${index}.alt`}
+                <Controller
+                  name={`techStack.${index}.name`}
                   control={control}
-                /> */}
+                  render={({ field }) => (
+                    <Input
+                      // label="stack name"
+                      {...field}
+                      endContent={
+                        <Icon
+                          icon="icomoon-free:bin"
+                          className="cursor-pointer"
+                          onClick={() => removeStack(index)}
+                        ></Icon>
+                      }
+                    />
+                  )}
+                />
+              </li>
+            ))}
+          </ul>
+          <Button
+            type="button"
+            onClick={() => appendStack({ name: "" })}
+            className="mt-2"
+          >
+            Add
+          </Button>
+        </div>
+        <div className="col-span-2 w-full">
+          <p className="font-semibold">Screenshots</p>
+          <ul className="flex flex-col gap-2">
+            {screenshotFields.map((item, index) => (
+              <li key={item.id} className="flex items-center gap-2">
                 <Controller
                   name={`screenshots.${index}.url`}
                   control={control}
@@ -158,17 +205,21 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
                     <Input label="screenshot alt text" {...field} />
                   )}
                 />
-                <Button type="button" onClick={() => remove(index)}>
+                <Button type="button" onClick={() => removeScreenshot(index)}>
                   Delete
                 </Button>
               </li>
             ))}
           </ul>
-          <Button type="button" onClick={() => append({ url: "", alt: "" })}>
+          <Button
+            type="button"
+            className="mt-2"
+            onClick={() => appendScreenshot({ url: "", alt: "" })}
+          >
             Add
           </Button>
         </div>
-        <Button type="submit" color="primary">
+        <Button type="submit" color="primary" className="w-full col-span-2">
           Submit
         </Button>
       </form>
@@ -177,44 +228,3 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
 }
 
 export default CreateProjectPage
-
-// {
-//   screenshots: [
-//     {
-//       alt: "screenshot - dashboard",
-//       url: "https://picsum.photos/seed/picsum/600/400",
-//     },
-//     {
-//       alt: "screenshot - landing",
-//       url: "https://picsum.photos/seed/picsum2/600/400",
-//     },
-//     {
-//       alt: "screenshot - users",
-//       url: "https://picsum.photos/seed/picsum3/600/400",
-//     },
-//     {
-//       alt: "screenshot - proejcts",
-//       url: "https://picsum.photos/seed/picsum4/600/400",
-//     },
-//   ],
-//   techStack: ["html", "css", "tailwind css", "javascript"],
-//   collaborators: [
-//     {
-//       avatar_url:
-//         "https://avatars.githubusercontent.com/u/20641815?v=4",
-//       html_url: "https://github.com/MinghongGao",
-//       id: 20641815,
-//       login: "MinghongGao",
-//       role_name: "write",
-//     },
-//     {
-//       avatar_url:
-//         "https://avatars.githubusercontent.com/u/28617120?v=4",
-//       html_url: "https://github.com/wenxpan",
-//       id: 28617120,
-//       login: "wenxpan",
-//       role_name: "admin",
-//     },
-//   ],
-
-// }

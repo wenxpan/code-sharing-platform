@@ -26,6 +26,6 @@ export default defineSchema({
     id: v.float64(),
     open_issues: v.float64(),
     screenshots: v.array(v.object({ alt: v.string(), url: v.string() })),
-    techStack: v.array(v.string()),
+    techStack: v.array(v.object({ name: v.string() })),
   }),
 })

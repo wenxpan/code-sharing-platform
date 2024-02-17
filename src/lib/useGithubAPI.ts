@@ -50,6 +50,17 @@ export const getGithubRepo = async ({
     }
   )
 
+  const collaborators = collaboratorsData.map(
+    // @ts-ignore
+    ({ avatar_url, html_url, id, login, role_name }) => ({
+      avatar_url,
+      html_url,
+      id,
+      login,
+      role_name,
+    })
+  )
+
   const { data: techStackData } = await octokit.request(
     "GET /repos/{owner}/{repo}/languages",
     {
@@ -61,18 +72,7 @@ export const getGithubRepo = async ({
     }
   )
 
-  const techStack = Object.keys(techStackData)
-
-  const collaborators = collaboratorsData.map(
-    // @ts-ignore
-    ({ avatar_url, html_url, id, login, role_name }) => ({
-      avatar_url,
-      html_url,
-      id,
-      login,
-      role_name,
-    })
-  )
+  const techStack = Object.keys(techStackData).map((key) => ({ name: key }))
 
   return {
     id,
@@ -133,7 +133,7 @@ export const getGithubRepoById = async ({
     }
   )
 
-  const techStack = Object.keys(techStackData)
+  const techStack = Object.keys(techStackData).map((key) => ({ name: key }))
 
   return {
     allow_forking,

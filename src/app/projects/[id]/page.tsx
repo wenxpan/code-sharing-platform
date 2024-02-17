@@ -82,7 +82,7 @@ const ProjectPage: React.FC<ProjectPageProps> = ({ params }) => {
       <ScreenshotsCarousel screenshots={project.screenshots} />
       <section>
         <h2 className="font-semibold text-lg">Tech Stack:</h2>
-        <SkillTagList skills={project.techStack} />
+        {/* <SkillTagList skills={project.techStack} /> */}
       </section>
       <section>
         <h2 className="font-semibold text-lg">Feedback</h2>
