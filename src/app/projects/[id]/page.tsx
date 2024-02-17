@@ -1,3 +1,4 @@
+"use client"
 import FeedbackCard from "@/components/FeedbackCard"
 import { ScreenshotsCarousel } from "@/components/ScreenshotsCarousel"
 import SkillTagList from "@/components/SkillTagList"
@@ -5,6 +6,10 @@ import { Button } from "@nextui-org/button"
 import { User } from "@nextui-org/user"
 import { notFound } from "next/navigation"
 import React from "react"
+import { Icon } from "@iconify-icon/react"
+import { Link } from "@nextui-org/link"
+import { useQuery } from "convex/react"
+import { api } from "@convex/_generated/api"
 
 interface ProjectPageProps {
   params: { id: string }
@@ -17,49 +22,65 @@ const fetchTechStack = async (name: string) => {
   return langs;
 }
 
-const ProjectPage: React.FC<ProjectPageProps> = async ({ params }) => {
-  const id = params.id
-  const project = {
-    displayName: "Tailwind Color Contrast Checker",
-    // techStack: ["html", "css", "tailwind css", "javascript"],
-    // can fetch from github api
-    full_name: "wenxpan/task-hatch-frontend",
-    techStack: (async () => await fetchTechStack("wenxpan/task-hatch-frontend"))(),
-    homepage: "https://taskhatch.wenxpan.com",
-    open_issues: 0,
-    allow_forking: true,
+    
+const ProjectPage: React.FC<ProjectPageProps> = ({ params }) => {
+  // const id = params.id
+  const id = 718520545
+  const project = useQuery(api.projects.getProjectById, { id })
+  // const techStack = (async () => await fetchTechStack("wenxpan/task-hatch-frontend"))(),
+
+  if (!project) {
+    return <p>Loading...</p>
   }
-  const collaborators = [
-    {
-      login: "MinghongGao",
-      avatar_url: "https://avatars.githubusercontent.com/u/20641815?v=4",
-      role_name: "write",
-    },
-    {
-      login: "wenxpan",
-      avatar_url: "https://avatars.githubusercontent.com/u/28617120?v=4",
-      role_name: "admin",
-    },
-  ]
+
+  const userData = {
+    login: "wenxpan",
+    id: 28617120,
+    name: "WP",
+    avatar_url: "https://avatars.githubusercontent.com/u/28617120?v=4",
+    html_url: "https://github.com/wenxpan",
+  }
 
   return (
-    <article className="max-w-lg mx-auto py-8 flex flex-col gap-4 items-start">
+    <article className="max-w-xl mx-auto py-8 flex flex-col gap-4 items-start">
       <h1 className="font-bold text-2xl">{project.displayName}</h1>
       <User
-        name="Jane Doe"
-        description="github name"
+        name={userData.name}
+        description={userData.login}
         avatarProps={{
-          src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
+          src: userData.avatar_url,
         }}
       />
-      <section className="grid grid-cols-2">
-        <h2>Repository</h2>
-        <p>{project.full_name}</p>
-        <h2>Website</h2>
-        <p>{project.homepage}</p>
+      <section>
+        <p>Collaborators:</p>
+        <div className="flex gap-2">
+          {project.collaborators.map((c) => (
+            <User
+              key={c.id}
+              name={c.login}
+              avatarProps={{ src: c.avatar_url }}
+            />
+          ))}
+        </div>
       </section>
-      <Button>Leave feedback</Button>
-      <ScreenshotsCarousel />
+      <section className="grid grid-cols-2 gap-4">
+        <Button
+          as={Link}
+          href={project.html_url}
+          startContent={<Icon icon="mdi:github" height="1.5rem" />}
+        >
+          {project.full_name}
+        </Button>
+        <Button
+          as={Link}
+          href={project.homepage}
+          startContent={<Icon icon="ph:globe-light" height="1.5rem" />}
+        >
+          {project.homepage}
+        </Button>
+      </section>
+      <Button color="primary">Leave feedback</Button>
+      <ScreenshotsCarousel screenshots={project.screenshots} />
       <section>
         <h2 className="font-semibold text-lg">Tech Stack:</h2>
         <SkillTagList skills={await project.techStack} />

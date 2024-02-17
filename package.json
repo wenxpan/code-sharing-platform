@@ -22,6 +22,7 @@
     "convex": "^1.9.0",
     "embla-carousel-react": "^8.0.0-rc22",
     "framer-motion": "^11.0.3",
+    "iconify-icon": "^2.0.0",
     "lucide-react": "^0.323.0",
     "next": "14.1.0",
     "next-auth": "^4.24.5",
@@ -32,6 +33,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@iconify-icon/react": "^2.0.1",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
