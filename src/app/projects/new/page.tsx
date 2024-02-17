@@ -43,6 +43,7 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
       `/api/github/repo?owner=${ownerName}&repo=${repoName}`
     )
     const { data } = await res.json()
+    console.log({ data })
     const currentValues = getValues()
     reset(
       { ...currentValues, ...data },
