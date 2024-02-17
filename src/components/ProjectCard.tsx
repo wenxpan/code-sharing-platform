@@ -1,3 +1,4 @@
+"use client"
 import React from "react"
 import { Image } from "@nextui-org/image"
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card"
@@ -6,15 +7,28 @@ import { User } from "@nextui-org/user"
 import NextImage from "next/image"
 import SkillTagList from "./SkillTagList"
 import Link from "next/link"
-
+import { useQuery } from "convex/react"
+import { api } from "@convex/_generated/api"
 
 interface ProjectCardProps {
   id: number
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = (props) => {
-  const { id } = props
-  const skills = ["html", "css", "react", "..."]
+const ProjectCard: React.FC<ProjectCardProps> = ({ id }) => {
+  const skills = [
+    { name: "html" },
+    { name: "css" },
+    { name: "react" },
+    { name: "..." },
+  ]
+  const project = useQuery(api.projects.getProjectById, {
+    id: "jh776741shb7sb1k02bq56ya756kn79e",
+  })
+  if (!project) {
+    return <p>Loading...</p>
+  }
+
+  console.log({ project })
   return (
     <Card className="py-4" shadow="sm">
       <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
@@ -36,7 +50,7 @@ const ProjectCard: React.FC<ProjectCardProps> = (props) => {
           width={300}
           height={200}
           priority
-        // fallbackSrc="https://via.placeholder.com/300x200"
+          // fallbackSrc="https://via.placeholder.com/300x200"
         />
         <SkillTagList skills={skills} />
       </CardBody>
@@ -86,7 +100,7 @@ const ProjectCard: React.FC<ProjectCardProps> = (props) => {
 
 export default ProjectCard
 
-const ProjectCardList: React.FC<ProjectCardProps> = () => {
+const ProjectCardList: React.FC = () => {
   return (
     <div className="py-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 place-items-center">
       <ProjectCard id={1} />

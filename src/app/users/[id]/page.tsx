@@ -35,9 +35,9 @@ const UserPage: React.FC<UserPageProps> = ({ params }) => {
         <h2 className="text-lg font-semibold py-5">Projects</h2>
         <div className="grid place-items-center gap-2 md:grid-cols-2 lg:grid-cols-3">
           {/* TODO: customise profile project card, remove name */}
-          <ProjectCard />
-          <ProjectCard />
-          <ProjectCard />
+          <ProjectCard id={1} />
+          <ProjectCard id={2} />
+          <ProjectCard id={3} />
         </div>
       </section>
       <section>
