@@ -7,8 +7,13 @@ export default defineSchema({
     email: v.string(),
     image: v.optional(v.string()),
     role: v.string(),
+    avatar_url: v.optional(v.string()),
+    html_url: v.optional(v.string()),
+    githubLogin: v.optional(v.string()),
+    githubId: v.optional(v.float64()),
   }).index("by_email", ["email"]),
   projects: defineTable({
+    owner: v.optional(v.id("users")),
     allow_forking: v.boolean(),
     collaborators: v.array(
       v.object({

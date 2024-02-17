@@ -68,6 +68,7 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
   const createProject = useMutation(api.projects.createProject)
 
   // TODO: check if user creating project is the repo owner
+  // TODO: add owner convex id to projectData
   // TODO: show collaborators
   // TODO: display allow forking
   // TODO: upload screenshots

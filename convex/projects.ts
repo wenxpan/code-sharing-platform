@@ -10,11 +10,11 @@ export const getProjects = query({
 })
 
 export const getProjectById = query({
-  args: { id: v.float64() },
+  args: { id: v.string() },
   handler: async (ctx, args) => {
     const project = await ctx.db
       .query("projects")
-      .filter((q) => q.eq(q.field("id"), args.id))
+      .filter((q) => q.eq(q.field("_id"), args.id))
       .unique()
     return project
   },

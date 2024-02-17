@@ -15,39 +15,26 @@ interface ProjectPageProps {
   params: { id: string }
 }
 
-const fetchTechStack = async (name: string) => {
-  const res = await fetch(`https://api.github.com/repos/${name}/languages`)
-  const data = await res.json()
-  const langs = Object.keys(data)
-  return langs
-}
-
 const ProjectPage: React.FC<ProjectPageProps> = ({ params }) => {
   // const id = params.id
-  const id = 718520545
+  // convex id
+  const id = "jh776741shb7sb1k02bq56ya756kn79e"
   const project = useQuery(api.projects.getProjectById, { id })
-  // const techStack = (async () => await fetchTechStack("wenxpan/task-hatch-frontend"))(),
+  const owner = project?.owner || undefined
+  const user = useQuery(api.users.getCoder, { userId: owner })
 
-  if (!project) {
+  if (!project || !user) {
     return <p>Loading...</p>
-  }
-
-  const userData = {
-    login: "wenxpan",
-    id: 28617120,
-    name: "WP",
-    avatar_url: "https://avatars.githubusercontent.com/u/28617120?v=4",
-    html_url: "https://github.com/wenxpan",
   }
 
   return (
     <article className="max-w-xl mx-auto py-8 flex flex-col gap-4 items-start">
       <h1 className="font-bold text-2xl">{project.displayName}</h1>
       <User
-        name={userData.name}
-        description={userData.login}
+        name={user.name}
+        description={user.githubLogin}
         avatarProps={{
-          src: userData.avatar_url,
+          src: user.avatar_url,
         }}
       />
       <section>
@@ -82,7 +69,7 @@ const ProjectPage: React.FC<ProjectPageProps> = ({ params }) => {
       <ScreenshotsCarousel screenshots={project.screenshots} />
       <section>
         <h2 className="font-semibold text-lg">Tech Stack:</h2>
-        {/* <SkillTagList skills={project.techStack} /> */}
+        <SkillTagList skills={project.techStack} />
       </section>
       <section>
         <h2 className="font-semibold text-lg">Feedback</h2>
