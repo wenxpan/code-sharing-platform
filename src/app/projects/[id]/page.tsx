@@ -17,12 +17,11 @@ interface ProjectPageProps {
 
 const fetchTechStack = async (name: string) => {
   const res = await fetch(`https://api.github.com/repos/${name}/languages`)
-  const data = await res.json();
-  const langs = Object.keys(data);
-  return langs;
+  const data = await res.json()
+  const langs = Object.keys(data)
+  return langs
 }
 
-    
 const ProjectPage: React.FC<ProjectPageProps> = ({ params }) => {
   // const id = params.id
   const id = 718520545
@@ -83,7 +82,7 @@ const ProjectPage: React.FC<ProjectPageProps> = ({ params }) => {
       <ScreenshotsCarousel screenshots={project.screenshots} />
       <section>
         <h2 className="font-semibold text-lg">Tech Stack:</h2>
-        <SkillTagList skills={await project.techStack} />
+        <SkillTagList skills={project.techStack} />
       </section>
       <section>
         <h2 className="font-semibold text-lg">Feedback</h2>
