@@ -25,9 +25,10 @@ import { WebsiteLogo } from "./ui/logo"
 const AvatarDropDown = ({
   userData,
 }: {
-  userData: { name: string; role: string; image: string }
+  userData: { userId: string; name: string; role: string; image: string }
 }) => {
   const sdk = useDescope()
+
 
   const handleLogout = useCallback(() => {
     sdk.logout()
@@ -38,7 +39,7 @@ const AvatarDropDown = ({
     return null
   }
   const coderItems = [
-    { key: "dashboard", label: "Dashboard", href: "/dashboard/coder" },
+    { key: "dashboard", label: "Dashboard", href: `/dashboard/coder/${parseInt(userData.userId)}` },
     { key: "profile", label: "My Profile", href: "/profile/coder" },
     { key: "projects", label: "My Projects", href: "/projects" },
     { key: "jobs", label: "Applied Jobs", href: "/jobs" },
@@ -111,6 +112,7 @@ export default function NavBar() {
           <NavbarItem>
             <AvatarDropDown
               userData={{
+                userId: user?.userId || "",
                 name: user?.name || "",
                 role: user?.roleNames?.[0] || "",
                 image: user?.picture || "",

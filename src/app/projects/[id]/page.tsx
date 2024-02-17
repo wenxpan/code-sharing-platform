@@ -15,10 +15,19 @@ interface ProjectPageProps {
   params: { id: string }
 }
 
+const fetchTechStack = async (name: string) => {
+  const res = await fetch(`https://api.github.com/repos/${name}/languages`)
+  const data = await res.json();
+  const langs = Object.keys(data);
+  return langs;
+}
+
+    
 const ProjectPage: React.FC<ProjectPageProps> = ({ params }) => {
   // const id = params.id
   const id = 718520545
   const project = useQuery(api.projects.getProjectById, { id })
+  // const techStack = (async () => await fetchTechStack("wenxpan/task-hatch-frontend"))(),
 
   if (!project) {
     return <p>Loading...</p>
@@ -74,7 +83,7 @@ const ProjectPage: React.FC<ProjectPageProps> = ({ params }) => {
       <ScreenshotsCarousel screenshots={project.screenshots} />
       <section>
         <h2 className="font-semibold text-lg">Tech Stack:</h2>
-        <SkillTagList skills={project.techStack} />
+        <SkillTagList skills={await project.techStack} />
       </section>
       <section>
         <h2 className="font-semibold text-lg">Feedback</h2>

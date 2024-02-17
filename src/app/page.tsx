@@ -1,8 +1,9 @@
 import { Button } from "@nextui-org/button"
 import Image from "next/image"
+import Link from "next/link"
 import React from "react"
 
-interface LandingPageProps {}
+interface LandingPageProps { }
 
 const LandingPage: React.FC<LandingPageProps> = () => {
   return (
@@ -18,7 +19,7 @@ const LandingPage: React.FC<LandingPageProps> = () => {
               Consequatur fuga cum qui explicabo animi rerum amet at ex.
               Laudantium, adipisci!
             </p>
-            <Button>Get Started</Button>
+            <Button href='/projects' as={Link}>Get Started</Button>
           </div>
         </div>
       </section>
