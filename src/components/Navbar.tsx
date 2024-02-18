@@ -7,85 +7,33 @@ import {
   NavbarItem,
 } from "@nextui-org/navbar"
 import { Link } from "@nextui-org/link"
-import {
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-} from "@nextui-org/dropdown"
 import { Button } from "@nextui-org/button"
-import { User } from "@nextui-org/user"
 import { usePathname } from "next/navigation"
-import { useMutation } from "convex/react"
-import { api } from "@convex/_generated/api"
-import { useDescope, useUser } from "@descope/react-sdk"
-import { useCallback } from "react"
 import { WebsiteLogo } from "./ui/logo"
-
-const AvatarDropDown = ({
-  userData,
-}: {
-  userData: { userId: string; name: string; role: string; image: string }
-}) => {
-  const sdk = useDescope()
-
-
-  const handleLogout = useCallback(() => {
-    sdk.logout()
-  }, [sdk])
-
-  // TODO: skeleton
-  if (!userData) {
-    return null
-  }
-  const coderItems = [
-    { key: "dashboard", label: "Dashboard", href: `/dashboard/coder/${parseInt(userData.userId)}` },
-    { key: "profile", label: "My Profile", href: "/profile/coder" },
-    { key: "projects", label: "My Projects", href: "/projects" },
-    { key: "jobs", label: "Applied Jobs", href: "/jobs" },
-    { key: "sign-out", label: "Sign Out" },
-  ]
-
-  const items = coderItems
-  return (
-    <Dropdown placement="bottom-end">
-      <DropdownTrigger>
-        <User
-          as="button"
-          avatarProps={{
-            isBordered: true,
-            src: userData?.image || "",
-          }}
-          className="transition-transform"
-          description={userData!.role}
-          name={userData!.name}
-        />
-      </DropdownTrigger>
-      <DropdownMenu aria-label="User Actions" variant="flat" items={items}>
-        {(item) => (
-          <DropdownItem
-            key={item.key}
-            color={item.key === "sign-out" ? "danger" : "default"}
-            className={item.key === "sign-out" ? "text-danger" : ""}
-            onClick={() => item.key === "sign-out" && handleLogout()}
-          >
-            {item.label}
-          </DropdownItem>
-        )}
-      </DropdownMenu>
-    </Dropdown>
-  )
-}
+import { AvatarDropDown } from "@/components/AvatarDropDown"
+import { useAppUser } from "@/lib/useAppUser"
 
 export default function NavBar() {
-  const { user } = useUser()
-  useMutation(api.users.storeCoder)
+  const user = useAppUser()
   const pathname = usePathname()
   const navItems = [
     { name: "Home", URL: "/" },
     { name: "Projects", URL: "/projects" },
     { name: "Users", URL: "/users" },
   ]
+  if (user) {
+    switch (user.role) {
+      case "coder":
+        navItems.push({ name: "Dashboard", URL: "/dashboard/coder" })
+        break
+      case "businessEmployee":
+        navItems.push({ name: "Dashboard", URL: "/dashboard/business" })
+        break
+      case "businessAdmin":
+        navItems.push({ name: "Dashboard", URL: "/dashboard/business" })
+        break
+    }
+  }
 
   return (
     <Navbar isBordered>
@@ -110,30 +58,15 @@ export default function NavBar() {
       <NavbarContent justify="end">
         {user && (
           <NavbarItem>
-            <AvatarDropDown
-              userData={{
-                userId: user?.userId || "",
-                name: user?.name || "",
-                role: user?.roleNames?.[0] || "",
-                image: user?.picture || "",
-              }}
-            />
+            <AvatarDropDown />
           </NavbarItem>
         )}
-
         {!user && (
-          <>
-            <NavbarItem>
-              <Button color="primary" variant="flat">
-                <Link href="/login/business">Business Portal</Link>
-              </Button>
-            </NavbarItem>
-            <NavbarItem>
-              <Button color="primary" variant="flat">
-                <Link href="/login/coder">Coder Portal</Link>
-              </Button>
-            </NavbarItem>
-          </>
+          <NavbarItem>
+            <Button color="primary" variant="flat">
+              <Link href="/login">Sign In</Link>
+            </Button>
+          </NavbarItem>
         )}
       </NavbarContent>
     </Navbar>
