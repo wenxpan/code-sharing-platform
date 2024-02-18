@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "@descope/nextjs-sdk": "^0.0.3-alpha.1",
-    "@descope/node-sdk": "^1.6.3",
     "@heroicons/react": "^2.1.1",
     "@nextui-org/react": "^2.2.9",
     "@octokit/core": "^5.1.0",
@@ -25,7 +24,6 @@
     "iconify-icon": "^2.0.0",
     "lucide-react": "^0.323.0",
     "next": "14.1.0",
-    "next-auth": "^4.24.5",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.50.1",

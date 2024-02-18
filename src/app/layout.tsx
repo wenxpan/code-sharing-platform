@@ -18,7 +18,10 @@ export default function RootLayout({
         <link rel="icon" href="/icon.svg" sizes="any" />
       </head>
       <body className={roboto.className}>
-        <AuthProvider projectId={process.env.DESCOPE_CLIENT_ID || ""}>
+        <AuthProvider
+          projectId={process.env.DESCOPE_PROJECT_ID || ""}
+          sessionTokenViaCookie={false}
+        >
           <Providers>
             <div className="flex flex-col min-h-screen">
               <NavBar />
