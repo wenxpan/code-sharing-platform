@@ -16,9 +16,8 @@ interface ProjectPageProps {
 }
 
 const ProjectPage: React.FC<ProjectPageProps> = ({ params }) => {
-  // const id = params.id
-  // convex id
-  const id = "jh776741shb7sb1k02bq56ya756kn79e"
+  const id = params.id
+  // const id = "jh776741shb7sb1k02bq56ya756kn79e"
   const project = useQuery(api.projects.getProjectById, { id })
   const owner = project?.owner || undefined
   const user = useQuery(api.users.getCoder, { userId: owner })
@@ -66,10 +65,12 @@ const ProjectPage: React.FC<ProjectPageProps> = ({ params }) => {
         </Button>
       </section>
       <Button color="primary">Leave feedback</Button>
-      <ScreenshotsCarousel screenshots={project.screenshots} />
+      {project.screenshots.length > 0 && (
+        <ScreenshotsCarousel screenshots={project.screenshots} />
+      )}
       <section>
         <h2 className="font-semibold text-lg">Tech Stack:</h2>
-        <SkillTagList skills={project.techStack} />
+        <SkillTagList skills={project.techStack} showFull={true} />
       </section>
       <section>
         <h2 className="font-semibold text-lg">Feedback</h2>

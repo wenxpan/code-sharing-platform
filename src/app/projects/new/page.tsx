@@ -3,7 +3,7 @@ import React, { useState } from "react"
 import { Input } from "@nextui-org/input"
 import { Checkbox } from "@nextui-org/checkbox"
 import { Button } from "@nextui-org/button"
-import { Doc } from "@convex/_generated/dataModel"
+import { Doc, Id } from "@convex/_generated/dataModel"
 import { useForm, Controller, useFieldArray } from "react-hook-form"
 import { Icon } from "@iconify-icon/react"
 import { useMutation } from "convex/react"
@@ -33,6 +33,7 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
       open_issues: 0,
       screenshots: [],
       techStack: [],
+      owner: "j97f78hr7sm66wzev1yb81sph56kct0n",
     },
   })
   const {
@@ -67,6 +68,7 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
   }
   const createProject = useMutation(api.projects.createProject)
 
+  // TODO: auto populate owner id
   // TODO: check if user creating project is the repo owner
   // TODO: add owner convex id to projectData
   // TODO: show collaborators
