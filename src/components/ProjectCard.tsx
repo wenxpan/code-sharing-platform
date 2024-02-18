@@ -7,6 +7,7 @@ import { User } from "@nextui-org/user"
 import NextImage from "next/image"
 import SkillTagList from "./SkillTagList"
 import Link from "next/link"
+import Link from "next/link"
 import { useQuery } from "convex/react"
 import { api } from "@convex/_generated/api"
 
@@ -14,6 +15,13 @@ interface ProjectCardProps {
   id: number
 }
 
+interface ProjectCardProps {
+  id: number
+}
+
+const ProjectCard: React.FC<ProjectCardProps> = (props) => {
+  const { id } = props
+  const skills = ["html", "css", "react", "..."]
 const ProjectCard: React.FC<ProjectCardProps> = ({ id }) => {
   const skills = [
     { name: "html" },
@@ -50,7 +58,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ id }) => {
           width={300}
           height={200}
           priority
-          // fallbackSrc="https://via.placeholder.com/300x200"
+        // fallbackSrc="https://via.placeholder.com/300x200"
         />
         <SkillTagList skills={skills} />
       </CardBody>
