@@ -25,6 +25,24 @@ const ProjectPage: React.FC<ProjectPageProps> = ({ params }) => {
 
   if (!project || !user) {
     return <p>Loading...</p>
+const fetchTechStack = async (name: string) => {
+  const res = await fetch(`https://api.github.com/repos/${name}/languages`)
+  const data = await res.json();
+  const langs = Object.keys(data);
+  return langs;
+}
+
+const ProjectPage: React.FC<ProjectPageProps> = async ({ params }) => {
+  const id = params.id
+  const project = {
+    displayName: "Tailwind Color Contrast Checker",
+    // techStack: ["html", "css", "tailwind css", "javascript"],
+    // can fetch from github api
+    full_name: "wenxpan/task-hatch-frontend",
+    techStack: (async () => await fetchTechStack("wenxpan/task-hatch-frontend"))(),
+    homepage: "https://taskhatch.wenxpan.com",
+    open_issues: 0,
+    allow_forking: true,
   }
 
   return (
@@ -69,7 +87,7 @@ const ProjectPage: React.FC<ProjectPageProps> = ({ params }) => {
       <ScreenshotsCarousel screenshots={project.screenshots} />
       <section>
         <h2 className="font-semibold text-lg">Tech Stack:</h2>
-        <SkillTagList skills={project.techStack} />
+        <SkillTagList skills={await project.techStack} />
       </section>
       <section>
         <h2 className="font-semibold text-lg">Feedback</h2>

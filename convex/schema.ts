@@ -12,6 +12,13 @@ export default defineSchema({
     githubLogin: v.optional(v.string()),
     githubId: v.optional(v.float64()),
   }).index("by_email", ["email"]),
+  jobs: defineTable({
+    position: v.string(),
+    companyName: v.string(),
+    jobDescription: v.string(),
+    email: v.string(),
+    techStack: v.array(v.string()),
+  })
   projects: defineTable({
     owner: v.optional(v.id("users")),
     allow_forking: v.boolean(),
