@@ -41,6 +41,7 @@ export const createProject = mutation({
       open_issues: v.float64(),
       screenshots: v.array(v.object({ alt: v.string(), url: v.string() })),
       techStack: v.array(v.object({ name: v.string() })),
+      owner: v.optional(v.id("users")),
     }),
   },
   handler: async (ctx, args) => {

@@ -1,17 +1,22 @@
-import { ProjectCard } from "@/components/ProjectCard"
+"use client"
+import { ProjectCardList } from "@/components/ProjectCard"
+import { api } from "@convex/_generated/api"
+import { useQuery } from "convex/react"
 import React from "react"
 
 interface ProjectsPageProps {}
 
 const ProjectsPage: React.FC<ProjectsPageProps> = () => {
-  // TODO: change back to card list
+  const projects = useQuery(api.projects.getProjects, {})
+  if (!projects) {
+    return <p>Loading...</p>
+  }
+
   return (
     <>
       <h1 className="font-bold text-2xl">All projects</h1>
       <div className="flex justify-center">
-        <div className="py-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 place-items-center">
-          <ProjectCard id={1} />
-        </div>
+        <ProjectCardList projects={projects} />
       </div>
     </>
   )
