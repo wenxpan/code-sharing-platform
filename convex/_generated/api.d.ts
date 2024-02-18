@@ -27,6 +27,8 @@ import type * as users from "../users.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  jobs: typeof jobs;
+  projects: typeof projects;
   users: typeof users;
 }>;
 export declare const api: FilterApi<

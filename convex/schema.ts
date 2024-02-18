@@ -18,7 +18,7 @@ export default defineSchema({
     jobDescription: v.string(),
     email: v.string(),
     techStack: v.array(v.string()),
-  })
+  }),
   projects: defineTable({
     owner: v.optional(v.id("users")),
     allow_forking: v.boolean(),
