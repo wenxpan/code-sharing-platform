@@ -7,7 +7,14 @@ export interface AppUser {
   name: string
   role: "coder" | "businessEmployee" | "businessAdmin"
   email: string
-  avatarUrl?: string
+  picture?: string
+  github?: {
+    id: number
+    login: string
+    name: string
+    avatar_url: string
+    html_url: string
+  }
 }
 
 export const useAppUser = (): AppUser | null => {
@@ -43,6 +50,13 @@ export const useAppUser = (): AppUser | null => {
     name: user.name || "Unknown",
     role,
     email: user.email || "Unknown",
-    avatarUrl: user.picture,
+    picture: user.picture,
+    github: {
+      id: 28617120,
+      login: "wenxpan",
+      name: "WP",
+      html_url: "https://github.com/wenxpan",
+      avatar_url: "https://avatars.githubusercontent.com/u/28617120?v=4",
+    },
   }
 }
