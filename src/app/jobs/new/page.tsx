@@ -8,6 +8,10 @@ import { api } from "@convex/_generated/api"
 
 const NewJob: React.FC = () => {
   const [email, setEmail] = React.useState("")
+  const [position, setPosition] = React.useState("")
+  const [companyName, setCompanyName] = React.useState("")
+  const [jobDescription, setJobDescription] = React.useState("")
+
   const [groupSelected, setGroupSelected] = React.useState([])
   const [stackGroup, setStackGroup] = React.useState([
     "HTML",
@@ -55,9 +59,9 @@ const NewJob: React.FC = () => {
 
     await createJobs({
       email: email,
-      position: formData.get("position") as string,
-      companyName: formData.get("CompanyName") as string,
-      jobDescription: formData.get("JD") as string,
+      position,
+      companyName,
+      jobDescription,
       techStack: groupSelected,
     })
   }
@@ -73,6 +77,8 @@ const NewJob: React.FC = () => {
             label="Position"
             placeholder="Position"
             labelPlacement="outside"
+            value={position}
+            onChange={(e) => setPosition(e.target.value)}
           />
           <Input
             isRequired
@@ -80,6 +86,8 @@ const NewJob: React.FC = () => {
             label="CompanyName"
             placeholder="Company Name"
             labelPlacement="outside"
+            value={companyName}
+            onChange={(e) => setCompanyName(e.target.value)}
           />
           <Textarea
             isRequired
@@ -87,6 +95,8 @@ const NewJob: React.FC = () => {
             label="JD"
             labelPlacement="outside"
             placeholder="Enter your job description"
+            value={jobDescription}
+            onChange={(e) => setJobDescription(e.target.value)}
           />
           <Input
             isRequired
