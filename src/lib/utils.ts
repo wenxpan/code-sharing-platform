@@ -1,15 +1,17 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { AppUser } from "@/lib/useAppUser"
+import { CleanedDescopeUser } from "@/lib/useAppUser"
 import { UserResponse } from "@descope/core-js-sdk"
 
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs))
 }
 
-export const mapDescopeUserToAppUser = (user: UserResponse): AppUser | null => {
+export const mapDescopeUserToCleanedDescopeUser = (
+  user: UserResponse,
+): CleanedDescopeUser => {
   if (!user.userTenants || !user.roleNames) {
-    return null
+    throw new Error("Descope User is missing required fields")
   }
 
   let role: "coder" | "businessEmployee" | "businessAdmin" | undefined
@@ -23,7 +25,7 @@ export const mapDescopeUserToAppUser = (user: UserResponse): AppUser | null => {
   }
 
   if (!role) {
-    return null
+    throw new Error("Descope User is missing required fields")
   }
 
   return {
@@ -32,12 +34,7 @@ export const mapDescopeUserToAppUser = (user: UserResponse): AppUser | null => {
     role,
     email: user.email || "Unknown",
     picture: user.picture,
-    github: {
-      id: 28617120,
-      login: "wenxpan",
-      name: "WP",
-      html_url: "https://github.com/wenxpan",
-      avatar_url: "https://avatars.githubusercontent.com/u/28617120?v=4",
-    },
+    githubUsername: user.customAttributes?.githubUsername,
+    position: user.customAttributes?.position,
   }
 }

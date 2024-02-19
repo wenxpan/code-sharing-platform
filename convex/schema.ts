@@ -3,15 +3,26 @@ import { v } from "convex/values"
 
 export default defineSchema({
   users: defineTable({
+    descopeId: v.string(),
     name: v.string(),
+    role: v.union(
+      v.literal("coder"),
+      v.literal("businessEmployee"),
+      v.literal("businessAdmin"),
+    ),
     email: v.string(),
-    image: v.optional(v.string()),
-    role: v.string(),
-    avatar_url: v.optional(v.string()),
-    html_url: v.optional(v.string()),
-    githubLogin: v.optional(v.string()),
-    githubId: v.optional(v.float64()),
-  }).index("by_email", ["email"]),
+    picture: v.optional(v.string()),
+    position: v.optional(v.string()),
+    github: v.optional(
+      v.object({
+        avatar_url: v.string(),
+        html_url: v.string(),
+        login: v.string(),
+        id: v.float64(),
+        name: v.string(),
+      }),
+    ),
+  }).index("by_descopeId", ["descopeId"]),
   jobs: defineTable({
     position: v.string(),
     companyName: v.string(),
@@ -29,7 +40,7 @@ export default defineSchema({
         id: v.float64(),
         login: v.string(),
         role_name: v.string(),
-      })
+      }),
     ),
     displayName: v.string(),
     full_name: v.string(),
@@ -45,7 +56,7 @@ export default defineSchema({
     postedBy: v.string(),
     overallFeedback: v.string(),
     specificFeedback: v.optional(
-      v.array(v.object({ area: v.string(), feedback: v.string() }))
+      v.array(v.object({ area: v.string(), feedback: v.string() })),
     ),
     positiveFeedback: v.string(),
   }),
