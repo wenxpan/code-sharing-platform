@@ -43,7 +43,15 @@ export const getUserFromDescope = action({
         descopeId: args.data.descopeId,
       }
     )
-    if (args.data.descopeId && !user) {
+    if (!user) {
+      // TODO: add github info to convex user
+      // https://github.com/get-convex/convex-demos/blob/main/giphy-action/convex/messages.ts
+      // const githubLogin = args.data.github?.login
+      // const githubData =
+      //   githubLogin &&
+      //   (await fetch(`https://api.github.com/users/${githubLogin}`))
+      // const json = githubData && (await githubData.json())
+      // console.log({ githubData: json })
       user = await ctx.runMutation(internal.userFunctions.storeUser, {
         data: args.data,
       })

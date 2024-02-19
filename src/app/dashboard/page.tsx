@@ -4,17 +4,21 @@ import { useAppUser } from "@/lib/useAppUser"
 import { redirect } from "next/navigation"
 
 const DashboardPage = () => {
-  const { user } = useAppUser()
+  const { status, user } = useAppUser()
+  // TODO: add loading status to navbar
 
-  if (!user) {
+  if (status === "unauthenticated") {
     redirect("/login")
   }
 
-  if (user.role === "coder") {
+  if (user && user.role === "coder") {
     redirect("/dashboard/coder")
   }
 
-  if (user.role === "businessEmployee" || user.role === "businessAdmin") {
+  if (
+    user &&
+    (user.role === "businessEmployee" || user.role === "businessAdmin")
+  ) {
     redirect("/dashboard/business")
   }
 }
