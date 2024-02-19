@@ -15,7 +15,15 @@ const JobCard: React.FC<JobCardProps> = () => {
           </div>
         </CardHeader>
         <CardBody>
-          <SkillTagList skills={["html", "css", "aws", "javascript", "..."]} />
+          <SkillTagList
+            skills={[
+              { name: "html" },
+              { name: "css" },
+              { name: "aws" },
+              { name: "javascript" },
+            ]}
+            showFull={true}
+          />
         </CardBody>
       </Card>
     </>

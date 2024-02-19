@@ -1,9 +1,10 @@
-import FeedbackCard from "@/components/FeedbackCard"
+"use client"
 import { ProjectCardList } from "@/components/ProjectCard"
-import { ScreenshotsCarousel } from "@/components/ScreenshotsCarousel"
 import SkillTagList from "@/components/SkillTagList"
+import { api } from "@convex/_generated/api"
 import { Button } from "@nextui-org/button"
 import { User } from "@nextui-org/user"
+import { useQuery } from "convex/react"
 import { notFound } from "next/navigation"
 import React from "react"
 
@@ -15,8 +16,14 @@ const JobPage: React.FC<JobPageProps> = ({ params }) => {
   const id = params.id
   const job = {
     name: "Frontend Developer",
-    techStack: ["html", "css", "tailwind css", "javascript"],
+    techStack: [
+      { name: "html" },
+      { name: "css" },
+      { name: "aws" },
+      { name: "javascript" },
+    ],
   }
+  const projects = useQuery(api.projects.getProjects, {})
   return (
     <article className="mx-auto py-8 flex flex-col gap-4 items-start">
       <h1 className="font-bold text-2xl">{job.name}</h1>
@@ -35,12 +42,12 @@ const JobPage: React.FC<JobPageProps> = ({ params }) => {
       </section>
       <section>
         <h2 className="font-semibold text-lg mb-4 mt-8">Desired Tech Stack:</h2>
-        <SkillTagList skills={job.techStack} />
+        <SkillTagList skills={job.techStack} showFull={true} />
       </section>
       <Button color="primary">Apply</Button>
       <section>
         <h2 className="font-semibold text-lg mt-4">Applications</h2>
-        <ProjectCardList />
+        {projects && <ProjectCardList projects={projects} />}
       </section>
     </article>
   )
