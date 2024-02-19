@@ -40,4 +40,13 @@ export default defineSchema({
     screenshots: v.array(v.object({ alt: v.string(), url: v.string() })),
     techStack: v.array(v.object({ name: v.string() })),
   }),
+  feedback: defineTable({
+    projectId: v.id("projects"),
+    postedBy: v.string(),
+    overallFeedback: v.string(),
+    specificFeedback: v.optional(
+      v.array(v.object({ area: v.string(), feedback: v.string() }))
+    ),
+    positiveFeedback: v.string(),
+  }),
 })

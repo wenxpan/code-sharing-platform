@@ -12,11 +12,11 @@ import { useQuery } from "convex/react"
 import { api } from "@convex/_generated/api"
 
 interface ProjectPageProps {
-  params: { id: string }
+  params: { projectId: string }
 }
 
 const ProjectPage: React.FC<ProjectPageProps> = ({ params }) => {
-  const id = params.id
+  const id = params.projectId
   // const id = "jh776741shb7sb1k02bq56ya756kn79e"
   const project = useQuery(api.projects.getProjectById, { id })
   const owner = project?.owner || undefined
@@ -64,7 +64,9 @@ const ProjectPage: React.FC<ProjectPageProps> = ({ params }) => {
           {project.homepage}
         </Button>
       </section>
-      <Button color="primary">Leave feedback</Button>
+      <Button color="primary" as={Link} href={`/projects/${id}/feedback/new`}>
+        Leave feedback
+      </Button>
       {project.screenshots.length > 0 && (
         <ScreenshotsCarousel screenshots={project.screenshots} />
       )}
