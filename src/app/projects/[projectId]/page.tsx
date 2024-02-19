@@ -64,7 +64,9 @@ const ProjectPage: React.FC<ProjectPageProps> = ({ params }) => {
           {project.homepage}
         </Button>
       </section>
-      <Button color="primary">Leave feedback</Button>
+      <Button color="primary" as={Link} href={`/projects/${id}/feedback/new`}>
+        Leave feedback
+      </Button>
       {project.screenshots.length > 0 && (
         <ScreenshotsCarousel screenshots={project.screenshots} />
       )}
