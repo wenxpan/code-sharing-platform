@@ -15,11 +15,9 @@ const FeedbackPage: React.FC<FeedbackPageProps> = ({ params }) => {
   const user = useAppUser()
   const feedbackId = params.feedbackId
   const projectId = params.projectId
-  const feedbackInfo = {
-    name: "",
-  }
-  const project = useQuery(api.projects.getProjects, {})?.[0]
-  if (!project) {
+  const project = useQuery(api.projects.getProjectById, { id: projectId })
+  const feedback = useQuery(api.feedback.getFeedbackById, { id: feedbackId })
+  if (!project || !feedback) {
     return <p>Loading...</p>
   }
 
@@ -41,35 +39,22 @@ const FeedbackPage: React.FC<FeedbackPageProps> = ({ params }) => {
             />
           </div>
           <dl>
-            <dt className="font-semibold">Overall feedback</dt>
-            <dd>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum
-              voluptate quis pariatur explicabo expedita necessitatibus esse
-              aliquam! Quasi, at non!
-            </dd>
+            <dt className="font-semibold">Overall Feedback</dt>
+            <dd>{feedback.overallFeedback}</dd>
           </dl>
           <dl>
-            <dt className="font-semibold">Specific Area</dt>
-            <dd>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum
-              voluptate quis pariatur explicabo expedita necessitatibus esse
-              aliquam! Quasi, at non!
-            </dd>
+            <dt className="font-semibold">Positive Feedback</dt>
+            <dd>{feedback.positiveFeedback}</dd>
           </dl>
-          <dl>
-            <dt className="font-semibold">PR history</dt>
-            <dd>
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tenetur,
-              asperiores.
-            </dd>
-          </dl>
-          <dl>
-            <dt className="font-semibold">Issues opened</dt>
-            <dd>
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tenetur,
-              asperiores.
-            </dd>
-          </dl>
+          <p>Rooms for improvement:</p>
+          {feedback.specificFeedback &&
+            feedback.specificFeedback.length > 0 &&
+            feedback.specificFeedback?.map((item, index) => (
+              <dl key={index}>
+                <dt className="font-semibold">{item.area}</dt>
+                <dd>{item.feedback}</dd>
+              </dl>
+            ))}
         </div>
       </div>
     </>
