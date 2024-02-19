@@ -1,7 +1,5 @@
 interface SkillTagListProps {
-  skills: {
-    name: string
-  }[]
+  skills: { name: string }[]
   showFull: boolean
 }
 
@@ -11,6 +9,7 @@ const SkillTagList: React.FC<SkillTagListProps> = ({
 }) => {
   const displayedSkills = showFull ? skills : skills.slice(0, 3)
   const showMore = showFull ? false : skills.length > 3
+  console.log(skills)
   return (
     <ul className="flex gap-1 text-xs">
       {displayedSkills.map((skill) => (

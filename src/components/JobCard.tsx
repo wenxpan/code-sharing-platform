@@ -1,28 +1,29 @@
 import React from "react"
 import { Card, CardHeader, CardBody } from "@nextui-org/card"
 import SkillTagList from "./SkillTagList"
+import { Link } from "@nextui-org/react"
+import { Doc } from "@convex/_generated/dataModel"
 
-interface JobCardProps {}
+interface JobCardProps {
+  job: Doc<"jobs">
+}
 
-const JobCard: React.FC<JobCardProps> = () => {
+const JobCard: React.FC<JobCardProps> = (props) => {
   return (
     <>
       <Card className="my-2" shadow="none">
         <CardHeader className="flex gap-3">
           <div className="flex flex-col">
-            <p className="text-lg">Frontend Developer</p>
-            <p className="text-md text-default-500">Company name</p>
+            <p className="text-lg">
+              <Link href={`jobs/${props.job._id}`}> {props.job.position}</Link>
+            </p>
+            <p className="text-md text-default-500">{props.job.companyName}</p>
           </div>
         </CardHeader>
         <CardBody>
           <SkillTagList
-            skills={[
-              { name: "html" },
-              { name: "css" },
-              { name: "aws" },
-              { name: "javascript" },
-            ]}
-            showFull={true}
+            skills={props.job.techStack.map((skill) => ({ name: skill }))}
+            showFull={false}
           />
         </CardBody>
       </Card>
@@ -30,12 +31,10 @@ const JobCard: React.FC<JobCardProps> = () => {
   )
 }
 
-const JobCardList: React.FC<JobCardProps> = () => {
+const JobCardList: React.FC<JobCardProps> = (props) => {
   return (
     <div className="flex flex-col self-start">
-      <JobCard />
-      <JobCard />
-      <JobCard />
+      <JobCard job={props.job} />
     </div>
   )
 }
