@@ -1,41 +1,61 @@
 "use client"
 
 import { useUser, useSession } from "@descope/nextjs-sdk/client"
-import {
-  mapDescopeUserToAppUser,
-  mapDescopeUserToCleanedDescopeUser,
-} from "@/lib/utils"
-import { useQuery } from "convex/react"
+import { mapDescopeUserToCleanedDescopeUser } from "@/lib/utils"
+import { useAction } from "convex/react"
+import { Doc } from "@convex/_generated/dataModel"
+import { useEffect, useMemo, useState } from "react"
+import { api } from "@convex/_generated/api"
 
 export interface CleanedDescopeUser {
-  id: string
+  descopeId: string
   name: string
   role: "coder" | "businessEmployee" | "businessAdmin"
   email: string
   picture?: string
-  githubUsername?: string
+  github?: {
+    login: string
+  }
   position?: string
 }
 
 export const useAppUser = (): {
-  user: AppUser | null
+  user: Doc<"users"> | null | undefined
   status: "loading" | "authenticated" | "unauthenticated"
-} | null => {
+} => {
   const { isSessionLoading, isAuthenticated } = useSession()
   const { isUserLoading: isDescopeUserLoading, user: descopeUser } = useUser()
-  const convexUser = useQuery("users", { id: descopeUser?.userId })
 
-  const cleanedDescopeUser = mapDescopeUserToCleanedDescopeUser(descopeUser)
+  const cleanedDescopeUser = useMemo(
+    () => mapDescopeUserToCleanedDescopeUser(descopeUser),
+    [descopeUser]
+  )
 
-  if (isSessionLoading || isDescopeUserLoading) {
-    return { status: "loading", user: null }
-  }
-  if (!isAuthenticated) {
+  const getConvexUser = useAction(api.userFunctions.getUserFromDescope)
+  const [convexUser, setConvexUser] = useState(null)
+
+  useEffect(() => {
+    console.log("cleaned descope user changed")
+    const getUser = async () => {
+      if (cleanedDescopeUser?.descopeId) {
+        const convexUser = await getConvexUser({ data: cleanedDescopeUser })
+        setConvexUser(convexUser)
+        console.log("convexUser set")
+      }
+    }
+    getUser()
+  }, [cleanedDescopeUser])
+
+  if (!isSessionLoading && !isAuthenticated) {
+    console.log({ status: "unauthenticated", user: null })
     return { status: "unauthenticated", user: null }
   }
-  if (!convexUser) {
+
+  if (isSessionLoading || isDescopeUserLoading || !convexUser) {
+    console.log({ status: "loading", user: null })
     return { status: "loading", user: null }
   }
 
-  return { status: "authenticated", user }
+  console.log({ status: "authenticated", user: convexUser })
+  return { status: "authenticated", user: convexUser }
 }

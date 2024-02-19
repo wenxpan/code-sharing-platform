@@ -10,7 +10,7 @@ import { User } from "@nextui-org/user"
 import { useAppUser } from "@/lib/useAppUser"
 
 export const AvatarDropDown = () => {
-  const user = useAppUser()
+  const { user } = useAppUser()
   const sdk = useDescope()
 
   const handleLogout = useCallback(() => {
@@ -26,7 +26,7 @@ export const AvatarDropDown = () => {
     {
       key: "dashboard",
       label: "Dashboard",
-      href: `/dashboard/coder/${user.id}`,
+      href: `/dashboard/coder/${user._id}`,
     },
     { key: "profile", label: "My Profile", href: "/profile/coder" },
     { key: "projects", label: "My Projects", href: "/projects" },

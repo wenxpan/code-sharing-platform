@@ -10,6 +10,7 @@ import { Icon } from "@iconify-icon/react"
 import { Link } from "@nextui-org/link"
 import { useQuery } from "convex/react"
 import { api } from "@convex/_generated/api"
+import { useAppUser } from "@/lib/useAppUser"
 
 interface ProjectPageProps {
   params: { projectId: string }
@@ -20,7 +21,8 @@ const ProjectPage: React.FC<ProjectPageProps> = ({ params }) => {
   // const id = "jh776741shb7sb1k02bq56ya756kn79e"
   const project = useQuery(api.projects.getProjectById, { id })
   const owner = project?.owner || undefined
-  const user = useQuery(api.users.getCoder, { userId: owner })
+  // const user = useQuery(api.users.getCoder, { userId: owner })
+  const { user } = useAppUser()
 
   if (!project || !user) {
     return <p>Loading...</p>

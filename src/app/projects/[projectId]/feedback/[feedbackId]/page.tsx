@@ -12,7 +12,7 @@ interface FeedbackPageProps {
 }
 
 const FeedbackPage: React.FC<FeedbackPageProps> = ({ params }) => {
-  const user = useAppUser()
+  const { user } = useAppUser()
   const feedbackId = params.feedbackId
   const projectId = params.projectId
   const project = useQuery(api.projects.getProjectById, { id: projectId })

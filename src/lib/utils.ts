@@ -8,14 +8,13 @@ export const cn = (...inputs: ClassValue[]) => {
 }
 
 export const mapDescopeUserToCleanedDescopeUser = (
-  user: UserResponse,
-): CleanedDescopeUser => {
-  if (!user.userTenants || !user.roleNames) {
-    throw new Error("Descope User is missing required fields")
+  user: UserResponse
+): CleanedDescopeUser | null => {
+  if (!user?.userTenants || !user?.roleNames) {
+    // throw new Error("Descope User is missing required fields")
+    return null
   }
-
   let role: "coder" | "businessEmployee" | "businessAdmin" | undefined
-
   if (user.userTenants.length === 0) {
     role = "coder"
   } else if (user.userTenants.length > 0 && user.roleNames.length === 0) {
@@ -28,13 +27,16 @@ export const mapDescopeUserToCleanedDescopeUser = (
     throw new Error("Descope User is missing required fields")
   }
 
-  return {
-    id: user.userId,
+  const returnedUser = {
+    descopeId: user.userId,
     name: user.name || "Unknown",
     role,
     email: user.email || "Unknown",
     picture: user.picture,
-    githubUsername: user.customAttributes?.githubUsername,
+    github: {
+      login: user.customAttributes?.githubUsername,
+    },
     position: user.customAttributes?.position,
   }
+  return returnedUser
 }

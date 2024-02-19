@@ -4,7 +4,7 @@ import { useAppUser } from "@/lib/useAppUser"
 import { redirect } from "next/navigation"
 
 const DashboardPage = () => {
-  const user = useAppUser()
+  const { user } = useAppUser()
 
   if (!user) {
     redirect("/login")

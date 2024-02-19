@@ -20,7 +20,7 @@ const FeedbackPage: React.FC<FeedbackPageProps> = ({ params }) => {
   const projectId = params.projectId
   const project = useQuery(api.projects.getProjectById, { id: projectId })
   const createFeedback = useMutation(api.feedback.createFeedback)
-  const user = useAppUser()
+  const { user } = useAppUser()
   const {
     register,
     handleSubmit,
@@ -52,7 +52,7 @@ const FeedbackPage: React.FC<FeedbackPageProps> = ({ params }) => {
     const feedbackId = await createFeedback({
       data: {
         ...data,
-        postedBy: user.id,
+        postedBy: user._id,
       },
     })
     // TODO: add redirect & toast
