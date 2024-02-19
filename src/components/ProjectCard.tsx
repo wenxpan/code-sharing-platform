@@ -11,6 +11,7 @@ import { useQuery } from "convex/react"
 import { api } from "@convex/_generated/api"
 import { Icon } from "@iconify-icon/react"
 import { Doc } from "@convex/_generated/dataModel"
+import { useAppUser } from "@/lib/useAppUser"
 
 interface ProjectCardProps {
   project: Doc<"projects">
@@ -22,7 +23,8 @@ interface ProjectListProps {
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   const owner = project.owner
-  const user = useQuery(api.users.getCoder, { userId: owner })
+  // const user = useQuery(api.users.getCoder, { userId: owner })
+  const { user } = useAppUser()
   if (!user) {
     return <p>Loading...</p>
   }

@@ -14,7 +14,7 @@ import { AvatarDropDown } from "@/components/AvatarDropDown"
 import { useAppUser } from "@/lib/useAppUser"
 
 export default function NavBar() {
-  const user = useAppUser()
+  const { user } = useAppUser()
   const pathname = usePathname()
   const navItems = [
     { name: "Home", URL: "/" },

@@ -1,30 +1,61 @@
 "use client"
 
 import { useUser, useSession } from "@descope/nextjs-sdk/client"
-import { mapDescopeUserToAppUser } from "@/lib/utils"
+import { mapDescopeUserToCleanedDescopeUser } from "@/lib/utils"
+import { useAction } from "convex/react"
+import { Doc } from "@convex/_generated/dataModel"
+import { useEffect, useMemo, useState } from "react"
+import { api } from "@convex/_generated/api"
 
-export interface AppUser {
-  id: string
+export interface CleanedDescopeUser {
+  descopeId: string
   name: string
   role: "coder" | "businessEmployee" | "businessAdmin"
   email: string
   picture?: string
   github?: {
-    id: number
     login: string
-    name: string
-    avatar_url: string
-    html_url: string
   }
+  position?: string
 }
 
-export const useAppUser = (): AppUser | null => {
+export const useAppUser = (): {
+  user: Doc<"users"> | null | undefined
+  status: "loading" | "authenticated" | "unauthenticated"
+} => {
   const { isSessionLoading, isAuthenticated } = useSession()
-  const { isUserLoading, user } = useUser()
+  const { isUserLoading: isDescopeUserLoading, user: descopeUser } = useUser()
 
-  if (isSessionLoading || !isAuthenticated || isUserLoading || !user) {
-    return null
+  const cleanedDescopeUser = useMemo(
+    () => mapDescopeUserToCleanedDescopeUser(descopeUser),
+    [descopeUser]
+  )
+
+  const getConvexUser = useAction(api.userFunctions.getUserFromDescope)
+  const [convexUser, setConvexUser] = useState(null)
+
+  useEffect(() => {
+    console.log("cleaned descope user changed")
+    const getUser = async () => {
+      if (cleanedDescopeUser?.descopeId) {
+        const convexUser = await getConvexUser({ data: cleanedDescopeUser })
+        setConvexUser(convexUser)
+        console.log("convexUser set")
+      }
+    }
+    getUser()
+  }, [cleanedDescopeUser])
+
+  if (!isSessionLoading && !isAuthenticated) {
+    console.log({ status: "unauthenticated", user: null })
+    return { status: "unauthenticated", user: null }
   }
 
-  return mapDescopeUserToAppUser(user)
+  if (isSessionLoading || isDescopeUserLoading || !convexUser) {
+    console.log({ status: "loading", user: null })
+    return { status: "loading", user: null }
+  }
+
+  console.log({ status: "authenticated", user: convexUser })
+  return { status: "authenticated", user: convexUser }
 }

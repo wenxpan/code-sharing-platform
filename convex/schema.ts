@@ -3,15 +3,28 @@ import { v } from "convex/values"
 
 export default defineSchema({
   users: defineTable({
+    descopeId: v.string(),
     name: v.string(),
+    role: v.union(
+      v.literal("coder"),
+      v.literal("businessEmployee"),
+      v.literal("businessAdmin")
+    ),
     email: v.string(),
-    image: v.optional(v.string()),
-    role: v.string(),
-    avatar_url: v.optional(v.string()),
-    html_url: v.optional(v.string()),
-    githubLogin: v.optional(v.string()),
-    githubId: v.optional(v.float64()),
-  }).index("by_email", ["email"]),
+    picture: v.optional(v.string()),
+    position: v.optional(v.string()),
+    github: v.optional(
+      v.object({
+        avatar_url: v.optional(v.string()),
+        html_url: v.optional(v.string()),
+        login: v.optional(v.string()),
+        id: v.optional(v.float64()),
+        name: v.optional(v.string()),
+      })
+    ),
+  })
+    .index("by_descopeId", ["descopeId"])
+    .index("by_email", ["email"]),
   jobs: defineTable({
     position: v.string(),
     companyName: v.string(),
