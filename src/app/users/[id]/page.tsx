@@ -1,11 +1,14 @@
+"use client"
 import { User } from "@nextui-org/user"
 import { notFound } from "next/navigation"
 import React from "react"
-import ProjectCard from "@/components/ProjectCard"
+import ProjectCard, { ProjectCardList } from "@/components/ProjectCard"
 import FeedbackCard from "@/components/FeedbackCard"
-import { Avatar } from "@nextui-org/react"
+import { Avatar, Button } from "@nextui-org/react"
 import { TrophyIcon } from "@heroicons/react/24/outline"
 import { HeartIcon } from "@heroicons/react/24/outline"
+import { useQuery } from "convex/react"
+import { api } from "@convex/_generated/api"
 
 interface UserPageProps {
   params: { id: string }
@@ -13,6 +16,8 @@ interface UserPageProps {
 
 const UserPage: React.FC<UserPageProps> = ({ params }) => {
   const id = params.id
+  const projects = useQuery(api.projects.getProjects, {})
+  const displayedProjects = projects?.slice(0, 2)
 
   return (
     <div className="flex flex-col mx-auto sm:px-10 py-5">
@@ -33,12 +38,12 @@ const UserPage: React.FC<UserPageProps> = ({ params }) => {
       </div>
       <section>
         <h2 className="text-lg font-semibold py-5">Projects</h2>
-        <div className="grid place-items-center gap-2 md:grid-cols-2 lg:grid-cols-3">
-          {/* TODO: customise profile project card, remove name */}
-          <ProjectCard id={1} />
-          <ProjectCard id={2} />
-          <ProjectCard id={3} />
-        </div>
+        <Button>View all projects</Button>
+        {displayedProjects ? (
+          <ProjectCardList projects={displayedProjects} />
+        ) : (
+          <p>No projects yet</p>
+        )}
       </section>
       <section>
         <h2 className="text-lg font-semibold py-5">Feedback posted</h2>
