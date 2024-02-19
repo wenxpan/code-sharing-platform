@@ -12,11 +12,11 @@ import { useQuery } from "convex/react"
 import { api } from "@convex/_generated/api"
 
 interface ProjectPageProps {
-  params: { id: string }
+  params: { projectId: string }
 }
 
 const ProjectPage: React.FC<ProjectPageProps> = ({ params }) => {
-  const id = params.id
+  const id = params.projectId
   // const id = "jh776741shb7sb1k02bq56ya756kn79e"
   const project = useQuery(api.projects.getProjectById, { id })
   const owner = project?.owner || undefined

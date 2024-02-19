@@ -1,23 +1,33 @@
+"use client"
 import { User } from "@nextui-org/user"
 import { notFound } from "next/navigation"
 import React from "react"
 import ProjectCard from "@/components/ProjectCard"
+import { useQuery } from "convex/react"
+import { api } from "@convex/_generated/api"
+import { useAppUser } from "@/lib/useAppUser"
 
 interface FeedbackPageProps {
-  params: { id: string }
+  params: { projectId: string; feedbackId: string }
 }
 
 const FeedbackPage: React.FC<FeedbackPageProps> = ({ params }) => {
-  const id = params.id
+  const user = useAppUser()
+  const feedbackId = params.feedbackId
+  const projectId = params.projectId
   const feedbackInfo = {
     name: "",
+  }
+  const project = useQuery(api.projects.getProjects, {})?.[0]
+  if (!project) {
+    return <p>Loading...</p>
   }
 
   return (
     <>
       <div className="flex gap-4 flex-col items-center sm:items-start p-5 sm:flex-row mx-auto md:gap-10">
         <div>
-          <ProjectCard />
+          <ProjectCard project={project} />
         </div>
         <div className="flex flex-col gap-4">
           <div className="flex gap-2 items-center">
