@@ -52,6 +52,35 @@ export const getFeedbackByProject = query({
   },
 })
 
+export const getFeedbackByUser = query({
+  // TODO: with index
+  args: { userId: v.optional(v.id("users")) },
+  handler: async (ctx, args) => {
+    // TODO: check if this step is necesssary
+    if (!args.userId) {
+      return null
+    }
+    const feedback = await ctx.db
+      .query("feedback")
+      .filter((q) => q.eq(q.field("postedBy"), args.userId))
+      .collect()
+    const feedbackWithProject = await Promise.all(
+      feedback.map(async (fb) => {
+        const project = await ctx.db.get(fb.projectId)
+        return {
+          _id: fb._id,
+          overallFeedback: fb.overallFeedback,
+          project: {
+            name: project?.displayName,
+            _id: project?._id,
+          },
+        }
+      })
+    )
+    return feedbackWithProject
+  },
+})
+
 export const createFeedback = mutation({
   args: {
     data: v.object({
