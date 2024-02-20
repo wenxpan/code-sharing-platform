@@ -16,7 +16,9 @@ interface UserPageProps {
 const UserPage: React.FC<UserPageProps> = ({ params }) => {
   const id = params.id
   const user = useQuery(api.users.getUserById, { id })
-  const projects = useQuery(api.projects.getProjects, {})
+  const projects = useQuery(api.projects.getProjectByOwner, {
+    owner: user?._id,
+  })
   const displayedProjects = projects?.slice(0, 2)
 
   if (user === undefined) return <p>Loading...</p>
@@ -43,8 +45,10 @@ const UserPage: React.FC<UserPageProps> = ({ params }) => {
       </div>
       <section>
         <h2 className="text-lg font-semibold py-5">Projects</h2>
-        <Button>View all projects</Button>
-        {displayedProjects ? (
+        {displayedProjects && displayedProjects.length > 3 && (
+          <Button>View all projects</Button>
+        )}
+        {displayedProjects && displayedProjects.length > 0 ? (
           <ProjectCardList projects={displayedProjects} />
         ) : (
           <p>No projects yet</p>

@@ -14,7 +14,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ coder }) => {
   const { name, picture, github, _id } = coder
   return (
     <div>
-      <Card>
+      <Card shadow="sm">
         <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
           <p className="text-lg uppercase font-bold">{name}</p>
           {github && (
@@ -28,9 +28,10 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ coder }) => {
             <Image
               className="object-cover rounded-xl"
               src={picture || github?.avatar_url || ""}
-              width={270}
+              width={135}
             />
           </Link>
+          <p className="text-center">Points: xx</p>
           <div className="flex flex-col items-center">
             <h4 className="font-bold text-large">Skills</h4>
             {/* TODO: add skills to user */}

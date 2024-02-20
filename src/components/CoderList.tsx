@@ -27,7 +27,7 @@ const CoderList: React.FC<CoderListProps> = () => {
   // TODO: add pagination
 
   return (
-    <ul>
+    <ul className="flex flex-wrap gap-6">
       {coders.map((coder: Doc<"users">) => (
         <li key={coder._id}>
           <ProfileCard coder={coder} />

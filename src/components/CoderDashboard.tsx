@@ -3,7 +3,6 @@ import React from "react"
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card"
 import { Divider, Link } from "@nextui-org/react"
 import { useAppUser } from "@/lib/useAppUser"
-import { Doc } from "@convex/_generated/dataModel"
 import ProfileCard from "./ProfileCard"
 
 // feedback received from here

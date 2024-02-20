@@ -23,6 +23,7 @@ export default function NavBar() {
     { name: "Users", URL: "/users" },
   ]
   if (user) {
+    navItems.push({ name: "Job Posts", URL: "/jobs" })
     switch (user.role) {
       case "coder":
         navItems.push({ name: "Dashboard", URL: "/dashboard/coder" })
