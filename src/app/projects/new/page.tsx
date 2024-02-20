@@ -10,6 +10,8 @@ import { api } from "@convex/_generated/api"
 import { useAppUser } from "@/lib/useAppUser"
 import { Spinner } from "@nextui-org/spinner"
 import { redirect } from "next/navigation"
+import { Avatar, AvatarGroup } from "@nextui-org/avatar"
+import { Skeleton } from "@nextui-org/skeleton"
 
 interface CreateProjectPageProps {}
 
@@ -71,8 +73,6 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
   }
   const createProject = useMutation(api.projects.createProject)
 
-  // TODO: auto populate owner id
-  // TODO: auto populate owner (github Login) to disabled cell
   // TODO: show collaborators
   // TODO: upload screenshots
   // TODO: tech stack - group by frontend/backend/db/ui
@@ -179,11 +179,26 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
           label="Total collaborators"
           value={getValues("collaborators").length.toString()}
         />
-        {/* additional info */}
+
+        <div className="col-span-2 w-full justify-start">
+          {getValues("collaborators").length === 0 && (
+            <Skeleton className="flex rounded-full w-12 h-12" />
+          )}
+          {getValues("collaborators").length > 0 && (
+            <AvatarGroup isBordered max={5} className="justify-start">
+              {getValues("collaborators").map((collaborator) => (
+                <Avatar
+                  src={collaborator.avatar_url}
+                  key={collaborator.login}
+                />
+              ))}
+            </AvatarGroup>
+          )}
+        </div>
         <Controller
           name="displayName"
           control={control}
-          render={({ field }) => <Input label="display name" {...field} />}
+          render={({ field }) => <Input label="Display name" {...field} />}
         />
         <div className="col-span-2 w-full">
           <p className="font-semibold">Tech Stack</p>
