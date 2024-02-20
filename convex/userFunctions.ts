@@ -43,19 +43,37 @@ export const getUserFromDescope = action({
         descopeId: args.data.descopeId,
       }
     )
-    if (!user) {
+    if (args.data.descopeId && !user) {
       // TODO: add github info to convex user
       // https://github.com/get-convex/convex-demos/blob/main/giphy-action/convex/messages.ts
-      // const githubLogin = args.data.github?.login
-      // const githubData =
-      //   githubLogin &&
-      //   (await fetch(`https://api.github.com/users/${githubLogin}`))
-      // const json = githubData && (await githubData.json())
-      // console.log({ githubData: json })
+      const githubLogin = args.data.github?.login
+      if (githubLogin && args.data.role === "coder") {
+        const { Octokit } = require("@octokit/core")
+        const octokit = new Octokit({})
+        const { data } = await octokit.request("GET /users/{username}", {
+          username: "wenxpan",
+          headers: {
+            "X-GitHub-Api-Version": "2022-11-28",
+          },
+        })
+        const { login, name, html_url, avatar_url, id } = data
+        // TODO: better condition check
+        if (login === githubLogin) {
+          user = await ctx.runMutation(internal.userFunctions.storeUser, {
+            data: {
+              ...args.data,
+              github: { login, name, html_url, avatar_url, id },
+            },
+          })
+          return user
+        }
+      }
+
       user = await ctx.runMutation(internal.userFunctions.storeUser, {
         data: args.data,
       })
     }
+    // TODO: error handling: unable to create new user should redirect to error page
     return user
   },
 })
