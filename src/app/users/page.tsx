@@ -1,4 +1,4 @@
-import CoderTable from "@/components/CoderTable"
+import CoderTable from "@/components/CoderList"
 import React from "react"
 
 interface UsersPageProps {}
