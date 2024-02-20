@@ -14,7 +14,15 @@ export const getFeedbackById = query({
   args: { id: v.id("feedback") },
   handler: async (ctx, args) => {
     const feedback = await ctx.db.get(args.id)
-    return feedback
+    const user = feedback && (await ctx.db.get(feedback.postedBy))
+    return {
+      ...feedback,
+      postedBy: {
+        picture: user?.picture,
+        name: user?.name,
+        _id: user?._id,
+      },
+    }
   },
 })
 
