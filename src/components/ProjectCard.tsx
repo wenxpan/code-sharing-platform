@@ -26,7 +26,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   const user = useQuery(api.users.getUserById, { id: owner })
 
   if (!user) {
-    return <p>Loading...</p>
+    return null
   }
 
   return (
@@ -36,7 +36,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
           name={user.name}
           description={user.githubLogin}
           avatarProps={{
-            src: user.avatar_url,
+            src: user.picture || user.github.avatar_url,
           }}
         />
         <h4 className="font-bold text-large mt-2">{project.displayName}</h4>

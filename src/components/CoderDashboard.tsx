@@ -5,22 +5,6 @@ import { Divider, Link } from "@nextui-org/react"
 import { useAppUser } from "@/lib/useAppUser"
 import ProfileCard from "./ProfileCard"
 
-// feedback received from here
-const comments = [
-  {
-    projectName: "111",
-    postedTime: "2024-02-13",
-    content: "Such a good project",
-    postUrl: ".../...",
-  },
-  {
-    projectName: "222",
-    postedTime: "2024-02-13",
-    content: "Such a lame project",
-    postUrl: ".../...",
-  },
-]
-
 interface feedbackPostedComments {
   // comments: object[]
 }
@@ -37,7 +21,7 @@ const FeedbackReceivedCard: React.FC<feedbackPostedComments> = (props) => {
           </p>
         </div>
         <Link className="flex justify-end" href="#">
-          View All
+          View All Projects
         </Link>
       </div>
       <Divider className="my-4" />

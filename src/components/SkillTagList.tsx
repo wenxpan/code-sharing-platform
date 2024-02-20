@@ -11,7 +11,7 @@ const SkillTagList: React.FC<SkillTagListProps> = ({
   const showMore = showFull ? false : skills.length > 3
 
   return (
-    <ul className="flex gap-1 text-xs">
+    <ul className="flex gap-1 text-xs flex-wrap">
       {displayedSkills.map((skill) => (
         <li key={skill.name} className="bg-gray-200 rounded-full px-3 py-1">
           {skill.name}

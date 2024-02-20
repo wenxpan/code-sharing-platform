@@ -13,6 +13,7 @@ export default defineSchema({
     email: v.string(),
     picture: v.optional(v.string()),
     position: v.optional(v.string()),
+    skillSet: v.optional(v.array(v.object({ name: v.string() }))),
     github: v.optional(
       v.object({
         avatar_url: v.optional(v.string()),

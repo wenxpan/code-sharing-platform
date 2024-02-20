@@ -26,9 +26,10 @@ export const AvatarDropDown = () => {
     {
       key: "dashboard",
       label: "Dashboard",
-      href: `/dashboard/coder/${user._id}`,
+      href: "/dashboard/coder",
     },
     { key: "profile", label: "My Profile", href: "/profile/coder" },
+    { key: "new-project", label: "New Project", href: "/projects/new" },
     { key: "projects", label: "My Projects", href: "/projects" },
     { key: "jobs", label: "Applied Jobs", href: "/jobs" },
     { key: "sign-out", label: "Sign Out" },
@@ -41,7 +42,7 @@ export const AvatarDropDown = () => {
           as="button"
           avatarProps={{
             isBordered: true,
-            src: user.picture || user.github?.avatar_url || "",
+            src: user.picture || user.github?.avatar_url,
           }}
           className="transition-transform"
           description={user.role}
@@ -52,6 +53,7 @@ export const AvatarDropDown = () => {
         {(item) => (
           <DropdownItem
             key={item.key}
+            href={item.href}
             color={item.key === "sign-out" ? "danger" : "default"}
             className={item.key === "sign-out" ? "text-danger" : ""}
             onClick={() => item.key === "sign-out" && handleLogout()}

@@ -62,13 +62,13 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
   const handleRepoLookup = async (e: React.FormEvent) => {
     e.preventDefault()
     const res = await fetch(
-      `/api/github/repo?owner=${user?.github?.login}&repo=${repoName}`,
+      `/api/github/repo?owner=${user?.github?.login}&repo=${repoName}`
     )
     const { data } = await res.json()
     const currentValues = getValues()
     reset(
       { ...currentValues, ...data },
-      { keepDefaultValues: true, keepDirtyValues: true },
+      { keepDefaultValues: true, keepDirtyValues: true }
     )
   }
   const createProject = useMutation(api.projects.createProject)
@@ -181,9 +181,9 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
         />
 
         <div className="col-span-2 w-full justify-start">
-          {getValues("collaborators").length === 0 && (
+          {/* {getValues("collaborators").length === 0 && (
             <Skeleton className="flex rounded-full w-12 h-12" />
-          )}
+          )} */}
           {getValues("collaborators").length > 0 && (
             <AvatarGroup isBordered max={5} className="justify-start">
               {getValues("collaborators").map((collaborator) => (
