@@ -1,9 +1,8 @@
 "use client"
 import React, { useState } from "react"
 import { Input } from "@nextui-org/input"
-import { Checkbox } from "@nextui-org/checkbox"
 import { Button } from "@nextui-org/button"
-import { Doc, Id } from "@convex/_generated/dataModel"
+import { Doc } from "@convex/_generated/dataModel"
 import { useForm, Controller, useFieldArray } from "react-hook-form"
 import { Icon } from "@iconify-icon/react"
 import { useMutation } from "convex/react"
@@ -15,7 +14,6 @@ import { redirect } from "next/navigation"
 interface CreateProjectPageProps {}
 
 const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
-  const [ownerName, setOwnerName] = useState("")
   const [repoName, setRepoName] = useState("")
   const { user, status } = useAppUser()
 
@@ -62,7 +60,7 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
   const handleRepoLookup = async (e: React.FormEvent) => {
     e.preventDefault()
     const res = await fetch(
-      `/api/github/repo?owner=${ownerName}&repo=${repoName}`,
+      `/api/github/repo?owner=${user?.github?.login}&repo=${repoName}`,
     )
     const { data } = await res.json()
     const currentValues = getValues()
