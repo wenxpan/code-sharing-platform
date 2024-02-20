@@ -33,7 +33,7 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
       open_issues: 0,
       screenshots: [],
       techStack: [],
-      owner: "j97f78hr7sm66wzev1yb81sph56kct0n",
+      owner: "j975sz803vnfdnzpcr9q0pbd156kthps",
     },
   })
   const {
@@ -69,10 +69,8 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
   const createProject = useMutation(api.projects.createProject)
 
   // TODO: auto populate owner id
-  // TODO: check if user creating project is the repo owner
-  // TODO: add owner convex id to projectData
+  // TODO: auto populate owner (github Login) to disabled cell
   // TODO: show collaborators
-  // TODO: display allow forking
   // TODO: upload screenshots
   // TODO: tech stack - group by frontend/backend/db/ui
   const onSubmit = async (data: Doc<"projects">) => {
@@ -80,6 +78,21 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
     const projectId = await createProject({ data })
     console.log({ projectId })
   }
+  // TODO: create table for techStack
+  // https://docs.convex.dev/database/document-ids
+  // const techStack = [
+  //   {
+  //     name: "js",
+  //     category: "language",
+  //   },
+  //   { name: "react", category: "frontend framework" },
+  // ]
+  // const project = {
+  //   name: "xx",
+  //   techStack: ["id1", "id2"],
+  //   // description for tags: custom tech stack or other tools used
+  //   tags: [{ name: "xx" }, { name: "xx" }],
+  // }
 
   return (
     <>

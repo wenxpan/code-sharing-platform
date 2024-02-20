@@ -8,7 +8,7 @@ const DashboardPage = () => {
   // TODO: add loading status to navbar
 
   if (status === "unauthenticated") {
-    redirect("/login")
+    redirect("/")
   }
 
   if (user && user.role === "coder") {

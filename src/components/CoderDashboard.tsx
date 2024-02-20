@@ -1,26 +1,19 @@
+"use client"
 import { notFound } from "next/navigation"
 import React from "react"
-import { coders } from "@/template_data/Coders"
 import { Image } from "@nextui-org/image"
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card"
 import { Divider, Link } from "@nextui-org/react"
+import { useAppUser } from "@/lib/useAppUser"
+import { Doc } from "@convex/_generated/dataModel"
 
 // Profile card from here
 interface ProfileCardProps {
-  coder: {
-    id: string
-    name: string
-    skills: string[]
-    feedbackPosted: number
-    feedbackReceived: number
-    avatar: string
-    github: string
-  }
+  coder: Doc<"users">
 }
 
-const ProfileCard: React.FC<ProfileCardProps> = (props) => {
-  const { id, name, skills, feedbackPosted, feedbackReceived, avatar, github } =
-    props.coder
+const ProfileCard: React.FC<ProfileCardProps> = ({ coder }) => {
+  const { _id, name, picture, github } = coder
   return (
     <div>
       <Card>
@@ -32,18 +25,19 @@ const ProfileCard: React.FC<ProfileCardProps> = (props) => {
           <Image
             alt="Card background"
             className="object-cover rounded-xl"
-            src={avatar}
+            src={picture || github?.avatar_url || ""}
             width={270}
           />
           <div className="flex flex-col items-center">
             <h4 className="font-bold text-large">Skills</h4>
-            <ul>
+            {/* TODO: add skills to user */}
+            {/* <ul>
               {skills.map((skill) => (
                 <li key={skill} className="mb-2">
                   {skill}
                 </li>
               ))}
-            </ul>
+            </ul> */}
           </div>
         </CardBody>
       </Card>
@@ -184,29 +178,15 @@ const FeedbackPostedCard: React.FC<feedbackPostedComments> = (props) => {
   // )
 }
 
-interface CoderDashboardProps {
-  params: { id: string }
-}
+interface CoderDashboardProps {}
 
-const CoderDashboard: React.FC<CoderDashboardProps> = ({ params }) => {
-  const id = params.id
-
-  const coder = coders.find((c) => `${c.id}` === id)
-  // const name = coder?.name;
-  // const skills = coder?.skills;
-  // const feedback = coder?.feedbackPosted;
-  // const feebackReceived = coder?.feedbackReceived;
-  // const avatar = coder?.avatar;
-  // const github = coder?.github;
-
-  if (!coder) {
-    return notFound()
-  }
-
+export const CoderDashboard: React.FC<CoderDashboardProps> = () => {
+  const { user } = useAppUser()
+  if (!user) return <p>Loading...</p>
   return (
     <article className="grid grid-cols-10 gap-4 pt-10">
       <div className="flex col-start-3 col-span-2">
-        <ProfileCard coder={coder} />
+        <ProfileCard coder={user} />
       </div>
       <div className="flex flex-wrap col-start-5 col-span-4">
         <FeedbackReceivedCard />
