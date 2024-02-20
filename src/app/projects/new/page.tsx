@@ -8,12 +8,17 @@ import { useForm, Controller, useFieldArray } from "react-hook-form"
 import { Icon } from "@iconify-icon/react"
 import { useMutation } from "convex/react"
 import { api } from "@convex/_generated/api"
+import { useAppUser } from "@/lib/useAppUser"
+import { Spinner } from "@nextui-org/spinner"
+import { redirect } from "next/navigation"
 
 interface CreateProjectPageProps {}
 
 const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
   const [ownerName, setOwnerName] = useState("")
   const [repoName, setRepoName] = useState("")
+  const { user, status } = useAppUser()
+
   const {
     register,
     handleSubmit,
@@ -33,7 +38,7 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
       open_issues: 0,
       screenshots: [],
       techStack: [],
-      owner: "j975sz803vnfdnzpcr9q0pbd156kthps",
+      owner: user?._id,
     },
   })
   const {
@@ -57,13 +62,13 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
   const handleRepoLookup = async (e: React.FormEvent) => {
     e.preventDefault()
     const res = await fetch(
-      `/api/github/repo?owner=${ownerName}&repo=${repoName}`
+      `/api/github/repo?owner=${ownerName}&repo=${repoName}`,
     )
     const { data } = await res.json()
     const currentValues = getValues()
     reset(
       { ...currentValues, ...data },
-      { keepDefaultValues: true, keepDirtyValues: true }
+      { keepDefaultValues: true, keepDirtyValues: true },
     )
   }
   const createProject = useMutation(api.projects.createProject)
@@ -94,6 +99,19 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
   //   tags: [{ name: "xx" }, { name: "xx" }],
   // }
 
+  if (status === "loading") {
+    return <Spinner />
+  }
+
+  if (status === "unauthenticated") {
+    redirect("/login")
+  }
+
+  if (!user) {
+    return null
+  }
+  console.log({ user })
+
   return (
     <>
       <form
@@ -105,10 +123,10 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
             type="text"
             label="Owner"
             required
-            description="https://github.com/{owner}/{repo}"
+            description={`https://github.com/${user.github?.login}/${repoName}`}
             isInvalid={false}
-            value={ownerName}
-            onChange={(e) => setOwnerName(e.target.value)}
+            value={user.github?.login}
+            isReadOnly={true}
           />
           <Input
             type="text"

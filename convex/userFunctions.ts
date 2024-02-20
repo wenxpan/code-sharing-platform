@@ -1,10 +1,4 @@
-import {
-  action,
-  internalMutation,
-  internalQuery,
-  mutation,
-  query,
-} from "./_generated/server"
+import { action, internalMutation, internalQuery } from "./_generated/server"
 import { internal } from "./_generated/api"
 import { v } from "convex/values"
 import { Doc } from "./_generated/dataModel"
@@ -18,7 +12,7 @@ export const getUserFromDescope = action({
       role: v.union(
         v.literal("coder"),
         v.literal("businessEmployee"),
-        v.literal("businessAdmin")
+        v.literal("businessAdmin"),
       ),
       email: v.string(),
       picture: v.optional(v.string()),
@@ -30,7 +24,7 @@ export const getUserFromDescope = action({
           login: v.optional(v.string()),
           id: v.optional(v.float64()),
           name: v.optional(v.string()),
-        })
+        }),
       ),
     }),
   },
@@ -41,17 +35,19 @@ export const getUserFromDescope = action({
       internal.userFunctions.checkExistingUser,
       {
         descopeId: args.data.descopeId,
-      }
+      },
     )
+
     if (args.data.descopeId && !user) {
       // TODO: add github info to convex user
       // https://github.com/get-convex/convex-demos/blob/main/giphy-action/convex/messages.ts
       const githubLogin = args.data.github?.login
+      console.log({ githubLogin })
       if (githubLogin && args.data.role === "coder") {
         const { Octokit } = require("@octokit/core")
         const octokit = new Octokit({})
         const { data } = await octokit.request("GET /users/{username}", {
-          username: "wenxpan",
+          username: githubLogin,
           headers: {
             "X-GitHub-Api-Version": "2022-11-28",
           },
@@ -62,7 +58,13 @@ export const getUserFromDescope = action({
           user = await ctx.runMutation(internal.userFunctions.storeUser, {
             data: {
               ...args.data,
-              github: { login, name, html_url, avatar_url, id },
+              github: {
+                login,
+                name: name ?? undefined,
+                html_url,
+                avatar_url,
+                id,
+              },
             },
           })
           return user
@@ -98,7 +100,7 @@ export const storeUser = internalMutation({
       role: v.union(
         v.literal("coder"),
         v.literal("businessEmployee"),
-        v.literal("businessAdmin")
+        v.literal("businessAdmin"),
       ),
       email: v.string(),
       picture: v.optional(v.string()),
@@ -110,7 +112,7 @@ export const storeUser = internalMutation({
           login: v.optional(v.string()),
           id: v.optional(v.float64()),
           name: v.optional(v.string()),
-        })
+        }),
       ),
     }),
   },
