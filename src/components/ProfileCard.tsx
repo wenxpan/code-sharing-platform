@@ -1,7 +1,6 @@
 "use client"
 import React from "react"
 import { Image } from "@nextui-org/image"
-import { Button } from "@nextui-org/button"
 import { Card, CardHeader, CardBody } from "@nextui-org/card"
 import { Link } from "@nextui-org/react"
 import { Doc } from "@convex/_generated/dataModel"
@@ -25,12 +24,13 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ coder }) => {
           )}
         </CardHeader>
         <CardBody className="overflow-visible py-2">
-          <Image
-            alt="Card background"
-            className="object-cover rounded-xl"
-            src={picture || github?.avatar_url || ""}
-            width={270}
-          />
+          <Link href={`/users/${_id}`}>
+            <Image
+              className="object-cover rounded-xl"
+              src={picture || github?.avatar_url || ""}
+              width={270}
+            />
+          </Link>
           <div className="flex flex-col items-center">
             <h4 className="font-bold text-large">Skills</h4>
             {/* TODO: add skills to user */}
@@ -42,9 +42,6 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ coder }) => {
               ))}
             </ul> */}
           </div>
-          <Button as={Link} href={`/users/${coder._id}`}>
-            View profile
-          </Button>
         </CardBody>
       </Card>
     </div>

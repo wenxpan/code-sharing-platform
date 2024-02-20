@@ -1,10 +1,9 @@
 "use client"
-import { User } from "@nextui-org/user"
 import { notFound } from "next/navigation"
 import React from "react"
 import ProjectCard, { ProjectCardList } from "@/components/ProjectCard"
 import FeedbackCard from "@/components/FeedbackCard"
-import { Avatar, Button } from "@nextui-org/react"
+import { Avatar, Button, Link } from "@nextui-org/react"
 import { TrophyIcon } from "@heroicons/react/24/outline"
 import { HeartIcon } from "@heroicons/react/24/outline"
 import { useQuery } from "convex/react"
@@ -16,17 +15,23 @@ interface UserPageProps {
 
 const UserPage: React.FC<UserPageProps> = ({ params }) => {
   const id = params.id
+  const user = useQuery(api.users.getUserById, { id })
   const projects = useQuery(api.projects.getProjects, {})
   const displayedProjects = projects?.slice(0, 2)
+
+  if (user === undefined) return <p>Loading...</p>
+  if (user === null) {
+    notFound()
+  }
 
   return (
     <div className="flex flex-col mx-auto sm:px-10 py-5">
       <div className="flex gap-2 items-center">
-        <Avatar src="https://i.pravatar.cc/150?u=a04258114e29026702d" />
-        <h1 className="font-bold text-xl">Jane Doe</h1>
+        <Avatar src={user.picture || user.github.avatar_url || ""} />
+        <h1 className="font-bold text-xl">{user.name}</h1>
       </div>
       <div className="mt-4">
-        <p>github account</p>
+        <Link href={user.github.html_url}>Github: {user.github.login}</Link>
         <div className="flex gap-2 items-center">
           <TrophyIcon className="h-4 w-4" />
           <p>20 feedback posted</p>

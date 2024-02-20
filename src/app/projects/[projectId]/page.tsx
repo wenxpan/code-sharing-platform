@@ -10,7 +10,7 @@ import { Icon } from "@iconify-icon/react"
 import { Link } from "@nextui-org/link"
 import { useQuery } from "convex/react"
 import { api } from "@convex/_generated/api"
-import { useAppUser } from "@/lib/useAppUser"
+import { Doc } from "@convex/_generated/dataModel"
 
 interface ProjectPageProps {
   params: { projectId: string }
@@ -18,11 +18,13 @@ interface ProjectPageProps {
 
 const ProjectPage: React.FC<ProjectPageProps> = ({ params }) => {
   const id = params.projectId
-  // const id = "jh776741shb7sb1k02bq56ya756kn79e"
-  const project = useQuery(api.projects.getProjectById, { id })
+  const project: Doc<"projects"> = useQuery(api.projects.getProjectById, { id })
   const owner = project?.owner || undefined
-  // const user = useQuery(api.users.getCoder, { userId: owner })
-  const { user } = useAppUser()
+  const user: Doc<"users"> = useQuery(api.users.getUserById, { id: owner })
+
+  if (project === null || user === null) {
+    notFound()
+  }
 
   if (!project || !user) {
     return <p>Loading...</p>
@@ -33,9 +35,9 @@ const ProjectPage: React.FC<ProjectPageProps> = ({ params }) => {
       <h1 className="font-bold text-2xl">{project.displayName}</h1>
       <User
         name={user.name}
-        description={user.githubLogin}
+        description={user.github?.login}
         avatarProps={{
-          src: user.avatar_url,
+          src: user.picture || user.github?.avatar_url,
         }}
       />
       <section>

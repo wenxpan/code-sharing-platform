@@ -9,6 +9,17 @@ export const getProjects = query({
   },
 })
 
+export const getProjectByOwner = query({
+  args: { owner: v.string() },
+  handler: async (ctx, args) => {
+    const projects = await ctx.db
+      .query("projects")
+      .filter((q) => q.eq(q.field("owner"), args.owner))
+      .collect()
+    return projects
+  },
+})
+
 export const getProjectById = query({
   args: { id: v.string() },
   handler: async (ctx, args) => {
