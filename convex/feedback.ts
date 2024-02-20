@@ -1,4 +1,5 @@
 // import { Doc } from "./_generated/dataModel"
+import { Id } from "./_generated/dataModel"
 import { mutation, query } from "./_generated/server"
 import { v } from "convex/values"
 
@@ -10,13 +11,73 @@ export const getFeedback = query({
 })
 
 export const getFeedbackById = query({
-  args: { id: v.string() },
+  args: { id: v.id("feedback") },
+  handler: async (ctx, args) => {
+    const feedback = await ctx.db.get(args.id)
+    const user = feedback && (await ctx.db.get(feedback.postedBy))
+    return {
+      ...feedback,
+      postedBy: {
+        picture: user?.picture,
+        name: user?.name,
+        _id: user?._id,
+      },
+    }
+  },
+})
+
+export const getFeedbackByProject = query({
+  // TODO: with index
+  args: { projectId: v.id("projects") },
   handler: async (ctx, args) => {
     const feedback = await ctx.db
       .query("feedback")
-      .filter((q) => q.eq(q.field("_id"), args.id))
-      .unique()
-    return feedback
+      .filter((q) => q.eq(q.field("projectId"), args.projectId))
+      .collect()
+    const feedbackWithUser = await Promise.all(
+      feedback.map(async (fb) => {
+        const user = await ctx.db.get(fb.postedBy)
+        return {
+          ...fb,
+          postedBy: {
+            picture: user?.picture,
+            name: user?.name,
+            _id: user?._id,
+          },
+        }
+      })
+    )
+
+    return feedbackWithUser
+  },
+})
+
+export const getFeedbackByUser = query({
+  // TODO: with index
+  args: { userId: v.optional(v.id("users")) },
+  handler: async (ctx, args) => {
+    // TODO: check if this step is necesssary
+    if (!args.userId) {
+      return null
+    }
+    const feedback = await ctx.db
+      .query("feedback")
+      .filter((q) => q.eq(q.field("postedBy"), args.userId))
+      .collect()
+    const feedbackWithProject = await Promise.all(
+      feedback.map(async (fb) => {
+        const project = await ctx.db.get(fb.projectId)
+        return {
+          _id: fb._id,
+          overallFeedback: fb.overallFeedback,
+          project: {
+            name: project?.displayName,
+            _id: project?._id,
+          },
+        }
+      })
+    )
+    return feedbackWithProject
   },
 })
 
@@ -24,7 +85,7 @@ export const createFeedback = mutation({
   args: {
     data: v.object({
       projectId: v.id("projects"),
-      postedBy: v.string(),
+      postedBy: v.id("users"),
       overallFeedback: v.string(),
       specificFeedback: v.optional(
         v.array(v.object({ area: v.string(), feedback: v.string() }))

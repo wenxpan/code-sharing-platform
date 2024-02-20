@@ -58,7 +58,7 @@ export default function NavBar() {
         ))}
       </NavbarContent>
       <NavbarContent justify="end">
-        {status === "loading" && <Spinner />}
+        {/* {status === "loading" && <Spinner />} */}
         {status === "authenticated" && user && (
           <NavbarItem>
             <AvatarDropDown />

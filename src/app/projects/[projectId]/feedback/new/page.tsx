@@ -1,7 +1,7 @@
 "use client"
 import { Button } from "@nextui-org/button"
 import { User } from "@nextui-org/user"
-import { notFound } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import { Textarea } from "@nextui-org/input"
 import React from "react"
 import { useForm, Controller, useFieldArray } from "react-hook-form"
@@ -11,6 +11,7 @@ import { useMutation, useQuery } from "convex/react"
 import { api } from "@convex/_generated/api"
 import { Input } from "@nextui-org/input"
 import ProjectCard from "@/components/ProjectCard"
+import { Spinner } from "@nextui-org/react"
 
 interface FeedbackPageProps {
   params: { projectId: string }
@@ -22,12 +23,8 @@ const FeedbackPage: React.FC<FeedbackPageProps> = ({ params }) => {
   const createFeedback = useMutation(api.feedback.createFeedback)
   const { user } = useAppUser()
   const {
-    register,
     handleSubmit,
     control,
-    getValues,
-    reset,
-    setValue,
     formState: { errors },
   } = useForm<Doc<"feedback">>({
     defaultValues: {
@@ -45,7 +42,7 @@ const FeedbackPage: React.FC<FeedbackPageProps> = ({ params }) => {
   })
 
   if (!user || !project) {
-    return <p>Loading...</p>
+    return <Spinner />
   }
 
   const onSubmit = async (data: Doc<"feedback">) => {
@@ -57,6 +54,7 @@ const FeedbackPage: React.FC<FeedbackPageProps> = ({ params }) => {
     })
     // TODO: add redirect & toast
     console.log({ feedbackId })
+    redirect(`/projects/${projectId}`)
   }
 
   return (

@@ -1,157 +1,112 @@
 "use client"
 import React from "react"
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card"
-import { Divider, Link } from "@nextui-org/react"
+import { Divider, Link, Spinner } from "@nextui-org/react"
 import { useAppUser } from "@/lib/useAppUser"
 import ProfileCard from "./ProfileCard"
+import { Id } from "@convex/_generated/dataModel"
+import { useQuery } from "convex/react"
+import { api } from "@convex/_generated/api"
 
-// feedback received from here
-const comments = [
-  {
-    projectName: "111",
-    postedTime: "2024-02-13",
-    content: "Such a good project",
-    postUrl: ".../...",
-  },
-  {
-    projectName: "222",
-    postedTime: "2024-02-13",
-    content: "Such a lame project",
-    postUrl: ".../...",
-  },
-]
-
-interface feedbackPostedComments {
-  // comments: object[]
+interface FeedbackOverviewCardProps {
+  feedback: feedbackWithProject
 }
 
-const FeedbackReceivedCard: React.FC<feedbackPostedComments> = (props) => {
-  // comments.map(comment => (
+interface feedbackWithProject {
+  _id: Id<"feedback">
+  overallFeedback: string
+  project: {
+    name: string
+    _id: Id<"projects">
+  }
+}
+const FeedbackOverviewCard: React.FC<FeedbackOverviewCardProps> = ({
+  feedback,
+}) => {
+  console.log({ feedback })
   return (
-    <div>
-      <div className="space-y-1 flex justify-between">
-        <div className="flex flex-col justify-start">
-          <h4 className="text-large font-medium">Received Feedback</h4>
-          <p className="text-small text-default-400">
-            See how others think of your projects
-          </p>
+    <Card>
+      <CardHeader className="flex gap-3">
+        <div className="flex flex-col">
+          <p className="text-md">{feedback.project.name}</p>
+          <p className="text-small text-default-500">Feedback</p>
         </div>
-        <Link className="flex justify-end" href="#">
-          View All
+      </CardHeader>
+      <Divider />
+      <CardBody>
+        <p>{feedback.overallFeedback}</p>
+      </CardBody>
+      <Divider />
+      <CardFooter>
+        <Link showAnchorIcon href={`/projects/${feedback.project._id}`}>
+          View complete project
         </Link>
-      </div>
-      <Divider className="my-4" />
-
-      <Card>
-        <CardHeader className="flex gap-3">
-          <div className="flex flex-col">
-            <p className="text-md">Project Name</p>
-            <p className="text-small text-default-500">Feedback</p>
-          </div>
-        </CardHeader>
-        <Divider />
-        <CardBody>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum
-            eveniet ducimus quaerat ex excepturi dicta perspiciatis architecto
-            dolor. Tempora commodi cumque, reprehenderit maxime in deleniti
-            repellat vero. Impedit, repellat eius. Lorem ipsum dolor sit amet
-            consectetur, adipisicing elit. Voluptatum sapiente quam explicabo,
-            veritatis autem mollitia magnam ea dolorum beatae! Velit nobis fuga
-            itaque iure voluptas, officiis laborum possimus ipsa sunt.
-          </p>
-        </CardBody>
-        <Divider />
-        <CardFooter>
-          <Link
-            // isExternal
-            showAnchorIcon
-            href="https://github.com/nextui-org/nextui"
-          >
-            View complete project
-          </Link>
-        </CardFooter>
-      </Card>
-    </div>
+      </CardFooter>
+    </Card>
   )
-  // )
-  // )
-}
-
-// feedback posted from here
-
-interface feedbackPostedComments {
-  // comments: object[]
-}
-
-const FeedbackPostedCard: React.FC<feedbackPostedComments> = (props) => {
-  // comments.map(comment => (
-  return (
-    <div>
-      <div className="space-y-1 flex justify-between">
-        <div className="flex flex-col justify-start">
-          <h4 className="text-large font-medium">Posted Feedback</h4>
-          <p className="text-small text-default-400">
-            Thanks for giving out ideas
-          </p>
-        </div>
-        <Link className="flex justify-end" href="#">
-          View All
-        </Link>
-      </div>
-
-      <Divider className="my-4" />
-
-      <Card>
-        <CardHeader className="flex gap-3">
-          <div className="flex flex-col">
-            <p className="text-md">Project Name</p>
-            <p className="text-small text-default-500">Comment</p>
-          </div>
-        </CardHeader>
-        <Divider />
-        <CardBody>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum
-            eveniet ducimus quaerat ex excepturi dicta perspiciatis architecto
-            dolor. Tempora commodi cumque, reprehenderit maxime in deleniti
-            repellat vero. Impedit, repellat eius. Lorem ipsum dolor sit amet
-            consectetur, adipisicing elit. Voluptatum sapiente quam explicabo,
-            veritatis autem mollitia magnam ea dolorum beatae! Velit nobis fuga
-            itaque iure voluptas, officiis laborum possimus ipsa sunt.
-          </p>
-        </CardBody>
-        <Divider />
-        <CardFooter>
-          <Link
-            // isExternal
-            showAnchorIcon
-            href="https://github.com/nextui-org/nextui"
-          >
-            View complete project
-          </Link>
-        </CardFooter>
-      </Card>
-    </div>
-  )
-  // )
-  // )
 }
 
 interface CoderDashboardProps {}
 
 export const CoderDashboard: React.FC<CoderDashboardProps> = () => {
   const { user } = useAppUser()
-  if (!user) return <p>Loading...</p>
+  const feedback: feedbackWithProject[] = useQuery(
+    api.feedback.getFeedbackByUser,
+    {
+      userId: user?._id,
+    }
+  )
+  if (!user || feedback === undefined) return <Spinner />
+
   return (
     <article className="grid grid-cols-10 gap-4 pt-10">
       <div className="flex col-start-3 col-span-2">
         <ProfileCard coder={user} />
       </div>
-      <div className="flex flex-wrap col-start-5 col-span-4">
-        <FeedbackReceivedCard />
+      <div className="flex flex-wrap col-start-5 col-span-4 w-full">
+        <div>
+          <div className="space-y-1 flex justify-between">
+            <div className="flex flex-col justify-start">
+              <h4 className="text-large font-medium">Received Feedback</h4>
+              <p className="text-small text-default-400">
+                See how others think of your projects
+              </p>
+            </div>
+            <Link className="flex justify-end" href="#">
+              View All
+            </Link>
+          </div>
+          <Divider className="my-4" />
+          <ul>
+            {feedback.map((fb) => (
+              <li key={fb._id}>
+                <FeedbackOverviewCard feedback={fb} />
+              </li>
+            ))}
+          </ul>
+        </div>
         <br className="py-10" />
-        <FeedbackPostedCard />
+        <div>
+          <div className="space-y-1 flex justify-between">
+            <div className="flex flex-col justify-start">
+              <h4 className="text-large font-medium">Posted Feedback</h4>
+              <p className="text-small text-default-400">
+                Thanks for giving out ideas
+              </p>
+            </div>
+            <Link className="flex justify-end" href="#">
+              View All
+            </Link>
+          </div>
+          <Divider className="my-4" />
+          <ul className="gap-2 flex flex-col">
+            {feedback.map((fb) => (
+              <li key={fb._id}>
+                <FeedbackOverviewCard feedback={fb} />
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
       {/* <h2 className="font-bold">{name}</h2>
         <h2 className="font-bold">{skills}</h2>

@@ -13,6 +13,7 @@ export default defineSchema({
     email: v.string(),
     picture: v.optional(v.string()),
     position: v.optional(v.string()),
+    skillSet: v.optional(v.array(v.object({ name: v.string() }))),
     github: v.optional(
       v.object({
         avatar_url: v.optional(v.string()),
@@ -55,7 +56,7 @@ export default defineSchema({
   }),
   feedback: defineTable({
     projectId: v.id("projects"),
-    postedBy: v.string(),
+    postedBy: v.id("users"),
     overallFeedback: v.string(),
     specificFeedback: v.optional(
       v.array(v.object({ area: v.string(), feedback: v.string() }))

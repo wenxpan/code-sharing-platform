@@ -1,16 +1,6 @@
 "use client"
 
 import React from "react"
-import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableColumn,
-  TableRow,
-  TableCell,
-} from "@nextui-org/table"
-import { User } from "@nextui-org/user"
-import SkillTagList from "./SkillTagList"
 import { Doc } from "@convex/_generated/dataModel"
 import { useQuery } from "convex/react"
 import { api } from "@convex/_generated/api"
@@ -24,10 +14,10 @@ const CoderList: React.FC<CoderListProps> = () => {
     return <p>Loading...</p>
   }
 
-  // TODO: add pagination
+  // TODO: add pagination or infinite scroll
 
   return (
-    <ul className="flex flex-wrap gap-6">
+    <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
       {coders.map((coder: Doc<"users">) => (
         <li key={coder._id}>
           <ProfileCard coder={coder} />
