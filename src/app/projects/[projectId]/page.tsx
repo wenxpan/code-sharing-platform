@@ -1,5 +1,5 @@
 "use client"
-import FeedbackCard from "@/components/FeedbackCard"
+import FeedbackCard, { FeedbackWithUser } from "@/components/FeedbackCard"
 import { ScreenshotsCarousel } from "@/components/ScreenshotsCarousel"
 import SkillTagList from "@/components/SkillTagList"
 import { Button } from "@nextui-org/button"
@@ -11,6 +11,7 @@ import { Link } from "@nextui-org/link"
 import { useQuery } from "convex/react"
 import { api } from "@convex/_generated/api"
 import { Doc } from "@convex/_generated/dataModel"
+import { Spinner } from "@nextui-org/react"
 
 interface ProjectPageProps {
   params: { projectId: string }
@@ -21,13 +22,16 @@ const ProjectPage: React.FC<ProjectPageProps> = ({ params }) => {
   const project: Doc<"projects"> = useQuery(api.projects.getProjectById, { id })
   const owner = project?.owner || undefined
   const user: Doc<"users"> = useQuery(api.users.getUserById, { id: owner })
+  const feedback = useQuery(api.feedback.getFeedbackByProject, {
+    projectId: id,
+  }) as FeedbackWithUser[]
 
   if (project === null || user === null) {
     notFound()
   }
 
-  if (!project || !user) {
-    return <p>Loading...</p>
+  if (!project || !user || !feedback) {
+    return <Spinner />
   }
 
   return (
@@ -78,10 +82,15 @@ const ProjectPage: React.FC<ProjectPageProps> = ({ params }) => {
         <h2 className="font-semibold text-lg">Tech Stack:</h2>
         <SkillTagList skills={project.techStack} showFull={true} />
       </section>
-      <section>
+      <section className="w-full">
         <h2 className="font-semibold text-lg">Feedback</h2>
-        <FeedbackCard />
-        <FeedbackCard />
+        <ul>
+          {feedback.map((fb) => (
+            <li key={fb._id}>
+              <FeedbackCard feedback={fb} />
+            </li>
+          ))}
+        </ul>
       </section>
     </article>
   )

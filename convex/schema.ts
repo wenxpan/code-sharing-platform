@@ -56,7 +56,7 @@ export default defineSchema({
   }),
   feedback: defineTable({
     projectId: v.id("projects"),
-    postedBy: v.string(),
+    postedBy: v.id("users"),
     overallFeedback: v.string(),
     specificFeedback: v.optional(
       v.array(v.object({ area: v.string(), feedback: v.string() }))

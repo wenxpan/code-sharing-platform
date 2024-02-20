@@ -12,7 +12,7 @@ export const getUserFromDescope = action({
       role: v.union(
         v.literal("coder"),
         v.literal("businessEmployee"),
-        v.literal("businessAdmin"),
+        v.literal("businessAdmin")
       ),
       email: v.string(),
       picture: v.optional(v.string()),
@@ -24,7 +24,7 @@ export const getUserFromDescope = action({
           login: v.optional(v.string()),
           id: v.optional(v.float64()),
           name: v.optional(v.string()),
-        }),
+        })
       ),
     }),
   },
@@ -35,10 +35,10 @@ export const getUserFromDescope = action({
       internal.userFunctions.checkExistingUser,
       {
         descopeId: args.data.descopeId,
-      },
+      }
     )
 
-    if (args.data.descopeId && !user) {
+    if (args.data.descopeId && user === null) {
       // TODO: add github info to convex user
       // https://github.com/get-convex/convex-demos/blob/main/giphy-action/convex/messages.ts
       const githubLogin = args.data.github?.login
@@ -58,6 +58,7 @@ export const getUserFromDescope = action({
           user = await ctx.runMutation(internal.userFunctions.storeUser, {
             data: {
               ...args.data,
+              picture: args.data.picture || avatar_url,
               github: {
                 login,
                 name: name ?? undefined,
@@ -100,7 +101,7 @@ export const storeUser = internalMutation({
       role: v.union(
         v.literal("coder"),
         v.literal("businessEmployee"),
-        v.literal("businessAdmin"),
+        v.literal("businessAdmin")
       ),
       email: v.string(),
       picture: v.optional(v.string()),
@@ -112,7 +113,7 @@ export const storeUser = internalMutation({
           login: v.optional(v.string()),
           id: v.optional(v.float64()),
           name: v.optional(v.string()),
-        }),
+        })
       ),
     }),
   },
