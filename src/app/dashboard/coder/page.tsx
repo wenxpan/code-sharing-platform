@@ -1,9 +1,14 @@
+import CoderDashboard from "@/components/CoderDashboard"
 import React from "react"
 
 interface CoderDashboardProps {}
 
-const CoderDashboard: React.FC<CoderDashboardProps> = () => {
-  return <>Coder dashboard</>
+const CoderDashboardPage: React.FC<CoderDashboardProps> = () => {
+  return (
+    <>
+      <CoderDashboard />
+    </>
+  )
 }
 
-export default CoderDashboard
+export default CoderDashboardPage
