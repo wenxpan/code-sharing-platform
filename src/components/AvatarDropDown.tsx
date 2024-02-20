@@ -41,7 +41,7 @@ export const AvatarDropDown = () => {
           as="button"
           avatarProps={{
             isBordered: true,
-            src: user.picture || "",
+            src: user.picture || user.github?.avatar_url || "",
           }}
           className="transition-transform"
           description={user.role}

@@ -1,3 +1,4 @@
+import { Doc } from "./_generated/dataModel"
 import { mutation, query } from "./_generated/server"
 import { v } from "convex/values"
 
@@ -52,5 +53,16 @@ export const getUserById = query({
       .filter((q) => q.eq(q.field("_id"), args.id))
       .unique()
     return user
+  },
+})
+
+export const getCoders = query({
+  args: {},
+  handler: async (ctx, args) => {
+    const coders = await ctx.db
+      .query("users")
+      .filter((q) => q.eq(q.field("role"), "coder"))
+      .collect()
+    return coders
   },
 })

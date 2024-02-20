@@ -1,49 +1,9 @@
 "use client"
-import { notFound } from "next/navigation"
 import React from "react"
-import { Image } from "@nextui-org/image"
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card"
 import { Divider, Link } from "@nextui-org/react"
 import { useAppUser } from "@/lib/useAppUser"
-import { Doc } from "@convex/_generated/dataModel"
-
-// Profile card from here
-interface ProfileCardProps {
-  coder: Doc<"users">
-}
-
-const ProfileCard: React.FC<ProfileCardProps> = ({ coder }) => {
-  const { _id, name, picture, github } = coder
-  return (
-    <div>
-      <Card>
-        <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-          <p className="text-lg uppercase font-bold">{name}</p>
-          <small className="text-default-500">Placeholder....</small>
-        </CardHeader>
-        <CardBody className="overflow-visible py-2">
-          <Image
-            alt="Card background"
-            className="object-cover rounded-xl"
-            src={picture || github?.avatar_url || ""}
-            width={270}
-          />
-          <div className="flex flex-col items-center">
-            <h4 className="font-bold text-large">Skills</h4>
-            {/* TODO: add skills to user */}
-            {/* <ul>
-              {skills.map((skill) => (
-                <li key={skill} className="mb-2">
-                  {skill}
-                </li>
-              ))}
-            </ul> */}
-          </div>
-        </CardBody>
-      </Card>
-    </div>
-  )
-}
+import ProfileCard from "./ProfileCard"
 
 // feedback received from here
 const comments = [

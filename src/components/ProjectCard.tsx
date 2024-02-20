@@ -23,8 +23,8 @@ interface ProjectListProps {
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   const owner = project.owner
-  // const user = useQuery(api.users.getCoder, { userId: owner })
-  const { user } = useAppUser()
+  const user = useQuery(api.users.getUserById, { id: owner })
+
   if (!user) {
     return <p>Loading...</p>
   }
