@@ -6,15 +6,11 @@ import { v } from "convex/values"
 export interface FeedbackOverview {
   _id: Id<"feedback">
   overallFeedback: string
-  project: {
-    name: string
-    _id: Id<"projects">
-  }
-  postedBy: {
-    name: string
-    _id: Id<"projects">
-  }
+  project: { name: string | undefined; _id: Id<"projects"> | undefined }
+  postedBy: { name: string | undefined; _id: Id<"users"> | undefined }
 }
+
+export type FeedbackOverviewResult = FeedbackOverview[] | undefined | null
 
 export const getFeedback = query({
   handler: async (ctx, args) => {
@@ -102,7 +98,7 @@ export const getPostedFeedbackByUser = query({
 export const getReceivedFeedbackByUser = query({
   // TODO: with index
   args: { userId: v.optional(v.id("users")) },
-  handler: async (ctx, args) => {
+  handler: async (ctx, args): Promise<FeedbackOverviewResult> => {
     // TODO: check if this step is necesssary
     if (!args.userId) {
       return null

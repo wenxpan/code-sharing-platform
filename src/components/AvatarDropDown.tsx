@@ -8,12 +8,14 @@ import {
 } from "@nextui-org/dropdown"
 import { User } from "@nextui-org/user"
 import { Doc } from "@convex/_generated/dataModel"
+import { redirect } from "next/navigation"
 
 export const AvatarDropDown = ({ user }: { user: Doc<"users"> }) => {
   const sdk = useDescope()
 
   const handleLogout = useCallback(() => {
     sdk.logout()
+    redirect("/")
   }, [sdk])
 
   if (!user) {
