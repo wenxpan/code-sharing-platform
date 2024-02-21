@@ -2,13 +2,13 @@
 import React from "react"
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card"
 import { Divider, Link } from "@nextui-org/react"
-import { FeedbackOverview } from "@convex/feedback"
+import { FeedbackOverview, FeedbackOverviewResult } from "@convex/feedback"
 
 interface FeedbackOverviewCardProps {
   feedback: FeedbackOverview
 }
 interface FeedbackOverviewSectionProps {
-  feedback: FeedbackOverview[]
+  feedback: FeedbackOverviewResult
   heading: string
   subHeading: string
 }
@@ -52,13 +52,17 @@ const FeedbackOverviewSection: React.FC<FeedbackOverviewSectionProps> = ({
         <p className="text-small text-default-400">{subHeading}</p>
       </div>
       <Divider className="my-4" />
-      <ul className="gap-4 flex flex-col">
-        {feedback.map((fb) => (
-          <li key={fb._id}>
-            <FeedbackOverviewCard feedback={fb} />
-          </li>
-        ))}
-      </ul>
+      {feedback ? (
+        <ul className="gap-4 flex flex-col">
+          {feedback.map((fb) => (
+            <li key={fb._id}>
+              <FeedbackOverviewCard feedback={fb} />
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No feedback yet</p>
+      )}
     </div>
   )
 }
