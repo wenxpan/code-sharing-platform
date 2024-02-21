@@ -7,7 +7,7 @@ import { useQuery } from "convex/react"
 import { api } from "@convex/_generated/api"
 import { useAppUser } from "@/lib/useAppUser"
 import { Link, Spinner } from "@nextui-org/react"
-import { FeedbackWithUser } from "@/components/FeedbackCard"
+import { FeedbackWithUser } from "@/components/FeedbackCommentCard"
 
 interface FeedbackPageProps {
   params: { projectId: string; feedbackId: string }

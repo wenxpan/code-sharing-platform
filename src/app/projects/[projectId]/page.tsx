@@ -1,5 +1,7 @@
 "use client"
-import FeedbackCard, { FeedbackWithUser } from "@/components/FeedbackCard"
+import FeedbackCard, {
+  FeedbackWithUser,
+} from "@/components/FeedbackCommentCard"
 import { ScreenshotsCarousel } from "@/components/ScreenshotsCarousel"
 import SkillTagList from "@/components/SkillTagList"
 import { Button } from "@nextui-org/button"
