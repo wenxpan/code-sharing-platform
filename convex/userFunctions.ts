@@ -3,7 +3,6 @@ import { internal } from "./_generated/api"
 import { v } from "convex/values"
 import { Doc } from "./_generated/dataModel"
 
-// @ts-ignore
 export const getUserFromDescope = action({
   args: {
     data: v.object({
@@ -31,14 +30,14 @@ export const getUserFromDescope = action({
   handler: async (ctx, args): Promise<Doc<"users"> | null> => {
     if (!args.data.descopeId) return null
 
-    let user: Doc<"users"> | null = await ctx.runQuery(
+    const existedUser: Doc<"users"> | null = await ctx.runQuery(
       internal.userFunctions.checkExistingUser,
       {
         descopeId: args.data.descopeId,
       }
     )
 
-    if (args.data.descopeId && user === null) {
+    if (args.data.descopeId && existedUser === null) {
       console.log("creating user...")
       const githubLogin = args.data.github?.login
 
@@ -54,7 +53,7 @@ export const getUserFromDescope = action({
         const { login, name, html_url, avatar_url, id } = data
         // if github info is retreived, create user with github
         if (login === githubLogin) {
-          user = await ctx.runMutation(internal.userFunctions.storeUser, {
+          const user = await ctx.runMutation(internal.userFunctions.storeUser, {
             data: {
               ...args.data,
               picture: args.data.picture || avatar_url,
@@ -69,14 +68,15 @@ export const getUserFromDescope = action({
           })
           return user
         }
+      } else {
+        const user = await ctx.runMutation(internal.userFunctions.storeUser, {
+          data: args.data,
+        })
+        return user
       }
-
-      user = await ctx.runMutation(internal.userFunctions.storeUser, {
-        data: args.data,
-      })
     }
     // TODO: error handling: unable to create new user should redirect to error page
-    return user
+    return existedUser
   },
 })
 
@@ -117,6 +117,15 @@ export const storeUser = internalMutation({
     }),
   },
   handler: async (ctx, args) => {
+    const existedUser = await ctx.db
+      .query("users")
+      // todo: change to index
+      .filter((q) => q.eq(q.field("descopeId"), args.data.descopeId))
+      .unique()
+    if (existedUser) {
+      return existedUser
+    }
+
     const newUserId = await ctx.db.insert("users", args.data)
     const newUser = await ctx.db
       .query("users")
