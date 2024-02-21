@@ -20,7 +20,7 @@ export default defineSchema({
         html_url: v.optional(v.string()),
         login: v.optional(v.string()),
         id: v.optional(v.float64()),
-        name: v.optional(v.string()),
+        name: v.optional(v.string() || v.null()),
       })
     ),
   })

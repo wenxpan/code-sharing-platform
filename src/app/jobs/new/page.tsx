@@ -55,7 +55,7 @@ const NewJob: React.FC = () => {
     event.preventDefault()
 
     const formData = new FormData(event.currentTarget)
-    console.log(formData)
+    // console.log(formData)
 
     await createJobs({
       email: email,
