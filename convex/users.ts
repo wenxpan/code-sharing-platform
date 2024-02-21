@@ -46,13 +46,9 @@ export const getUserByDescopeId = query({
 })
 
 export const getUserById = query({
-  args: { id: v.string() },
+  args: { id: v.id("users") },
   handler: async (ctx, args) => {
-    const user = await ctx.db
-      .query("users")
-      // todo: change to index
-      .filter((q) => q.eq(q.field("_id"), args.id))
-      .unique()
+    const user = await ctx.db.get(args.id)
     return user
   },
 })
