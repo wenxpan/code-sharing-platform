@@ -2,7 +2,7 @@
 import { notFound } from "next/navigation"
 import React from "react"
 import ProjectCard, { ProjectCardList } from "@/components/ProjectCard"
-import FeedbackCard from "@/components/FeedbackCard"
+import FeedbackCard from "@/components/FeedbackCommentCard"
 import { Avatar, Button, Link } from "@nextui-org/react"
 import { TrophyIcon } from "@heroicons/react/24/outline"
 import { HeartIcon } from "@heroicons/react/24/outline"
