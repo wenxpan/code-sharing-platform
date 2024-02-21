@@ -12,10 +12,10 @@ import { usePathname } from "next/navigation"
 import { WebsiteLogo } from "./ui/logo"
 import { AvatarDropDown } from "@/components/AvatarDropDown"
 import { useAppUser } from "@/lib/useAppUser"
-import { Spinner } from "@nextui-org/spinner"
 
 export default function NavBar() {
   const { user, status } = useAppUser()
+  console.log({ status, user })
   const pathname = usePathname()
   const navItems = [
     { name: "Home", URL: "/" },
@@ -61,7 +61,7 @@ export default function NavBar() {
         {/* {status === "loading" && <Spinner />} */}
         {status === "authenticated" && user && (
           <NavbarItem>
-            <AvatarDropDown />
+            <AvatarDropDown user={user} />
           </NavbarItem>
         )}
         {status === "unauthenticated" && (

@@ -7,10 +7,9 @@ import {
   DropdownTrigger,
 } from "@nextui-org/dropdown"
 import { User } from "@nextui-org/user"
-import { useAppUser } from "@/lib/useAppUser"
+import { Doc } from "@convex/_generated/dataModel"
 
-export const AvatarDropDown = () => {
-  const { user } = useAppUser()
+export const AvatarDropDown = ({ user }: { user: Doc<"users"> }) => {
   const sdk = useDescope()
 
   const handleLogout = useCallback(() => {

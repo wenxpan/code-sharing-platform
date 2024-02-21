@@ -28,8 +28,8 @@ export const getUserFromDescope = action({
       ),
     }),
   },
-  handler: async (ctx, args) => {
-    if (!args.data.descopeId) return
+  handler: async (ctx, args): Promise<Doc<"users"> | null> => {
+    if (!args.data.descopeId) return null
 
     let user: Doc<"users"> | null = await ctx.runQuery(
       internal.userFunctions.checkExistingUser,
@@ -39,10 +39,9 @@ export const getUserFromDescope = action({
     )
 
     if (args.data.descopeId && user === null) {
-      // TODO: add github info to convex user
-      // https://github.com/get-convex/convex-demos/blob/main/giphy-action/convex/messages.ts
+      console.log("creating user...")
       const githubLogin = args.data.github?.login
-      console.log({ githubLogin })
+
       if (githubLogin && args.data.role === "coder") {
         const { Octokit } = require("@octokit/core")
         const octokit = new Octokit({})
@@ -53,7 +52,7 @@ export const getUserFromDescope = action({
           },
         })
         const { login, name, html_url, avatar_url, id } = data
-        // TODO: better condition check
+        // if github info is retreived, create user with github
         if (login === githubLogin) {
           user = await ctx.runMutation(internal.userFunctions.storeUser, {
             data: {

@@ -4,7 +4,7 @@ import { useUser, useSession } from "@descope/nextjs-sdk/client"
 import { mapDescopeUserToCleanedDescopeUser } from "@/lib/utils"
 import { useAction } from "convex/react"
 import { Doc } from "@convex/_generated/dataModel"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useState } from "react"
 import { api } from "@convex/_generated/api"
 
 export interface CleanedDescopeUser {
@@ -26,36 +26,37 @@ export const useAppUser = (): {
   const { isSessionLoading, isAuthenticated } = useSession()
   const { isUserLoading: isDescopeUserLoading, user: descopeUser } = useUser()
 
-  const cleanedDescopeUser = useMemo(
-    () => mapDescopeUserToCleanedDescopeUser(descopeUser),
-    [descopeUser]
-  )
-
   const getConvexUser = useAction(api.userFunctions.getUserFromDescope)
-  const [convexUser, setConvexUser] = useState(null)
+  const [convexUser, setConvexUser] = useState<Doc<"users"> | undefined>(
+    undefined
+  )
+  const [isUserLoading, setIsUserLoading] = useState(true)
 
   useEffect(() => {
-    console.log("cleaned descope user changed")
-    const getUser = async () => {
-      if (cleanedDescopeUser?.descopeId) {
-        const convexUser = await getConvexUser({ data: cleanedDescopeUser })
-        setConvexUser(convexUser)
-        console.log("convexUser set")
+    if (descopeUser) {
+      const cleanedDescopeUser = mapDescopeUserToCleanedDescopeUser(descopeUser)
+      const getUser = async () => {
+        if (cleanedDescopeUser?.descopeId && convexUser === undefined) {
+          const user = await getConvexUser({ data: cleanedDescopeUser })
+          if (user === null) {
+            return
+          }
+          setConvexUser(user)
+          setIsUserLoading(false)
+          console.log("convexUser set")
+        }
       }
+      getUser()
     }
-    getUser()
-  }, [cleanedDescopeUser])
+  }, [isDescopeUserLoading])
 
   if (!isSessionLoading && !isAuthenticated) {
-    console.log({ status: "unauthenticated", user: null })
     return { status: "unauthenticated", user: null }
   }
 
-  if (isSessionLoading || isDescopeUserLoading || !convexUser) {
-    console.log({ status: "loading", user: null })
-    return { status: "loading", user: null }
+  if (isSessionLoading || isDescopeUserLoading || isUserLoading) {
+    return { status: "loading", user: undefined }
   }
 
-  console.log({ status: "authenticated", user: convexUser })
   return { status: "authenticated", user: convexUser }
 }

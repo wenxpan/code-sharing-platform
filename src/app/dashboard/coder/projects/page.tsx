@@ -2,6 +2,7 @@
 import { ProjectCardList } from "@/components/ProjectCard"
 import { useAppUser } from "@/lib/useAppUser"
 import { api } from "@convex/_generated/api"
+import { Doc } from "@convex/_generated/dataModel"
 import { Spinner } from "@nextui-org/react"
 import { useQuery } from "convex/react"
 import { redirect } from "next/navigation"
@@ -11,9 +12,12 @@ interface CoderProjectsPageProps {}
 
 const CoderProjectsPage: React.FC<CoderProjectsPageProps> = () => {
   const { status, user } = useAppUser()
-  const projects = useQuery(api.projects.getProjectByOwner, {
-    owner: user?._id,
-  })
+  const projects: Doc<"projects">[] | undefined = useQuery(
+    api.projects.getProjectByOwner,
+    {
+      owner: user?._id,
+    }
+  )
 
   if (status === "unauthenticated") {
     redirect("/dashboard")
