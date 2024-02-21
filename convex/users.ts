@@ -22,7 +22,7 @@ export const createUser = mutation({
           html_url: v.string(),
           login: v.string(),
           id: v.float64(),
-          name: v.string(),
+          name: v.string() || v.null(),
         })
       ),
     }),
@@ -67,3 +67,39 @@ export const getCoders = query({
     return coders
   },
 })
+
+
+// export const updateCoder = mutation({
+//   args: {
+//     id: v.string(),
+//     newInfo: v.object({
+//       name: v.string(),
+//       email: v.string(),
+//       skillSet: v.string(),
+//     }),
+//   },
+//   handler: async (ctx, args) => await ctx.db.patch({ _id: args.id }, args.newInfo)
+// })
+
+export const updateCoder = mutation({
+  args: {
+    id: v.string(),
+    data: v.object({
+      name: v.string(),
+      email: v.string(),
+      skillSet: v.array(v.object({ name: v.string() })),
+      github: v.optional(
+        v.object({
+          avatar_url: v.optional(v.string()),
+          html_url: v.optional(v.string()),
+          login: v.optional(v.string()),
+          id: v.optional(v.float64()),
+          // name: v.optional(v.string() || v.null()),
+        })
+      ),
+    }),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.id as any, args.data);
+  },
+});
