@@ -36,7 +36,7 @@ const CoderDashboardPage: React.FC<CoderDashboardProps> = () => {
           <Button as={Link} href="/projects/new">
             New Project
           </Button>
-          <Button as={Link} href="/profile">
+          <Button as={Link} href="/dashboard/coder/profile">
             Profile
           </Button>
           <Button as={Link} href="/dashboard/coder/projects">

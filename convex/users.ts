@@ -68,23 +68,10 @@ export const getCoders = query({
   },
 })
 
-
-// export const updateCoder = mutation({
-//   args: {
-//     id: v.string(),
-//     newInfo: v.object({
-//       name: v.string(),
-//       email: v.string(),
-//       skillSet: v.string(),
-//     }),
-//   },
-//   handler: async (ctx, args) => await ctx.db.patch({ _id: args.id }, args.newInfo)
-// })
-
 export const updateCoder = mutation({
   args: {
-    id: v.string(),
     data: v.object({
+      _id: v.id("users"),
       name: v.string(),
       email: v.string(),
       skillSet: v.array(v.object({ name: v.string() })),
@@ -94,12 +81,12 @@ export const updateCoder = mutation({
           html_url: v.optional(v.string()),
           login: v.optional(v.string()),
           id: v.optional(v.float64()),
-          // name: v.optional(v.string() || v.null()),
+          name: v.optional(v.string()),
         })
       ),
     }),
   },
   handler: async (ctx, args) => {
-    await ctx.db.patch(args.id as any, args.data);
+    await ctx.db.patch(args.data._id, args.data)
   },
-});
+})
