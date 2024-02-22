@@ -28,3 +28,19 @@ export const getJobById = query({
         return job;
     },
 });
+
+export const getJobsByCompany = query({
+    args: { companyName: v.string() },
+    handler: async (ctx, args) => {
+        const jobs = await ctx.db.query("jobs").filter((q) => q.eq(q.field("companyName"), args.companyName)).collect();
+        return jobs;
+    }
+});
+
+// Doesn't work
+export const deleteJobById = mutation({
+    args: { storageId: v.string() },
+    handler: async (ctx, args) => {
+        await ctx.storage.delete(args.storageId);
+    }
+});
