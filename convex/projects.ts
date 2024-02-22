@@ -10,7 +10,7 @@ export const getProjects = query({
 })
 
 export const getProjectByOwner = query({
-  args: { owner: v.string() },
+  args: { owner: v.optional(v.string()) },
   handler: async (ctx, args) => {
     const projects = await ctx.db
       .query("projects")

@@ -1,5 +1,6 @@
 "use client"
 
+import { UserProvider } from "@/lib/useAppUser"
 import { NextUIProvider } from "@nextui-org/react"
 import { ConvexProvider, ConvexReactClient } from "convex/react"
 import { useRouter } from "next/navigation"
@@ -10,7 +11,9 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   const router = useRouter()
   return (
     <NextUIProvider navigate={router.push}>
-      <ConvexProvider client={convex}>{children}</ConvexProvider>
+      <ConvexProvider client={convex}>
+        <UserProvider>{children}</UserProvider>
+      </ConvexProvider>
     </NextUIProvider>
   )
 }
