@@ -5,7 +5,7 @@ import { notFound, redirect } from "next/navigation"
 import { Textarea } from "@nextui-org/input"
 import React from "react"
 import { useForm, Controller, useFieldArray } from "react-hook-form"
-import { Doc } from "@convex/_generated/dataModel"
+import { Doc, Id } from "@convex/_generated/dataModel"
 import { useAppUser } from "@/lib/useAppUser"
 import { useMutation, useQuery } from "convex/react"
 import { api } from "@convex/_generated/api"
@@ -14,7 +14,7 @@ import ProjectCard from "@/components/ProjectCard"
 import { Spinner } from "@nextui-org/react"
 
 interface FeedbackPageProps {
-  params: { projectId: string }
+  params: { projectId: Id<"projects"> }
 }
 
 const FeedbackPage: React.FC<FeedbackPageProps> = ({ params }) => {

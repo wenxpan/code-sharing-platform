@@ -5,13 +5,15 @@ import React from "react"
 import CustomCheckbox from "@/components/ui/checkbox"
 import { useMutation } from "convex/react"
 import { api } from "@convex/_generated/api"
+import { useRouter } from "next/navigation"
 
 const NewJob: React.FC = () => {
+  const router = useRouter()
   const [email, setEmail] = React.useState("")
   const [position, setPosition] = React.useState("")
   const [companyName, setCompanyName] = React.useState("")
   const [jobDescription, setJobDescription] = React.useState("")
-
+  const [externalPostUrl, setExternalPostUrl] = React.useState("")
   const [groupSelected, setGroupSelected] = React.useState([])
   const [stackGroup, setStackGroup] = React.useState([
     "HTML",
@@ -26,6 +28,7 @@ const NewJob: React.FC = () => {
   const [stackInput, setStackInput] = React.useState("")
 
   const createJobs = useMutation(api.jobs.createJobs)
+  // TODO: auto populate company name
 
   const validateEmail = (email: string) =>
     email.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i)
@@ -54,23 +57,24 @@ const NewJob: React.FC = () => {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
-    const formData = new FormData(event.currentTarget)
-    // console.log(formData)
-
-    await createJobs({
-      email: email,
-      position,
-      companyName,
-      jobDescription,
-      techStack: groupSelected,
+    const newJobId = await createJobs({
+      data: {
+        email: email,
+        position,
+        companyName,
+        jobDescription,
+        externalPostUrl,
+        techStack: groupSelected,
+      },
     })
+    router.push(`/jobs/${newJobId}`)
   }
 
   return (
     <div>
       <h1 className="pb-8">Post a new job!</h1>
       <form onSubmit={handleSubmit} className="grid gap-y-10">
-        <div>
+        <div className="flex flex-col gap-4">
           <Input
             isRequired
             type="text"
@@ -83,11 +87,19 @@ const NewJob: React.FC = () => {
           <Input
             isRequired
             type="text"
-            label="CompanyName"
+            label="Company Name"
             placeholder="Company Name"
             labelPlacement="outside"
             value={companyName}
             onChange={(e) => setCompanyName(e.target.value)}
+          />
+          <Input
+            type="text"
+            label="External Job Post Link"
+            placeholder="External Job Post Link"
+            labelPlacement="outside"
+            value={externalPostUrl}
+            onChange={(e) => setExternalPostUrl(e.target.value)}
           />
           <Textarea
             isRequired
@@ -102,7 +114,7 @@ const NewJob: React.FC = () => {
             isRequired
             value={email}
             type="email"
-            label="Email"
+            label="Contact Email"
             labelPlacement="outside"
             placeholder="johndoe@hotmail.com"
             variant="bordered"
@@ -119,9 +131,11 @@ const NewJob: React.FC = () => {
               label="Select Tech Stacks"
               orientation="horizontal"
               value={groupSelected}
+              // @ts-ignore
               onChange={setGroupSelected}
             >
               {stackGroup.map((stack) => (
+                // @ts-ignore
                 <CustomCheckbox value={stack} key={stack}>
                   {stack}
                 </CustomCheckbox>
