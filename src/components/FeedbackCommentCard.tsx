@@ -23,11 +23,13 @@ export interface FeedbackWithUser {
     | undefined
 }
 
-interface FeedbackCardProps {
+interface FeedbackCommentCardProps {
   feedback: FeedbackWithUser
 }
 
-const FeedbackCard: React.FC<FeedbackCardProps> = ({ feedback }) => {
+const FeedbackCommentCard: React.FC<FeedbackCommentCardProps> = ({
+  feedback,
+}) => {
   return (
     <>
       <div className="flex gap-2 py-2 w-full items-center">
@@ -56,4 +58,4 @@ const FeedbackCard: React.FC<FeedbackCardProps> = ({ feedback }) => {
   )
 }
 
-export default FeedbackCard
+export default FeedbackCommentCard
