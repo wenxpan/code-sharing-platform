@@ -30,6 +30,7 @@ export default defineSchema({
   jobs: defineTable({
     position: v.string(),
     companyName: v.string(),
+    externalPostUrl: v.optional(v.string()),
     jobDescription: v.string(),
     email: v.string(),
     techStack: v.array(v.string()),

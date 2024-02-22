@@ -25,9 +25,14 @@ export const AvatarDropDown = ({ user }: { user: Doc<"users"> }) => {
 
   const employee = [
     {
+      key: "create-jobs",
+      label: "Post New Job",
+      href: "/jobs/new",
+    },
+    {
       key: "posted-jobs",
       label: "Posted Jobs",
-      href: "/dashboard/business/jobs",
+      href: "/dashboard/business",
     },
   ]
   const admin = [
@@ -81,6 +86,7 @@ export const AvatarDropDown = ({ user }: { user: Doc<"users"> }) => {
         {(item) => (
           <DropdownItem
             key={item.key}
+            // @ts-ignore
             href={item?.href}
             color={item.key === "sign-out" ? "danger" : "default"}
             className={item.key === "sign-out" ? "text-danger" : ""}
