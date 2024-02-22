@@ -13,6 +13,7 @@ export const createUser = mutation({
         v.literal("businessEmployee"),
         v.literal("businessAdmin")
       ),
+      company: v.optional(v.string()),
       email: v.string(),
       picture: v.optional(v.string()),
       position: v.optional(v.string()),
