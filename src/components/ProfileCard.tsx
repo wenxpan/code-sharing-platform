@@ -12,7 +12,7 @@ interface ProfileCardProps {
 }
 
 const ProfileCard: React.FC<ProfileCardProps> = ({ coder }) => {
-  const { name, picture, github, _id, skillSet } = coder
+  const { name, picture, github, _id, skillSet, score } = coder
   return (
     <div>
       <Card shadow="sm">
@@ -33,7 +33,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ coder }) => {
               width={135}
             />
           </Link>
-          <p className="text-center">Points: xx</p>
+          <p className="text-center">Points: {score || 0}</p>
           <div className="flex flex-col items-center">
             {skillSet && <SkillTagList skills={skillSet} showFull={false} />}
           </div>

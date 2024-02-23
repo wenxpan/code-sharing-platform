@@ -43,7 +43,7 @@ export const AvatarDropDown = ({ user }: { user: Doc<"users"> }) => {
     },
   ]
   const coder = [
-    { key: "profile", label: "My Profile", href: "/profile/coder" },
+    { key: "profile", label: "My Profile", href: "/dashboard/profile/coder" },
     { key: "new-project", label: "New Project", href: "/projects/new" },
     {
       key: "projects",
@@ -56,8 +56,8 @@ export const AvatarDropDown = ({ user }: { user: Doc<"users"> }) => {
     user.role === "coder"
       ? coder
       : user.role === "businessEmployee"
-      ? employee
-      : [...admin, ...employee]
+        ? employee
+        : [...admin, ...employee]
   const navItems = [
     {
       key: "dashboard",
