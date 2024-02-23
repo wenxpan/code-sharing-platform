@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Code-sharing Platform
 
-## Getting Started
+## Description
 
-First, run the development server:
+Code-sharing Platform is a web-based application designed to streamline the process of sharing and collaborating on code. It integrates with various APIs and services to provide a seamless user experience.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Architecture
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The application is structured around a Next.js framework, distinguishing between client and server components for optimized rendering and performance. Data is managed using a Convex DB, ensuring efficient and reliable data flow. The authentication flow is handled by Descope, providing secure and streamlined user access. The architecture also includes interfaces with GitHub API and Descope API for extended functionality.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+![architecture diagram.png](doc%2Farchitecture%20diagram.png)
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Features
 
-## Learn More
+- Seamless code sharing and collaboration
+- Integration with GitHub for repository management
+- Secure authentication flow via Descope
+- Real-time updates and management with Convex DB
 
-To learn more about Next.js, take a look at the following resources:
+## Technology Stack
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Next.js
+- Convex DB
+- Descope API
+- GitHub API
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Installation Instructions
 
-## Deploy on Vercel
+To set up the Code-sharing Platform locally, follow these steps:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Clone the repository to your local machine.
+2. Copy the `.env.default` file to a new file named `.env.local`.
+3. Fill in the `.env.local` file with your personal credentials.
+4. Run `npm install` to install all the dependencies.
+5. Start the Convex development server using `npx convex run`.
+6. Finally, start the Next.js development server with `npm run dev`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Your local version of the Code-sharing Platform should now be running and accessible.
+
+## Usage
+
+After installation, the application can be accessed locally through your web browser. Utilize the various features as detailed in the platform's user interface.
+
+## Configuration
+
+Ensure that all the necessary environment variables and credentials are correctly set up in your `.env.local` file before running the application.
+
+## License
+
+This project is released under the [MIT License](LICENSE).
