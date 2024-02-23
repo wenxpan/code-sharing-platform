@@ -10,9 +10,9 @@ const Login: React.FC = () => {
   const { user } = useAppUser()
   const router = useRouter()
 
-  if (user === undefined) {
-    return <Spinner />
-  }
+  // if (user === undefined) {
+  //   return <Spinner />
+  // }
 
   if (user) {
     router.push("/dashboard")
