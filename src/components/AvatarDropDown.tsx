@@ -43,7 +43,7 @@ export const AvatarDropDown = ({ user }: { user: Doc<"users"> }) => {
     },
   ]
   const coder = [
-    { key: "profile", label: "My Profile", href: "/dashboard/profile/coder" },
+    { key: "profile", label: "My Profile", href: "/dashboard/coder/profile" },
     { key: "new-project", label: "New Project", href: "/projects/new" },
     {
       key: "projects",
