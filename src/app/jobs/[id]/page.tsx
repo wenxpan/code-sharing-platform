@@ -27,7 +27,10 @@ const JobPage: React.FC<JobPageProps> = ({ params }) => {
     hasCoderApplied === undefined ? (
       <Spinner />
     ) : hasCoderApplied ? (
-      <p>You have already applied.</p>
+      <p>
+        You have already applied with project{" "}
+        {hasCoderApplied.project?.full_name}
+      </p>
     ) : (
       <Button color="primary" as={Link} href={`/jobs/${params.id}/apply`}>
         Apply
