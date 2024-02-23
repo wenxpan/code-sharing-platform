@@ -52,7 +52,7 @@ const FeedbackOverviewSection: React.FC<FeedbackOverviewSectionProps> = ({
         <p className="text-small text-default-400">{subHeading}</p>
       </div>
       <Divider className="my-4" />
-      {feedback ? (
+      {feedback && feedback.length > 0 ? (
         <ul className="gap-4 flex flex-col">
           {feedback.map((fb) => (
             <li key={fb._id}>

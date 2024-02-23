@@ -18,6 +18,7 @@ const CoderDashboardPage: React.FC<CoderDashboardProps> = () => {
       userId: user?._id,
     }
   )
+  console.log({ feedbackPosted })
   const feedbackReceived: FeedbackOverviewResult = useQuery(
     api.feedback.getReceivedFeedbackByUser,
     {
