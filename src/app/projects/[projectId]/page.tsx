@@ -12,23 +12,29 @@ import { Icon } from "@iconify-icon/react"
 import { Link } from "@nextui-org/link"
 import { useQuery } from "convex/react"
 import { api } from "@convex/_generated/api"
-import { Doc } from "@convex/_generated/dataModel"
+import { Doc, Id } from "@convex/_generated/dataModel"
 import { Spinner } from "@nextui-org/react"
 
 interface ProjectPageProps {
-  params: { projectId: string }
+  params: { projectId: Id<"projects"> }
 }
 
 const ProjectPage: React.FC<ProjectPageProps> = ({ params }) => {
   const id = params.projectId
-  const project: Doc<"projects"> = useQuery(api.projects.getProjectById, { id })
-  const owner = project?.owner || undefined
-  const user: Doc<"users"> = useQuery(api.users.getUserById, { id: owner })
+  const project: Doc<"projects"> | null | undefined = useQuery(
+    api.projects.getProjectById,
+    { id }
+  )
+  const ownerId = project?.owner || null
+  const user: Doc<"users"> | null | undefined = useQuery(
+    api.users.getUserById,
+    { id: ownerId! }
+  )
   const feedback = useQuery(api.feedback.getFeedbackByProject, {
     projectId: id,
   }) as FeedbackWithUser[]
 
-  if (project === null || user === null) {
+  if (project === null || ownerId === null || user === null) {
     notFound()
   }
 

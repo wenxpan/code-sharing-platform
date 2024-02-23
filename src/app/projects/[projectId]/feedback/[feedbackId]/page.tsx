@@ -8,9 +8,10 @@ import { api } from "@convex/_generated/api"
 import { useAppUser } from "@/lib/useAppUser"
 import { Link, Spinner } from "@nextui-org/react"
 import { FeedbackWithUser } from "@/components/FeedbackCommentCard"
+import { Id } from "@convex/_generated/dataModel"
 
 interface FeedbackPageProps {
-  params: { projectId: string; feedbackId: string }
+  params: { projectId: Id<"projects">; feedbackId: Id<"feedback"> }
 }
 
 const FeedbackPage: React.FC<FeedbackPageProps> = ({ params }) => {
