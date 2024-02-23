@@ -5,6 +5,8 @@ import NavBar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import { AuthProvider } from "@descope/nextjs-sdk"
 import Script from "next/script"
+import { ToastContainer } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
 const roboto = Roboto({ subsets: ["latin"], weight: ["400", "500", "700"] })
 
@@ -29,6 +31,7 @@ export default function RootLayout({
               <main className="flex grow items-start justify-center py-4 w-full">
                 <div className="max-w-[1024px] w-full px-4 flex flex-col items-center">
                   {children}
+                  <ToastContainer />
                 </div>
               </main>
               <Footer />
