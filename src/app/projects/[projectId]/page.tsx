@@ -34,11 +34,9 @@ const ProjectPage: React.FC<ProjectPageProps> = ({ params }) => {
     projectId: id,
   }) as FeedbackWithUser[]
 
-  console.log({ project, user, feedback })
-
-  // if (project === null || ownerId === null || user === null) {
-  //   notFound()
-  // }
+  if (project === null) {
+    notFound()
+  }
 
   if (!project || !user || !feedback) {
     return <Spinner />
