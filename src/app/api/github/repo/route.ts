@@ -1,4 +1,4 @@
-import { getGithubRepo, getGithubRepoById } from "@/lib/useGithubAPI"
+import { getGithubRepo, getGithubRepoById } from "@/lib/fetchGithubData"
 import { type NextRequest } from "next/server"
 
 export async function GET(req: NextRequest) {

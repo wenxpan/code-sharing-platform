@@ -1,4 +1,4 @@
-import { getGithubUser } from "@/lib/useGithubAPI"
+import { getGithubUser } from "@/lib/fetchGithubData"
 import { NextRequest } from "next/server"
 
 export async function GET(req: NextRequest) {

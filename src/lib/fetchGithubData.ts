@@ -1,4 +1,4 @@
-export default async function useGithubAPI({ token }: { token: string }) {
+export default async function fetchGithubData({ token }: { token: string }) {
   const { Octokit } = require("@octokit/core")
   const octokit = new Octokit({ auth: token })
   return octokit
@@ -11,7 +11,7 @@ export const getGithubUser = async ({
   username: string
   token: string
 }) => {
-  const octokit = await useGithubAPI({ token })
+  const octokit = await fetchGithubData({ token })
   const userData = await octokit.request("GET /users/{username}", {
     username,
     headers: {
@@ -30,7 +30,7 @@ export const getGithubRepo = async ({
   repo: string
   token: string
 }) => {
-  const octokit = await useGithubAPI({ token })
+  const octokit = await fetchGithubData({ token })
   const { data } = await octokit.request("GET /repos/{owner}/{repo}", {
     owner,
     repo,
@@ -94,7 +94,7 @@ export const getGithubRepoById = async ({
   token: string
 }) => {
   // TODO: check if it's working
-  const octokit = await useGithubAPI({ token })
+  const octokit = await fetchGithubData({ token })
   const repoData = await octokit.request("GET /repositories/{repo_id}", {
     repo_id: repoId,
     headers: {
