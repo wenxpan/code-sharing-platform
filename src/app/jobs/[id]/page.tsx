@@ -1,7 +1,10 @@
 "use client"
 import { useAppUser } from "@/lib/useAppUser"
+import { api } from "@convex/_generated/api"
 import { Id } from "@convex/_generated/dataModel"
 import { Button } from "@nextui-org/button"
+import { Spinner } from "@nextui-org/react"
+import { useQuery } from "convex/react"
 import Link from "next/link"
 import React from "react"
 
@@ -11,18 +14,35 @@ interface JobPageProps {
 
 const JobPage: React.FC<JobPageProps> = ({ params }) => {
   const { user } = useAppUser()
+  const hasCoderApplied = useQuery(api.applications.checkApplyStatus, {
+    applicantId: user!._id,
+    jobId: params.id,
+  })
+
+  if (hasCoderApplied === undefined) {
+    return <Spinner />
+  }
+
+  const coderApplyStatus =
+    hasCoderApplied === undefined ? (
+      <Spinner />
+    ) : hasCoderApplied ? (
+      <p>You have already applied.</p>
+    ) : (
+      <Button color="primary" as={Link} href={`/jobs/${params.id}/apply`}>
+        Apply
+      </Button>
+    )
+
   return (
     <>
       <div className="mt-4">
         {user!.role === "coder" ? (
-          <Button color="primary" as={Link} href={`/jobs/${params.id}/apply`}>
-            Apply
-          </Button>
+          coderApplyStatus
         ) : (
-          <section>
-            <h2 className="font-semibold text-lg mt-4">Review Applications</h2>
-            {/* <ProjectCardList /> */}
-          </section>
+          <Button color="primary" as={Link} href={`/jobs/${params.id}/review`}>
+            Review Applications
+          </Button>
         )}
       </div>
     </>

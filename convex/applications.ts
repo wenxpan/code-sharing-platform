@@ -37,3 +37,15 @@ export const getApplicationsByUser = query({
     return applications
   },
 })
+
+export const checkApplyStatus = query({
+  args: { applicantId: v.id("users"), jobId: v.id("jobs") },
+  handler: async (ctx, args) => {
+    const application = await ctx.db
+      .query("applications")
+      .filter((q) => q.eq(q.field("jobId"), args.jobId))
+      .filter((q) => q.eq(q.field("applicantId"), args.applicantId))
+      .collect()
+    return application
+  },
+})

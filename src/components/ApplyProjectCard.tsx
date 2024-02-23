@@ -1,5 +1,5 @@
 "use client"
-import { Doc } from "@convex/_generated/dataModel"
+import { Doc, Id } from "@convex/_generated/dataModel"
 import React from "react"
 import {
   Button,
@@ -14,10 +14,20 @@ import SkillTagList from "./SkillTagList"
 
 interface ApplyProjectCardProps {
   project: Doc<"projects">
+  setSelectedId: React.Dispatch<React.SetStateAction<Id<"projects"> | null>>
+  setSelectedName: React.Dispatch<React.SetStateAction<string | undefined>>
 }
 
-const ApplyProjectCard: React.FC<ApplyProjectCardProps> = ({ project }) => {
+const ApplyProjectCard: React.FC<ApplyProjectCardProps> = ({
+  project,
+  setSelectedId,
+  setSelectedName,
+}) => {
   const { _id, displayName, techStack, html_url, full_name } = project
+  const handleChoose = () => {
+    setSelectedId(_id)
+    setSelectedName(full_name)
+  }
   return (
     <>
       <Card>
@@ -35,7 +45,7 @@ const ApplyProjectCard: React.FC<ApplyProjectCardProps> = ({ project }) => {
           <SkillTagList skills={techStack} showFull={true} />
         </CardBody>
         <CardFooter>
-          <Button>Apply with this project</Button>
+          <Button onClick={handleChoose}>Apply with this project</Button>
         </CardFooter>
       </Card>
     </>
@@ -44,13 +54,22 @@ const ApplyProjectCard: React.FC<ApplyProjectCardProps> = ({ project }) => {
 
 const ApplyProjectCardList = ({
   projects,
+  setSelectedId,
+  setSelectedName,
 }: {
   projects: Doc<"projects">[]
+  setSelectedId: React.Dispatch<React.SetStateAction<Id<"projects"> | null>>
+  setSelectedName: React.Dispatch<React.SetStateAction<string | undefined>>
 }) => {
   return (
     <>
       {projects.map((project) => (
-        <ApplyProjectCard key={project._id} project={project} />
+        <ApplyProjectCard
+          key={project._id}
+          project={project}
+          setSelectedId={setSelectedId}
+          setSelectedName={setSelectedName}
+        />
       ))}
     </>
   )
