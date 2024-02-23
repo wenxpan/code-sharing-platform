@@ -59,6 +59,8 @@ export const getCoders = query({
   handler: async (ctx, args) => {
     const coders = await ctx.db
       .query("users")
+      .withIndex("by_score")
+      .order("desc")
       .filter((q) => q.eq(q.field("role"), "coder"))
       .collect()
     return coders

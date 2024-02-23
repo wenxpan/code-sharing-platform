@@ -27,7 +27,8 @@ export default defineSchema({
     ),
   })
     .index("by_descopeId", ["descopeId"])
-    .index("by_email", ["email"]),
+    .index("by_email", ["email"])
+    .index("by_score", ["score"]),
   jobs: defineTable({
     position: v.string(),
     companyName: v.string(),
