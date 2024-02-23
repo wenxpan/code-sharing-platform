@@ -16,6 +16,7 @@ import {
 import { useMutation, useQuery } from "convex/react"
 import { redirect } from "next/navigation"
 import React from "react"
+import { toast } from "react-toastify"
 
 interface BusinessDashboardProps {}
 
@@ -37,7 +38,11 @@ const BusinessDashboard: React.FC<BusinessDashboardProps> = () => {
   const deleteJob = useMutation(api.jobs.deleteJobById)
 
   const handleDelete = (id: Id<"jobs">) => {
-    deleteJob({ id })
+    toast.promise(deleteJob({ id }), {
+      pending: "Deleting...",
+      success: "Successfully deleted",
+      error: "Deletion failed. Please  try again",
+    })
   }
 
   if (company === undefined || user === undefined || jobs === undefined) {
