@@ -21,6 +21,7 @@ const FeedbackPage: React.FC<FeedbackPageProps> = ({ params }) => {
   const projectId = params.projectId
   const project = useQuery(api.projects.getProjectById, { id: projectId })
   const createFeedback = useMutation(api.feedback.createFeedback)
+  const incrementScoreToCoder = useMutation(api.users.incrementScoreToCoder)
   const { user } = useAppUser()
   const {
     handleSubmit,
@@ -50,6 +51,12 @@ const FeedbackPage: React.FC<FeedbackPageProps> = ({ params }) => {
       data: {
         ...data,
         postedBy: user._id,
+      },
+    })
+    await incrementScoreToCoder({
+      data: {
+        _id: user._id,
+        increment: 5,
       },
     })
     // TODO: add redirect & toast
