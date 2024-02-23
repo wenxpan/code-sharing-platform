@@ -14,7 +14,7 @@ interface CoderProfileProps {}
 const CoderProfile: React.FC<CoderProfileProps> = () => {
   const { user } = useAppUser()
   const [groupSelected, setGroupSelected] = useState(
-    user?.skillSet?.map((skill) => skill.name) || []
+    user?.skillSet?.map((skill) => skill.name) || [],
   )
 
   const [stackGroup, setStackGroup] = React.useState([
@@ -29,7 +29,7 @@ const CoderProfile: React.FC<CoderProfileProps> = () => {
   ])
   const [stackInput, setStackInput] = React.useState("")
   const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (
-    event
+    event,
   ) => {
     if (stackGroup.includes(stackInput) && event.key === "Enter") {
       event.preventDefault()
@@ -145,6 +145,8 @@ const CoderProfile: React.FC<CoderProfileProps> = () => {
             Github url: <Link href={githubUrl}>{githubUrl}</Link>
           </p>
         )}
+
+        <p>Score: {user?.score || 0}</p>
 
         <Button color="primary" type="submit">
           Fetch GitHub Account

@@ -11,7 +11,6 @@ import { useAppUser } from "@/lib/useAppUser"
 import { Spinner } from "@nextui-org/spinner"
 import { redirect, useRouter } from "next/navigation"
 import { Avatar, AvatarGroup } from "@nextui-org/avatar"
-import { Skeleton } from "@nextui-org/skeleton"
 import { toast } from "react-toastify"
 
 interface CreateProjectPageProps {}
@@ -84,6 +83,7 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
     })
   }
   const createProject = useMutation(api.projects.createProject)
+  const incrementScoreToCoder = useMutation(api.users.incrementScoreToCoder)
 
   // TODO: upload screenshots
   // TODO: tech stack - group by frontend/backend/db/ui
@@ -92,6 +92,8 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
       const projectId = await createProject({
         data: { ...data, owner: user?._id },
       })
+      await incrementScoreToCoder({ data: { _id: user?._id, increment: 2 } })
+
       router.push(`/projects/${projectId}`)
     }
     await toast.promise(create, {

@@ -23,18 +23,18 @@ const ProjectPage: React.FC<ProjectPageProps> = ({ params }) => {
   const id = params.projectId
   const project: Doc<"projects"> | null | undefined = useQuery(
     api.projects.getProjectById,
-    { id }
+    { id },
   )
   const ownerId = project?.owner || null
   const user: Doc<"users"> | null | undefined = useQuery(
     api.users.getUserById,
-    { id: ownerId! }
+    { id: ownerId! },
   )
   const feedback = useQuery(api.feedback.getFeedbackByProject, {
     projectId: id,
   }) as FeedbackWithUser[]
 
-  if (project === null || ownerId === null || user === null) {
+  if (project === null) {
     notFound()
   }
 
