@@ -9,15 +9,17 @@ import { useMutation } from "convex/react"
 import { api } from "@convex/_generated/api"
 import { useAppUser } from "@/lib/useAppUser"
 import { Spinner } from "@nextui-org/spinner"
-import { redirect } from "next/navigation"
+import { redirect, useRouter } from "next/navigation"
 import { Avatar, AvatarGroup } from "@nextui-org/avatar"
 import { Skeleton } from "@nextui-org/skeleton"
+import { toast } from "react-toastify"
 
 interface CreateProjectPageProps {}
 
 const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
   const [repoName, setRepoName] = useState("")
   const { user, status } = useAppUser()
+  const router = useRouter()
 
   const {
     register,
@@ -61,41 +63,39 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
 
   const handleRepoLookup = async (e: React.FormEvent) => {
     e.preventDefault()
-    const res = await fetch(
-      `/api/github/repo?owner=${user?.github?.login}&repo=${repoName}`
-    )
-    const { data } = await res.json()
-    const currentValues = getValues()
-    reset(
-      { ...currentValues, ...data },
-      { keepDefaultValues: true, keepDirtyValues: true }
-    )
+    const updateData = async () => {
+      const res = await fetch(
+        `/api/github/repo?owner=${user?.github?.login}&repo=${repoName}`
+      )
+      const { data } = await res.json()
+      const currentValues = getValues()
+      reset(
+        { ...currentValues, ...data },
+        { keepDefaultValues: true, keepDirtyValues: true }
+      )
+      await toast.promise(updateData, {
+        pending: "Fetching repo...",
+        success: "Repo info loaded",
+        error:
+          "Fetching failed. Please check the repo and owner names are valid",
+      })
+    }
   }
   const createProject = useMutation(api.projects.createProject)
 
-  // TODO: show collaborators
   // TODO: upload screenshots
   // TODO: tech stack - group by frontend/backend/db/ui
   const onSubmit = async (data: Doc<"projects">) => {
-    console.log({ data })
-    const projectId = await createProject({ data })
-    console.log({ projectId })
+    const create = async () => {
+      const projectId = await createProject({ data })
+      router.push(`/projects/${projectId}`)
+    }
+    await toast.promise(create, {
+      pending: "Creating...",
+      success: "Successfully created",
+      error: "Creation failed. Please double check your input and try again",
+    })
   }
-  // TODO: create table for techStack
-  // https://docs.convex.dev/database/document-ids
-  // const techStack = [
-  //   {
-  //     name: "js",
-  //     category: "language",
-  //   },
-  //   { name: "react", category: "frontend framework" },
-  // ]
-  // const project = {
-  //   name: "xx",
-  //   techStack: ["id1", "id2"],
-  //   // description for tags: custom tech stack or other tools used
-  //   tags: [{ name: "xx" }, { name: "xx" }],
-  // }
 
   if (status === "loading") {
     return <Spinner />
@@ -108,7 +108,6 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
   if (!user) {
     return null
   }
-  console.log({ user })
 
   return (
     <>
@@ -123,7 +122,7 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
             required
             description={`https://github.com/${user.github?.login}/${repoName}`}
             isInvalid={false}
-            value={user.github?.login}
+            value={user.github?.login || ""}
             isReadOnly={true}
           />
           <Input
@@ -131,19 +130,29 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
             label="Repo"
             required
             isInvalid={false}
-            value={repoName}
+            value={repoName || ""}
             onChange={(e) => setRepoName(e.target.value)}
           />
         </div>
-        <Button type="submit" color="primary">
-          Search for repo
-        </Button>
+        <Button type="submit">Search for repo</Button>
       </form>
       <form
         className="grid grid-cols-2 w-full gap-4 max-w-xl place-items-center"
         onSubmit={handleSubmit(onSubmit)}
       >
         {/* populated info */}
+        <div className="col-span-2 w-full justify-start">
+          {getValues("collaborators").length > 0 && (
+            <AvatarGroup isBordered max={5} className="justify-start">
+              {getValues("collaborators").map((collaborator) => (
+                <Avatar
+                  src={collaborator.avatar_url}
+                  key={collaborator.login}
+                />
+              ))}
+            </AvatarGroup>
+          )}
+        </div>
         <Controller
           name="html_url"
           control={control}
@@ -180,21 +189,6 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
           value={getValues("collaborators").length.toString()}
         />
 
-        <div className="col-span-2 w-full justify-start">
-          {/* {getValues("collaborators").length === 0 && (
-            <Skeleton className="flex rounded-full w-12 h-12" />
-          )} */}
-          {getValues("collaborators").length > 0 && (
-            <AvatarGroup isBordered max={5} className="justify-start">
-              {getValues("collaborators").map((collaborator) => (
-                <Avatar
-                  src={collaborator.avatar_url}
-                  key={collaborator.login}
-                />
-              ))}
-            </AvatarGroup>
-          )}
-        </div>
         <Controller
           name="displayName"
           control={control}
