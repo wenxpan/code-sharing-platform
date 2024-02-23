@@ -42,6 +42,11 @@ export default defineSchema({
     applicantId: v.id("users"),
     projectId: v.id("projects"),
     text: v.optional(v.string()),
+    status: v.union(
+      v.literal("pending"),
+      v.literal("accepted"),
+      v.literal("rejected")
+    ),
   }),
   projects: defineTable({
     owner: v.optional(v.id("users")),
