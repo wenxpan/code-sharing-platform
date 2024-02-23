@@ -152,6 +152,7 @@ export const seedApplication = internalMutation(async (ctx) => {
       applicantId: getRandomUserId(),
       projectId: getRandomProjectId(),
       text: faker.lorem.lines(1),
+      status: "pending",
     })
   }
 })
