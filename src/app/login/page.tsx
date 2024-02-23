@@ -2,8 +2,22 @@
 
 import React from "react"
 import { Descope } from "@descope/nextjs-sdk"
+import { useAppUser } from "@/lib/useAppUser"
+import { useRouter } from "next/navigation"
+import { Spinner } from "@nextui-org/react"
 
 const Login: React.FC = () => {
+  const { user } = useAppUser()
+  const router = useRouter()
+
+  if (user === undefined) {
+    return <Spinner />
+  }
+
+  if (user) {
+    router.push("/dashboard")
+  }
+
   return (
     <div
       style={{

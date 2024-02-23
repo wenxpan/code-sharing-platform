@@ -2,7 +2,7 @@
 
 import { useAppUser } from "@/lib/useAppUser"
 import { redirect } from "next/navigation"
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 
 const DashboardPage = () => {
   const { status, user } = useAppUser()

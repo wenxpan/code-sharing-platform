@@ -3,20 +3,16 @@
 import { useAppUser } from "@/lib/useAppUser"
 import { useRouter } from "next/navigation"
 
-export default function BusinessDashboardLayout({
+export default function CoderDashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const { user } = useAppUser()
+  const { status } = useAppUser()
   const router = useRouter()
 
-  if (
-    user &&
-    user.role !== "businessAdmin" &&
-    user.role !== "businessEmployee"
-  ) {
-    router.push("/dashboard")
+  if (status === "unauthenticated") {
+    router.push("/")
   }
 
   return <>{children}</>

@@ -14,12 +14,14 @@ import {
 import { Button } from "@nextui-org/button"
 import { toast } from "react-toastify"
 import { Id } from "@convex/_generated/dataModel"
+import { useRouter } from "next/navigation"
 
 const UserManagement: React.FC = () => {
   const { user } = useAppUser()
   const employees = useQuery(api.users.getEmployees, {
     company: user?.company,
   })
+  const router = useRouter()
 
   const deleteEmployee = useMutation(api.users.deleteEmployee)
 
@@ -29,6 +31,10 @@ const UserManagement: React.FC = () => {
       success: "Successfully deleted",
       error: "Deletion failed. Please  try again",
     })
+  }
+
+  if (user && user.role !== "businessAdmin") {
+    router.push("/dashboard")
   }
 
   if (!employees) {
