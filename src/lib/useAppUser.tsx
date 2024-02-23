@@ -71,7 +71,13 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         setStatus("unauthenticated")
       }
     }
-  }, [descopeUser])
+  }, [
+    descopeUser,
+    convexUser,
+    getConvexUser,
+    isSessionLoading,
+    isAuthenticated,
+  ])
 
   // Dynamically update the status based on the current state
   useEffect(() => {

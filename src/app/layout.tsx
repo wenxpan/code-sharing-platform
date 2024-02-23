@@ -4,6 +4,7 @@ import { Roboto } from "next/font/google"
 import NavBar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import { AuthProvider } from "@descope/nextjs-sdk"
+import Script from "next/script"
 
 const roboto = Roboto({ subsets: ["latin"], weight: ["400", "500", "700"] })
 
@@ -34,7 +35,7 @@ export default function RootLayout({
             </div>
           </Providers>
         </AuthProvider>
-        <script src="https://cdn.jsdelivr.net/npm/iconify-icon@2.0.0/dist/iconify-icon.min.js"></script>
+        <Script src="https://cdn.jsdelivr.net/npm/iconify-icon@2.0.0/dist/iconify-icon.min.js"></Script>
       </body>
     </html>
   )

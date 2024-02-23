@@ -55,7 +55,7 @@ const LandingPage: React.FC<LandingPageProps> = () => {
           <div>
             <h3 className="text-xl">Apply to Jobs with Your Portfolio</h3>
             <p className="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">
-              Leverage your projects and the feedback you've received as a
+              Leverage your projects and the feedback you&apos;ve received as a
               dynamic portfolio to apply for job opportunities posted by top
               tech companies on our platform.
             </p>

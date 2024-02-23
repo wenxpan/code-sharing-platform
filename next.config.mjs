@@ -6,6 +6,7 @@ const nextConfig = {
       { protocol: "https", hostname: "picsum.photos" },
       { protocol: "https", hostname: "placehold.co" },
       { protocol: "https", hostname: "i.pravatar.cc" },
+      { protocol: "https", hostname: "lh3.googleusercontent.com" },
     ],
   },
 }

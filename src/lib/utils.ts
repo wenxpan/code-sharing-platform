@@ -15,12 +15,17 @@ export const mapDescopeUserToCleanedDescopeUser = (
     return null
   }
   let role: "coder" | "businessEmployee" | "businessAdmin" | undefined
+  let companyName: string | undefined
   if (user.userTenants.length === 0) {
     role = "coder"
-  } else if (user.userTenants.length > 0 && user.roleNames.length === 0) {
-    role = "businessEmployee"
-  } else if (user.userTenants.length > 0 && user.roleNames.length > 0) {
-    role = "businessAdmin"
+  } else if (user.userTenants.length > 0) {
+    const userCompany = user.userTenants[0].tenantName
+    companyName = userCompany
+    if (user.roleNames.length === 0) {
+      role = "businessEmployee"
+    } else {
+      role = "businessAdmin"
+    }
   }
 
   if (!role) {
@@ -36,6 +41,7 @@ export const mapDescopeUserToCleanedDescopeUser = (
     github: {
       login: user.customAttributes?.githubUsername,
     },
+    company: companyName,
     position: user.customAttributes?.position,
   }
   return returnedUser
