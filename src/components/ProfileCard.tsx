@@ -29,6 +29,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ coder }) => {
             <Image
               className="object-cover rounded-xl"
               src={picture || github?.avatar_url}
+              alt=""
               width={135}
             />
           </Link>
