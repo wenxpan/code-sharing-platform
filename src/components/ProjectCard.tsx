@@ -23,9 +23,9 @@ interface ProjectListProps {
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   const owner = project.owner
-  const user = useQuery(api.users.getUserById, { id: owner })
+  const user = useQuery(api.users.getUserById, { id: owner! })
 
-  if (!user) {
+  if (!owner || !user) {
     return null
   }
 
@@ -34,9 +34,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
       <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
         <User
           name={user.name}
-          description={user.githubLogin}
+          description={user.github?.login}
           avatarProps={{
-            src: user.picture || user.github.avatar_url,
+            src: user.picture || user.github?.avatar_url || "",
           }}
         />
         <h4 className="font-bold text-large mt-2">{project.displayName}</h4>
