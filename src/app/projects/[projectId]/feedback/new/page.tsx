@@ -1,7 +1,6 @@
 "use client"
 import { Button } from "@nextui-org/button"
-import { User } from "@nextui-org/user"
-import { notFound, redirect } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { Textarea } from "@nextui-org/input"
 import React from "react"
 import { useForm, Controller, useFieldArray } from "react-hook-form"
@@ -18,6 +17,7 @@ interface FeedbackPageProps {
 }
 
 const FeedbackPage: React.FC<FeedbackPageProps> = ({ params }) => {
+  const router = useRouter()
   const projectId = params.projectId
   const project = useQuery(api.projects.getProjectById, { id: projectId })
   const createFeedback = useMutation(api.feedback.createFeedback)
@@ -61,7 +61,7 @@ const FeedbackPage: React.FC<FeedbackPageProps> = ({ params }) => {
     })
     // TODO: add redirect & toast
     console.log({ feedbackId })
-    redirect(`/projects/${projectId}`)
+    router.push(`/projects/${projectId}`)
   }
 
   return (
