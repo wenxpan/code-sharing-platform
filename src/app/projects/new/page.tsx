@@ -65,21 +65,20 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
     e.preventDefault()
     const updateData = async () => {
       const res = await fetch(
-        `/api/github/repo?owner=${user?.github?.login}&repo=${repoName}`
+        `/api/github/repo?owner=${user?.github?.login}&repo=${repoName}`,
       )
       const { data } = await res.json()
       const currentValues = getValues()
       reset(
         { ...currentValues, ...data },
-        { keepDefaultValues: true, keepDirtyValues: true }
+        { keepDefaultValues: true, keepDirtyValues: true },
       )
-      await toast.promise(updateData, {
-        pending: "Fetching repo...",
-        success: "Repo info loaded",
-        error:
-          "Fetching failed. Please check the repo and owner names are valid",
-      })
     }
+    await toast.promise(updateData, {
+      pending: "Fetching repo...",
+      success: "Repo info loaded",
+      error: "Fetching failed. Please check the repo and owner names are valid",
+    })
   }
   const createProject = useMutation(api.projects.createProject)
 
