@@ -11,7 +11,7 @@ export const createUser = mutation({
       role: v.union(
         v.literal("coder"),
         v.literal("businessEmployee"),
-        v.literal("businessAdmin")
+        v.literal("businessAdmin"),
       ),
       company: v.optional(v.string()),
       email: v.string(),
@@ -24,7 +24,7 @@ export const createUser = mutation({
           login: v.string(),
           id: v.float64(),
           name: v.string() || v.null(),
-        })
+        }),
       ),
     }),
   },
@@ -79,11 +79,29 @@ export const updateCoder = mutation({
           login: v.optional(v.string()),
           id: v.optional(v.float64()),
           name: v.optional(v.string()),
-        })
+        }),
       ),
     }),
   },
   handler: async (ctx, args) => {
     await ctx.db.patch(args.data._id, args.data)
+  },
+})
+
+export const incrementScoreToCoder = mutation({
+  args: {
+    data: v.object({
+      _id: v.optional(v.id("users")),
+      increment: v.number(),
+    }),
+  },
+  handler: async (ctx, args) => {
+    if (!args.data._id) {
+      return
+    }
+    const currentScore = (await ctx.db.get(args.data._id))?.score || 0
+    await ctx.db.patch(args.data._id, {
+      score: currentScore + args.data.increment,
+    })
   },
 })

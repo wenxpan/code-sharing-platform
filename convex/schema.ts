@@ -8,13 +8,14 @@ export default defineSchema({
     role: v.union(
       v.literal("coder"),
       v.literal("businessEmployee"),
-      v.literal("businessAdmin")
+      v.literal("businessAdmin"),
     ),
     company: v.optional(v.string()),
     email: v.string(),
     picture: v.optional(v.string()),
     position: v.optional(v.string()),
     skillSet: v.optional(v.array(v.object({ name: v.string() }))),
+    score: v.optional(v.number()),
     github: v.optional(
       v.object({
         avatar_url: v.optional(v.string()),
@@ -22,7 +23,7 @@ export default defineSchema({
         login: v.optional(v.string()),
         id: v.optional(v.float64()),
         name: v.optional(v.string() || v.null()),
-      })
+      }),
     ),
   })
     .index("by_descopeId", ["descopeId"])
@@ -51,7 +52,7 @@ export default defineSchema({
         id: v.float64(),
         login: v.string(),
         role_name: v.string(),
-      })
+      }),
     ),
     displayName: v.string(),
     full_name: v.string(),
@@ -67,7 +68,7 @@ export default defineSchema({
     postedBy: v.id("users"),
     overallFeedback: v.string(),
     specificFeedback: v.optional(
-      v.array(v.object({ area: v.string(), feedback: v.string() }))
+      v.array(v.object({ area: v.string(), feedback: v.string() })),
     ),
     positiveFeedback: v.string(),
   }),
