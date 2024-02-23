@@ -50,6 +50,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   >("loading")
 
   useEffect(() => {
+    console.log({ descopeUser })
     if (descopeUser) {
       const cleanedDescopeUser = mapDescopeUserToCleanedDescopeUser(descopeUser)
       const getUser = async () => {

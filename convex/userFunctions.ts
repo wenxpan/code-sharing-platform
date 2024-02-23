@@ -15,6 +15,7 @@ export const getUserFromDescope = action({
       ),
       email: v.string(),
       picture: v.optional(v.string()),
+      company: v.optional(v.string()),
       position: v.optional(v.string()),
       github: v.optional(
         v.object({
@@ -104,6 +105,7 @@ export const storeUser = internalMutation({
       ),
       email: v.string(),
       picture: v.optional(v.string()),
+      company: v.optional(v.string()),
       position: v.optional(v.string()),
       github: v.optional(
         v.object({
@@ -127,10 +129,7 @@ export const storeUser = internalMutation({
     }
 
     const newUserId = await ctx.db.insert("users", args.data)
-    const newUser = await ctx.db
-      .query("users")
-      .filter((q) => q.eq(q.field("_id"), newUserId))
-      .unique()
+    const newUser = await ctx.db.get(newUserId)
     return newUser
   },
 })
