@@ -89,7 +89,9 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
   // TODO: tech stack - group by frontend/backend/db/ui
   const onSubmit = async (data: Doc<"projects">) => {
     const create = async () => {
-      const projectId = await createProject({ data })
+      const projectId = await createProject({
+        data: { ...data, owner: user?._id },
+      })
       router.push(`/projects/${projectId}`)
     }
     await toast.promise(create, {
