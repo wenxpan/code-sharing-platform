@@ -19,6 +19,8 @@ const JobPage: React.FC<JobPageProps> = ({ params }) => {
     jobId: params.id,
   })
 
+  console.log({ hasCoderApplied })
+
   if (hasCoderApplied === undefined) {
     return <Spinner />
   }
@@ -26,7 +28,7 @@ const JobPage: React.FC<JobPageProps> = ({ params }) => {
   const coderApplyStatus =
     hasCoderApplied === undefined ? (
       <Spinner />
-    ) : hasCoderApplied ? (
+    ) : hasCoderApplied.application ? (
       <p>
         You have already applied with project{" "}
         {hasCoderApplied.project?.full_name}
