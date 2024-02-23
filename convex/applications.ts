@@ -21,11 +21,13 @@ export const createApplication = mutation({
       applicantId: v.id("users"),
       projectId: v.id("projects"),
       text: v.optional(v.string()),
-      status: v.literal("pending"),
     }),
   },
   handler: async (ctx, args) => {
-    const newApplicationId = await ctx.db.insert("applications", args.data)
+    const newApplicationId = await ctx.db.insert("applications", {
+      ...args.data,
+      status: "pending",
+    })
     return newApplicationId
   },
 })
@@ -36,15 +38,17 @@ export const getApplicationsByJob = query({
     const applications = await ctx.db
       .query("applications")
       .filter((q) => q.eq(q.field("jobId"), args.id))
-      .collect();
+      .collect()
 
-    const users = await ctx.db.query("users").collect();
+    const users = await ctx.db.query("users").collect()
     // console.log(users);
     const projects = await ctx.db.query("projects").collect()
     // Join the data
-    const result = applications.map(application => {
-      const user = users.find(user => user._id === application.applicantId);
-      const project = projects.find(project => project._id === application.projectId);
+    const result = applications.map((application) => {
+      const user = users.find((user) => user._id === application.applicantId)
+      const project = projects.find(
+        (project) => project._id === application.projectId
+      )
 
       return {
         userId: user?._id,
@@ -54,11 +58,10 @@ export const getApplicationsByJob = query({
         projectLink: project?.html_url,
         deployedPage: project?.homepage,
         status: application?.status,
-      };
-    });
+      }
+    })
 
-    return result;
-
+    return result
   },
 })
 

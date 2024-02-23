@@ -41,11 +41,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         />
         <h4 className="font-bold text-large mt-2">{project.displayName}</h4>
       </CardHeader>
-      <CardBody className="overflow-visible py-2 flex flex-col gap-2">
+      <CardBody className="overflow-hidden py-2 flex flex-col gap-2 relative">
         <Image
           as={NextImage}
           alt={project.screenshots[0]?.alt || ""}
-          className="object-cover rounded-xl"
+          className="object-cover rounded-xl w-[300px] h-[200px] object-top"
           src={
             project.screenshots[0]?.url || "https://placehold.co/300x200/png"
           }

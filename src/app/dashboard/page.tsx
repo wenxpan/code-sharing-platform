@@ -2,24 +2,25 @@
 
 import { useAppUser } from "@/lib/useAppUser"
 import { redirect } from "next/navigation"
+import { useRouter } from "next/navigation"
 
 const DashboardPage = () => {
   const { status, user } = useAppUser()
-  // TODO: add loading status to navbar
+  const router = useRouter()
 
   if (status === "unauthenticated") {
-    redirect("/")
+    router.push("/")
   }
 
   if (user && user.role === "coder") {
-    redirect("/dashboard/coder")
+    router.push("/dashboard/coder")
   }
 
   if (
     user &&
     (user.role === "businessEmployee" || user.role === "businessAdmin")
   ) {
-    redirect("/dashboard/business")
+    router.push("/dashboard/business")
   }
 }
 

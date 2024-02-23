@@ -9,7 +9,7 @@ import { useMutation } from "convex/react"
 import { api } from "@convex/_generated/api"
 import { useAppUser } from "@/lib/useAppUser"
 import { Spinner } from "@nextui-org/spinner"
-import { redirect, useRouter } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { Avatar, AvatarGroup } from "@nextui-org/avatar"
 import { toast } from "react-toastify"
 
@@ -67,13 +67,13 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
         throw new Error("Invalid user input")
       }
       const res = await fetch(
-        `/api/github/repo?owner=${user?.github?.login}&repo=${repoName}`,
+        `/api/github/repo?owner=${user?.github?.login}&repo=${repoName}`
       )
       const { data } = await res.json()
       const currentValues = getValues()
       reset(
         { ...currentValues, ...data },
-        { keepDefaultValues: true, keepDirtyValues: true },
+        { keepDefaultValues: true, keepDirtyValues: true }
       )
     }
     await toast.promise(updateData, {
@@ -108,7 +108,7 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
   }
 
   if (status === "unauthenticated") {
-    redirect("/login")
+    router.push("/login")
   }
 
   if (!user) {

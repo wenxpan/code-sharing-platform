@@ -46,6 +46,10 @@ const FeedbackPage: React.FC<FeedbackPageProps> = ({ params }) => {
     return <Spinner />
   }
 
+  if (user === null) {
+    router.push(`projects/${projectId}`)
+  }
+
   const onSubmit = async (data: Doc<"feedback">) => {
     const feedbackId = await createFeedback({
       data: {
@@ -60,7 +64,6 @@ const FeedbackPage: React.FC<FeedbackPageProps> = ({ params }) => {
       },
     })
     // TODO: add redirect & toast
-    console.log({ feedbackId })
     router.push(`/projects/${projectId}`)
   }
 
