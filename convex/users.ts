@@ -67,6 +67,39 @@ export const getCoders = query({
   },
 })
 
+export const getEmployees = query({
+  args: {
+    company: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    if (!args.company) {
+      return null
+    }
+    const employees = await ctx.db
+      .query("users")
+      .filter((q) =>
+        q.and(
+          q.eq(q.field("role"), "businessEmployee"),
+          q.eq(q.field("company"), args.company),
+        ),
+      )
+      .collect()
+    return employees
+  },
+})
+
+export const deleteEmployee = mutation({
+  args: {
+    _id: v.optional(v.id("users")),
+  },
+  handler: async (ctx, args) => {
+    if (!args._id) {
+      return null
+    }
+    await ctx.db.delete(args._id)
+  },
+})
+
 export const updateCoder = mutation({
   args: {
     data: v.object({
