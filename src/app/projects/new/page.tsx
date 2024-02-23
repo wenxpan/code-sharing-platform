@@ -64,6 +64,9 @@ const CreateProjectPage: React.FC<CreateProjectPageProps> = () => {
   const handleRepoLookup = async (e: React.FormEvent) => {
     e.preventDefault()
     const updateData = async () => {
+      if (!user?.github?.login || !repoName) {
+        throw new Error("Invalid user input")
+      }
       const res = await fetch(
         `/api/github/repo?owner=${user?.github?.login}&repo=${repoName}`,
       )
